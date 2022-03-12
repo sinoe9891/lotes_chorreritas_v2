@@ -69,7 +69,7 @@ date_default_timezone_set('America/Tegucigalpa');
 									<a class="nav-link" id="referencias-tab" data-bs-toggle="tab" href="#referencias" role="tab" aria-controls="referencias" aria-selected="false">Referencias</a>
 								</li>
 								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="observaciones-tab" data-bs-toggle="tab" href="#observaciones" role="tab" aria-controls="observaciones" aria-selected="false">Observaciones</a>
+									<a class="nav-link" id="observacionestab-tab" data-bs-toggle="tab" href="#observacionestab" role="tab" aria-controls="observacionestab" aria-selected="false">Observaciones</a>
 								</li>
 							</ul>
 							<form class="form" id="editarRegistro" method="post">
@@ -87,7 +87,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														$beneficiarioQuery = obtenerBeneficiario($user_id);
 														$financieraQuery = obtenerFinanciera($user_id);
 													} else {
-														header('Location: editar-perfil.php');
+														header('Location: clientes.php');
 													};
 
 													if ($solicitudes->num_rows > 0) {
@@ -113,6 +113,7 @@ date_default_timezone_set('America/Tegucigalpa');
 															$correo = $row['correo'];
 
 															$profesion = $row['profesion'];
+															$observaciones = $row['observaciones'];
 															$lugar_empleo = $row['lugar_empleo'];
 															$direccion_empleo = $row['direccion_empleo'];
 															$cargo = $row['cargo'];
@@ -151,7 +152,7 @@ date_default_timezone_set('America/Tegucigalpa');
 															$alquiler = $row['alquiler'];
 															$otros_egresos = $row['otros_egresos'];
 															//Observaciones
-															$observaciones = $row['observaciones'];
+															
 
 													?>
 															<div class="row">
@@ -172,7 +173,7 @@ date_default_timezone_set('America/Tegucigalpa');
 																<div class="col-md-6 col-12">
 																	<div class="form-group">
 																		<label for="city-column">Identidad</label>
-																		<input type="text" class="form-control" id="identidad" name="identidad" value="<?php echo $identidad; ?>" placeholder="Identidad">
+																		<input type="text" class="form-control" id="identidad" name="identidad" value="<?php echo $identidad; ?>" placeholder="0000-0000-00000" required>
 																	</div>
 																</div>
 																<div class="col-md-6 col-12">
@@ -268,7 +269,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="city-column">Dirección</label>
+																<label for="city-column">Lugar de residencia actual</label>
 																<input type="text" class="form-control" name="direccion" id="direccion" value="<?php echo $direccion; ?>">
 															</div>
 														</div>
@@ -280,13 +281,13 @@ date_default_timezone_set('America/Tegucigalpa');
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="company-column">Departamento</label>
+																<label for="company-column">Departamento/Estado</label>
 																<input type="text" class="form-control" name="departamento" id="departamento" value="<?php echo $departamento; ?>">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="email-id-column">Email</label>
+																<label for="email-id-column">Correo electrónico</label>
 																<input type="email" class="form-control" name="correo" id="correo" value="<?php echo $correo; ?>">
 															</div>
 														</div>
@@ -412,14 +413,14 @@ date_default_timezone_set('America/Tegucigalpa');
 													<div class="row">
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="first-name-column">First Name</label>
+																<label for="first-name-column">Nombre Completo</label>
 																<input type="text" class="form-control" id="nombre_beneficiario" name="nombre_beneficiario" value="<?php echo $nombre_beneficiario; ?>" placeholder="Nombre Completo">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="last-name-column">Last Name</label>
-																<input type="text" class="form-control" id="identidad_beneficiario" name="identidad_beneficiario" value="<?php echo $identidad_beneficiario; ?>" placeholder="0801-1989-07280" required>
+																<label for="last-name-column">Identidad</label>
+																<input type="text" class="form-control" id="identidad_beneficiario" name="identidad_beneficiario" value="<?php echo $identidad_beneficiario; ?>" placeholder="0801-1989-07280">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
@@ -590,7 +591,7 @@ date_default_timezone_set('America/Tegucigalpa');
 											</div>
 										</div>
 									</div>
-									<div class="tab-pane fade" id="observaciones" role="tabpanel" aria-labelledby="contact-tab">
+									<div class="tab-pane fade" id="observacionestab" role="tabpanel" aria-labelledby="contact-tab">
 										<div class="card">
 											<div class="card-content">
 												<div class="card-body">
@@ -606,6 +607,7 @@ date_default_timezone_set('America/Tegucigalpa');
 											</div>
 										</div>
 									</div>
+								
 							<?php
 														}
 													}
