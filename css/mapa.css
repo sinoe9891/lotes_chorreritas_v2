@@ -1,0 +1,35 @@
+.container{
+	width: 100%;
+}
+
+.cls-1 {
+	fill: none;
+	stroke-miterlimit: 10;
+	stroke-width: 0.5px;
+}
+
+.cls-1,
+.cls-72 {
+	stroke: #000;
+}
+
+.cls-2 {
+	fill: #fff;
+	stroke-miterlimit: 10;
+	stroke-width: 0.25px;
+}
+
+.enable {
+	fill: #fff;
+	stroke: #000;
+}
+
+.reserved {
+	fill: #0dcaf0;
+	stroke: #000;
+}
+	
+.occupied{
+	fill: #ffd970;
+	stroke: #000;
+}
