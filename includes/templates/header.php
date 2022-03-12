@@ -28,12 +28,12 @@
 	<link rel="stylesheet" href="css/mapa.css">
 	<link rel="stylesheet" href="css/all.css">
 	<link rel="stylesheet" href="assets/css/style.css">
-	<link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon">
+	<link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
 	<!-- Etiquetas SEO -->
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="description" content="Somos una empresa inmobiliaria que brinda apoyo para que puedas comprar tu lote de terreno en Siguatepue.">
 	<meta name="keywords" content="lotes, siguatepeque, baratos, terrenos, sigua, casas, sin prima, economicos, seguridad, seguros, clima, fresco, paz">
-	<link rel="icon" href="./images/favicon.png" type="image/x-icon" />
+	<link rel="icon" href="./assets/images/favicon.png" type="image/x-icon" />
 	<meta name="description" content="Somos una empresa inmobiliaria que brinda apoyo para que puedas comprar tu lote de terreno en Siguatepue.">
 	<meta name="robots" content="noodp">
 	<link rel="canonical" href="https://kidan.dev/chorreritas/">

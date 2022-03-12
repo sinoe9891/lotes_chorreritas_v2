@@ -1,0 +1,16 @@
+/trash
+/uptask-inicio
+/uptask-fin
+/total
+/total-graduados
+/birthday
+*conexion.php
+*.code-workspace
+/notas-de-duelo/galeria/*.pdf
+/notas-de-duelo/galeria/*.jpg
+/notas-de-duelo/img/*.pdf
+/notas-de-duelo/img/*.jpg
+/src
+/plantilla
+/chorreritas
+.vscode/
