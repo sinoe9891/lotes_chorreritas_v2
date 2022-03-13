@@ -421,37 +421,37 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="first-name-column">Nombre Completo</label>
-																<input type="text" id="nombre_referencia_1" name="nombre_referencia_1" placeholder="Nombre completo">
+																<input type="text" class="form-control" name="nombre_referencia_1" id="nombre_referencia_1" placeholder="Nombre completo">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="last-name-column">Dirección</label>
-																<input type="text" name="direccion_referencia_1" id="direccion_referencia_1" value="" placeholder="Ej. Los Robles, Tegucigalpa, Honduras, …">
+																<input type="text" class="form-control" name="direccion_referencia_1" id="direccion_referencia_1" value="" placeholder="Ej. Los Robles, Tegucigalpa, Honduras, …">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="city-column">Celular</label>
-																<input type="tel" name="celular_referencia_1" id="celular_referencia_1" value="" placeholder="94500123">
+																<input type="tel" class="form-control" name="celular_referencia_1" id="celular_referencia_1" value="" placeholder="94500123">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="country-floating">Teléfono</label>
-																<input type="tel" name="telefono_referencia_1" id="telefono_referencia_1" value="" placeholder="94500123">
+																<input type="tel" class="form-control" name="telefono_referencia_1" id="telefono_referencia_1" value="" placeholder="94500123">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="company-column">Empresa donde labora</label>
-																<input type="text" name="empresa_labora_referencia_1" id="empresa_labora_referencia_1" value="" placeholder="Ej. Col. Ruben Darío, Tegucigalpa, …">
+																<input type="text" class="form-control" name="empresa_labora_referencia_1" id="empresa_labora_referencia_1" value="" placeholder="Ej. Col. Ruben Darío, Tegucigalpa, …">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="email-id-column">Teléfono Empleo</label>
-																<input type="tel" name="telefono_empleo_referencia_1" id="telefono_empleo_referencia_1" value="" placeholder="22872000">
+																<input type="tel" class="form-control" name="telefono_empleo_referencia_1" id="telefono_empleo_referencia_1" value="" placeholder="22872000">
 															</div>
 														</div>
 														<p for="first-name-column"><strong>Referencia 2</strong></p>
@@ -504,7 +504,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="email-id-column">Observaciones</label>
-																<textarea class="form-control" name="observaciones" id="observaciones" cols="30" rows="10"></textarea>
+																<textarea class="form-control" name="observaciones" id="observaciones" cols="30" rows="5"></textarea>
 															</div>
 														</div>
 													</div>
