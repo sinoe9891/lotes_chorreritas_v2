@@ -78,7 +78,6 @@ date_default_timezone_set('America/Tegucigalpa');
 										<div class="card">
 											<div class="card-content">
 												<div class="card-body">
-
 													<div class="row">
 														<div class="col-md-6 col-12">
 															<div class="form-group">

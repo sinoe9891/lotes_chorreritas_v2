@@ -60,16 +60,6 @@ function obtenerInfoFichaPerfil($id = null) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
 function obtenerListaLote() {
     include 'conexion.php';
     try {
@@ -81,19 +71,49 @@ function obtenerListaLote() {
     }
 }
 
+
 function obtenerFichas() {
     include 'conexion.php';
     try {
-        return $conn->query("SELECT * FROM ficha_directorio WHERE estado = 0 ORDER BY id DESC");
+		return $conn->query("SELECT * FROM ficha_directorio WHERE estado = 0 ORDER BY id DESC");
+    } catch(Exception $e) {
+		echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+//Traer toda la información de bloque, lote y proyecto
+function obtenerTodoProyecto() {
+    include 'conexion.php';
+    try {
+		return $conn->query("SELECT * FROM bloques a, proyectos b, lotes c WHERE a.id_proyecto = b.id_proyecto and a.id_bloque = c.id_bloque ORDER BY a.bloque ASC");
+    } catch(Exception $e) {
+		echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+
+//Funcion traer todos los datos de la tabla
+function obtenerInfoBloque($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM bloques WHERE id_bloque = {$id}");
+
     } catch(Exception $e) {
         echo "Error! : " . $e->getMessage();
         return false;
     }
 }
 
+function obtenerTodo($tabla = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM {$tabla}");
 
-
-
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
 
 
 

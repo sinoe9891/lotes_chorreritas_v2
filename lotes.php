@@ -23,7 +23,7 @@ include 'includes/templates/header.php';
 				<div class="page-title">
 					<div class="row">
 						<div class="col-12 col-md-6 order-md-1 order-last">
-							<h3>Clientes</h3>
+							<h3>Lotes</h3>
 						</div>
 						<div class="col-12 col-md-6 order-md-2 order-first">
 							<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -42,30 +42,47 @@ include 'includes/templates/header.php';
 								<thead>
 									<tr>
 										<th>No.</th>
-										<th>Nombre Completo</th>
-										<th>Identidad</th>
-										<th>Celular</th>
-										<th>Observaciones</th>
+										<th>Descripción</th>
+										<th>Precio</th>
+										<th>Varas2</th>
+										<th>Estado</th>
 										<th>Acciones</th>
 									</tr>
 								</thead>
 								<tbody>
 
 									<?php
-									$solicitudes = obtenerFichas('id');
-									$consulta = $conn->query("SELECT * FROM ficha_directorio ORDER BY fecha_solicitud DESC, hora_solicitud DESC");
-									$numero = $consulta->num_rows;
+									$consulta = $conn->query("SELECT a.id_lote, a.numero, a.areav2, a.estado, b.bloque, d.precio_vara2, a.estado, c.nombre FROM lotes a, bloques b, proyectos c, proyectos_ajustes d WHERE a.id_bloque = b.id_bloque and b.id_proyecto = c.id_proyecto and c.id_proyecto = d.id_proyecto");
+									$contador = 1;
 									while ($solicitud = $consulta->fetch_array()) {
+										$id_lote = $solicitud['id_lote'];
+										$bloque = $solicitud['bloque'];
+										$preciov2 = $solicitud['precio_vara2'];
+										$estado = $solicitud['estado'];
+										$nombre = $solicitud['nombre'];
+										$numero = $solicitud['numero'];
+										$areav2 = $solicitud['areav2'];
+
+										$estado = $solicitud['estado'];
+										if ($estado == 'v') {
+											$estadoLote = 'Vendido';
+											$color = 'bg-secondary';
+										} elseif ($estado == 'd') {
+											$estadoLote = 'Disponible';
+											$color = 'bg-success';
+										} elseif ($estado == 'r') {
+											$estadoLote = 'Reservado';
+											$color = 'bg-info';
+										}
 									?>
-										<tr id="solicitud:<?php echo $solicitud['id'] ?>">
-											<td><?php echo $numero--; ?></td>
-											<td><?php echo $solicitud['nombre_completo'] ?></td>
-											<td><?php echo $solicitud['identidad'] ?></td>
-											<td><?php echo $solicitud['celular'] ?></td>
-											<td><?php echo $solicitud['observaciones'] ?></td>
+										<tr id="solicitud:<?php echo $solicitud['id_lote'] ?>">
+											<td><?php echo $contador++; ?></td>
+											<td><?php echo 'Bloque ' . $bloque.'-'.$numero ?></td>
+											<td><?php echo 'L. ' . number_format( $preciov2 * $areav2) ?></td>
+											<td><?php echo $areav2.'v2 ' ?></td>
+											<td><?php echo '<span class="badge '.$color.'">'.$estadoLote.'</span>' ?></td>
 											<td>
-												<a href="edit-cliente.php?ID=<?php echo $solicitud['id'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
-												<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
+												<a href="edit-lote.php?ID=<?php echo $solicitud['id_lote'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 												<i class="fas fa-trash"></i>
 											</td>
 										</tr>
@@ -74,7 +91,7 @@ include 'includes/templates/header.php';
 									?>
 								</tbody>
 							</table>
-							<a href="new-client.php" class="btn btn-primary">Nuevo Registro</a>
+							<a href="new-lote.php" class="btn btn-primary">Nuevo Registro</a>
 						</div>
 					</div>
 				</section>

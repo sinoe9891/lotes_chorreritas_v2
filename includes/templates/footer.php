@@ -5,7 +5,7 @@
     $actual = obtenerPaginaActual();
     if ($actual === 'register' || $actual === 'login') {
         echo '<script src="js/formulario.js"></script>';
-    }elseif ($actual === 'index' || $actual === 'mapa' || $actual === 'actualizar-graduado' || $actual === 'editar-bloque' || $actual === 'contrato' || $actual === 'birthday' || $actual === 'ver-notas-de-duelo' || $actual === 'exportar' || $actual === 'buscar-graduado' || $actual === 'graduandos' || $actual === 'graduandos-solicitudes' || $actual === 'ver-fichas') {
+    }elseif ($actual === 'index' || $actual === 'mapa'|| $actual === 'actualizar-graduado' || $actual === 'editar-bloque' || $actual === 'contrato' || $actual === 'exportar'  || $actual === 'ver-fichas') {
         echo '<script> console.log("No accede porque la ruta actual no corresponde");</script>';
         echo '<script src="js/validaciones.js"></script>';
 		echo '<script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
@@ -16,7 +16,7 @@
     }else{
         echo '<script src="js/scripts.js"></script>';
     }
-	if($actual === 'clientes'){
+	if($actual === 'clientes' || $actual === 'bloques'){
 		echo '<script src="js/validaciones.js"></script>';
 	}
 ?> 

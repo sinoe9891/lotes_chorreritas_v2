@@ -23,7 +23,7 @@ include 'includes/templates/header.php';
 				<div class="page-title">
 					<div class="row">
 						<div class="col-12 col-md-6 order-md-1 order-last">
-							<h3>Clientes</h3>
+							<h3>Bloques</h3>
 						</div>
 						<div class="col-12 col-md-6 order-md-2 order-first">
 							<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -35,37 +35,32 @@ include 'includes/templates/header.php';
 						</div>
 					</div>
 				</div>
-				<section class="section clientes">
+				<section class="section bloques">
 					<div class="card">
 						<div class="card-body">
 							<table class="table table-striped" id="table1">
 								<thead>
 									<tr>
 										<th>No.</th>
-										<th>Nombre Completo</th>
-										<th>Identidad</th>
-										<th>Celular</th>
-										<th>Observaciones</th>
+										<th>Bloque</th>
+										<th>Proyecto</th>
 										<th>Acciones</th>
 									</tr>
 								</thead>
 								<tbody>
 
 									<?php
-									$solicitudes = obtenerFichas('id');
-									$consulta = $conn->query("SELECT * FROM ficha_directorio ORDER BY fecha_solicitud DESC, hora_solicitud DESC");
-									$numero = $consulta->num_rows;
+									// $solicitudes = traerTodo('bloques');
+									$consulta = $conn->query("SELECT * FROM bloques a, proyectos b WHERE a.id_proyecto = b.id_proyecto ORDER BY a.bloque ASC");
+									$numero = 1;
 									while ($solicitud = $consulta->fetch_array()) {
 									?>
-										<tr id="solicitud:<?php echo $solicitud['id'] ?>">
-											<td><?php echo $numero--; ?></td>
-											<td><?php echo $solicitud['nombre_completo'] ?></td>
-											<td><?php echo $solicitud['identidad'] ?></td>
-											<td><?php echo $solicitud['celular'] ?></td>
-											<td><?php echo $solicitud['observaciones'] ?></td>
+										<tr id="solicitud:<?php echo $solicitud['id_bloque'] ?>">
+											<td><?php echo $numero++; ?></td>
+											<td><?php echo $solicitud['bloque'] ?></td>
+											<td><?php echo $solicitud['nombre'] ?></td>
 											<td>
-												<a href="edit-cliente.php?ID=<?php echo $solicitud['id'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
-												<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
+												<a href="edit-bloque.php?ID=<?php echo $solicitud['id_bloque'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 												<i class="fas fa-trash"></i>
 											</td>
 										</tr>
@@ -74,7 +69,7 @@ include 'includes/templates/header.php';
 									?>
 								</tbody>
 							</table>
-							<a href="new-client.php" class="btn btn-primary">Nuevo Registro</a>
+							<a href="new-bloque.php" class="btn btn-primary">Nuevo Bloque</a>
 						</div>
 					</div>
 				</section>

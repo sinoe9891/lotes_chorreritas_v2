@@ -6,21 +6,6 @@ function addEventListener() {
 	if (buscador) {
 		buscador.addEventListener('submit', validarBuscar);
 	}
-	//Editor de Graduados
-	let editor = document.querySelector('#editor');
-	if (editor) {
-		editor.addEventListener('submit', validarEditorBuscador);
-	}
-	//Buscador de Graduados
-	let buscadorFallecido = document.querySelector('#buscadorFallecido');
-	if (buscadorFallecido) {
-		buscadorFallecido.addEventListener('submit', validarBuscarfallecido);
-	}
-	//Buscador de cumpleañero
-	let cumpleanero = document.querySelector('#buscarCumpleanos');
-	if (cumpleanero) {
-		cumpleanero.addEventListener('submit', validarCumplenero);
-	}
 	//Acciones de solicitudes
 	let solicitud = document.querySelector('.clientes');
 	if (solicitud) {
@@ -31,16 +16,17 @@ function addEventListener() {
 			}
 		});
 	}
-	//Acciones de solicitudes Graduandos
-	let solicitudGraduando = document.querySelector('.caja-solicitud-graduandos');
-	if (solicitudGraduando) {
-		modeloGraduandos = 'model-acciones-graduandos';
-		solicitudGraduando.addEventListener('click', (event) => {
+	//Acciones de solicitudes
+	let solicitudBloques = document.querySelector('.bloques');
+	if (solicitudBloques) {
+		modelo = 'model-acciones-bloques';
+		solicitudBloques.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modeloGraduandos);
+				acciones(event,modelo);
 			}
 		});
 	}
+
 	let fichaGraduado = document.querySelector('.caja-ficha');
 	if (fichaGraduado) {
 		modeloFicha = 'model-acciones-ficha';

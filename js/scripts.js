@@ -18,15 +18,26 @@ function addEventListener() {
 	//Nuevo Registgro
 	let fichaSolicitud = document.querySelector('#nuevoRegistro');
 	if (fichaSolicitud) {
-		fichaSolicitud.addEventListener('submit', validarFicha);
+		fichaSolicitud.addEventListener('submit', nuevoCliente);
+	}
+	//Nuevo Bloque
+	let nuevoBloque = document.querySelector('#nuevoBloque');
+	if (nuevoBloque) {
+		nuevoBloque.addEventListener('submit', newbloque);
 	}
 	//Asignar Lote
 	let asignar = document.querySelector('#asignar_lote');
 	if (asignar) {
 		asignar.addEventListener('submit', asignarLote);
 	}
-
-
+	let editarBloque = document.querySelector('#editarRegistroBloque');
+	if (editarBloque) {
+		editarBloque.addEventListener('submit', editarRegistroBloque);
+	}
+	let editarLote = document.querySelector('#editarRegistroLote');
+	if (editarLote) {
+		editarLote.addEventListener('submit', editarRegistroLote);
+	}
 
 
 	//Detectar Click de eliminar
@@ -85,7 +96,7 @@ function formatID(identidad) {
 
 //-------------------Solicitud de Graduado para actualziación-------------------
 
-function validarFicha(e) {
+function nuevoCliente(e) {
 	e.preventDefault();
 
 	let horaSolicitud = document.querySelector('#horaSolicitud').value,
@@ -231,7 +242,7 @@ function validarFicha(e) {
 		//Crear  el llamado a Ajax
 		let xhr = new XMLHttpRequest();
 		//Abrir la Conexión
-		xhr.open('POST', 'includes/models/model-nuevo-cliente.php', true);
+		xhr.open('POST', 'includes/models/model-nuevo.php', true);
 
 		//Retorno de Datos
 		xhr.onload = function () {
@@ -251,7 +262,71 @@ function validarFicha(e) {
 							showConfirmButton: true
 
 						}).then(function () {
-							window.location = "precontrato.php";
+							window.location = "clientes.php";
+						});;
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+
+}
+
+function newbloque(e) {
+	e.preventDefault();
+
+	let nombres = document.querySelector('#nombre').value,
+		proyecto = document.querySelector('#proyecto').value,
+		tipo = document.querySelector('#tipo').value;
+
+
+	if (nombres === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar los campos',
+		});
+	} else {
+		//Campos son correctos - Ejecutamos AJAX
+		//Crear  FormData - Datos que se envían al servidor
+		console.log('enviar');
+		let datos = new FormData();
+		datos.append('nombres', nombres);
+		datos.append('proyecto', proyecto);
+		datos.append('accion', tipo);
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-nuevo.php', true);
+
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'nuevoBloque') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Solicitud realizada!',
+							text: 'Se ha creado el bloque con éxito',
+							position: 'center',
+							showConfirmButton: true
+
+						}).then(function () {
+							window.location = "bloques.php";
 						});;
 					}
 				} else {
@@ -618,7 +693,7 @@ function editarRegistro(e) {
 						text: 'ID Invalido Cliente y Beneficiario (13 digitos más guiones) '
 					});
 				}
-			}else{
+			} else {
 				Swal.fire({
 					icon: 'error',
 					title: 'Oops...',
@@ -627,6 +702,139 @@ function editarRegistro(e) {
 			}
 
 		}
+	}
+}
+function editarRegistroBloque(e) {
+	e.preventDefault();
+
+	let bloque = document.querySelector('#nombre').value,
+		tipo = document.querySelector('#tipo').value,
+		id_bloque = document.querySelector('#id_bloque').value,
+		proyecto = document.querySelector('#proyecto').value,
+		id_proyectob = document.querySelector('#id_proyectob').value;
+
+	let datos = new FormData();
+	datos.append('id_bloque', id_bloque);
+	datos.append('bloque', bloque);
+	datos.append('proyecto', proyecto);
+	datos.append('id_proyectob', id_proyectob);
+	datos.append('accion', tipo);
+	//Validar que el campo tenga algo escrito
+	if (nombre === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar al menos un campo'
+		});
+	} else {
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-editar-registro.php', true);
+
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				// console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'editbloque') {
+						Swal.fire({
+							icon: 'success',
+							title: 'Bloque Actualizado!',
+							text: 'Esta solicitud se ha realizado con éxito',
+							position: 'center',
+							showConfirmButton: true
+						}).then(function () {
+							window.location = "bloques.php";
+						});
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+}
+
+function editarRegistroLote(e) {
+	e.preventDefault();
+
+	let user_id = document.querySelector('#user_id').value,
+		numero = document.querySelector('#numero').value,
+		id_bloque = document.querySelector('#bloque').value,
+		areav2 = document.querySelector('#areav2').value,
+		colindancias = document.querySelector('#colindancias').value,
+		path_lote = document.querySelector('#path_lote').value,
+		tipo = document.querySelector('#tipo').value,
+		estado = document.querySelector('#estado').value;
+
+	let datos = new FormData();
+	datos.append('numero', numero);
+	datos.append('id_bloque', id_bloque);
+	datos.append('areav2', areav2);
+	datos.append('colindancias', colindancias);
+	datos.append('path_lote', path_lote);
+	datos.append('estado', estado);
+	datos.append('user_id', user_id);
+	datos.append('accion', tipo);
+	//Validar que el campo tenga algo escrito
+	if (numero === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar al menos un campo'
+		});
+	} else {
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-editar-registro.php', true);
+
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'editlote') {
+						Swal.fire({
+							icon: 'success',
+							title: 'Bloque Actualizado!',
+							text: 'Esta solicitud se ha realizado con éxito',
+							position: 'center',
+							showConfirmButton: true
+						}).then(function () {
+							window.location = "lotes.php";
+						});
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
 	}
 }
 
