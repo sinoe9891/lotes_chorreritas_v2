@@ -39,6 +39,11 @@
 		}else{
 			$lotes = '';
 		}
+		if (obtenerPaginaActual() == 'ventas' || obtenerPaginaActual() == 'edit-venta' || obtenerPaginaActual() == 'new-venta') {
+			$ventas = 'active';
+		}else{
+			$ventas = '';
+		}
 		?>
 		<div class="sidebar-menu">
 			<ul class="menu">
@@ -61,17 +66,17 @@
 						</li>
 					</ul>
 				</li>
-				<li class="sidebar-item  has-sub <?php echo $clientes ?>">
+				<li class="sidebar-item  has-sub <?php echo $clientes.$ventas?>">
 					<a href="#" class='sidebar-link'>
 					<i class="fa fa-table"></i>
 						<span>Facturación</span>
 					</a>
-					<ul class="submenu <?php echo $clientes ?>">
+					<ul class="submenu <?php echo $clientes.$ventas ?>">
 						<li class="submenu-item <?php echo $clientes ?>">
 							<a href="clientes.php">Clientes</a>
 						</li>
-						<li class="submenu-item ">
-							<a href="#">Ventas</a>
+						<li class="submenu-item <?php echo $ventas ?> ">
+							<a href="ventas.php">Ventas</a>
 						</li>
 						<li class="submenu-item ">
 							<a href="#">Créditos</a>
