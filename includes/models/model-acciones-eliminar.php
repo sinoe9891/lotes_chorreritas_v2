@@ -1,16 +1,16 @@
 <?php
 $accion = $_POST['accion'];
 $estado = $_POST['estado'];
-$id_solicitud = $_POST['id'];
-
+$id = $_POST['id'];
+$nombretable = $_POST['nombretable'];
 //codigo eliminar solicitud
-if($accion === 'eliminar-cliente') {
+if($accion === 'eliminar-bloque') {
     // importar la conexion
     include '../conexion.php';
     try {
         // Realizar la consulta a la base de datos
-        $stmt = $conn->prepare("DELETE FROM ficha_directorio WHERE id = ? ");
-        $stmt->bind_param('s', $id_solicitud);
+        $stmt = $conn->prepare("DELETE FROM bloques WHERE id_bloque = ? ");
+        $stmt->bind_param('s', $id);
         $stmt->execute();
         if($stmt->affected_rows > 0) {
             $respuesta = array(
@@ -33,16 +33,13 @@ if($accion === 'eliminar-cliente') {
     echo json_encode($respuesta);
 }
 
-
-//Actualizar Estado
-if ($accion === 'actualizar') {
-	// importar la conexion
+if($accion === 'eliminar-lote') {
+    // importar la conexion
     include '../conexion.php';
-
     try {
         // Realizar la consulta a la base de datos
-        $stmt = $conn->prepare("UPDATE ficha_directorio set estado = ? WHERE id = ? ");
-        $stmt->bind_param('ss', $estado, $id_solicitud);
+        $stmt = $conn->prepare("DELETE FROM lotes WHERE id_lote = ? ");
+        $stmt->bind_param('s', $id);
         $stmt->execute();
         if($stmt->affected_rows > 0) {
             $respuesta = array(
@@ -64,4 +61,3 @@ if ($accion === 'actualizar') {
     
     echo json_encode($respuesta);
 }
-

@@ -35,7 +35,7 @@ include 'includes/templates/header.php';
 						</div>
 					</div>
 				</div>
-				<section class="section clientes">
+				<section class="section lotes">
 					<div class="card">
 						<div class="card-body">
 							<table class="table table-striped" id="table1">

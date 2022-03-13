@@ -10,6 +10,7 @@ function addEventListener() {
 	let solicitud = document.querySelector('.clientes');
 	if (solicitud) {
 		modelo = 'model-acciones';
+		eliminar = 'eliminar-cliente';
 		solicitud.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
 				acciones(event,modelo);
@@ -19,10 +20,22 @@ function addEventListener() {
 	//Acciones de solicitudes
 	let solicitudBloques = document.querySelector('.bloques');
 	if (solicitudBloques) {
-		modelo = 'model-acciones-bloques';
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-bloque';
 		solicitudBloques.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo);
+				acciones(event,modelo, eliminar);
+			}
+		});
+	}
+	//Acciones de solicitudes
+	let solicitudLote = document.querySelector('.lotes');
+	if (solicitudLote) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-lote';
+		solicitudLote.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event,modelo,eliminar);
 			}
 		});
 	}
@@ -171,7 +184,7 @@ function acciones(e, modelo) {
 				let solicitudEliminar = e.target.parentElement.parentElement;
 				console.log(solicitudEliminar);
 				// Borrra de la Base de datos
-				eliminarRegistro(solicitudEliminar, null, modelo);
+				eliminarRegistro(solicitudEliminar, null, modelo, eliminar);
 				// Borrar del HTML
 				solicitudEliminar.remove();
 				Swal.fire(
@@ -221,7 +234,7 @@ const removeAccents = (str) => {
 } 
 
 // Funcion eliminar registro de la tabla
-function eliminarRegistro(solicitudEliminar, estado, model) {
+function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 	let idSolicitud = solicitudEliminar.id.split(':');
 	// console.log(idSolicitud[1]);
 	//Crear llamado a AJAX
@@ -230,7 +243,7 @@ function eliminarRegistro(solicitudEliminar, estado, model) {
 	//información FormData
 	let datos = new FormData();
 	datos.append('id', idSolicitud[1]);
-	datos.append('accion', 'eliminar');
+	datos.append('accion', eliminar);
 	datos.append('estado', estado);
 	datos.append('estado', estado);
 	// console.log(accion);
