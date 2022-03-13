@@ -17,6 +17,27 @@ if (isset($_GET['cerrar_sesion'])) {
 	<link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
 	<link rel="stylesheet" href="assets/css/app.css">
 	<link rel="stylesheet" href="assets/css/pages/auth.css">
+	<!-- Etiquetas SEO -->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Somos una empresa inmobiliaria que brinda apoyo para que puedas comprar tu lote de terreno en Siguatepue.">
+	<meta name="keywords" content="lotes, siguatepeque, baratos, terrenos, sigua, casas, sin prima, economicos, seguridad, seguros, clima, fresco, paz">
+	<link rel="icon" href="./images/favicon.png" type="image/x-icon" />
+	<meta name="description" content="Somos una empresa inmobiliaria que brinda apoyo para que puedas comprar tu lote de terreno en Siguatepue.">
+	<meta name="robots" content="noodp">
+	<link rel="canonical" href="https://kidan.dev/chorreritas/">
+	<meta property="og:locale" content="es_ES">
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="Lotes Chorreritas - Siguatepeque">
+	<meta property="og:description" content="Lotes Chorreritas es una empresa inmobiliaria que brinda apoyo para que puedas comprar tu lote de terreno en Siguatepue.">
+	<meta property="og:url" content="https://kidan.dev/chorreritas/">
+	<meta property="og:site_name" content="Lotes Chorreritas - Siguatepeque">
+	<meta property="og:image" content="https://kidan.dev/chorreritas/images/openg.jpg">
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:description" content="Lotes Chorreritas es una empresa inmobiliaria que brinda apoyo para que puedas comprar tu lote de terreno en Siguatepue.">
+	<meta name="twitter:title" content="Lotes Chorreritas - Siguatepeque">
+	<!-- <meta name="twitter:site" content="@EAPZamorano"> -->
+	<meta name="twitter:image" content="https://kidan.dev/chorreritas/images/openg.jpg">
+	<!-- <meta name="twitter:creator" content="@EAPZamorano"> -->
 </head>
 
 <body>
