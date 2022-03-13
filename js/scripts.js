@@ -25,10 +25,10 @@ function addEventListener() {
 	if (nuevoBloque) {
 		nuevoBloque.addEventListener('submit', newbloque);
 	}
-	//Asignar Lote
-	let asignar = document.querySelector('#asignar_lote');
-	if (asignar) {
-		asignar.addEventListener('submit', asignarLote);
+	//Nuevo Lote
+	let nuevoLote = document.querySelector('#nuevoLote');
+	if (nuevoLote) {
+		nuevoLote.addEventListener('submit', newlote);
 	}
 	let editarBloque = document.querySelector('#editarRegistroBloque');
 	if (editarBloque) {
@@ -38,6 +38,14 @@ function addEventListener() {
 	if (editarLote) {
 		editarLote.addEventListener('submit', editarRegistroLote);
 	}
+	//Asignar Lote
+	let asignar = document.querySelector('#asignar_lote');
+	if (asignar) {
+		asignar.addEventListener('submit', asignarLote);
+	}
+
+
+
 
 
 	//Detectar Click de eliminar
@@ -156,8 +164,8 @@ function nuevoCliente(e) {
 		direccion_beneficiario = document.querySelector('#direccion_beneficiario').value,
 		ciudad_beneficiario = document.querySelector('#ciudad_beneficiario').value,
 		departamento_beneficiario = document.querySelector('#departamento_beneficiario').value,
-		celular_beneficiario = document.querySelector('#celular_beneficiario').value;
-	pais_reside_beneficiario = document.querySelector('#pais_reside_beneficiario').value;
+		celular_beneficiario = document.querySelector('#celular_beneficiario').value,
+		pais_reside_beneficiario = document.querySelector('#pais_reside_beneficiario').value;
 
 	const regExp = new RegExp(/[0-9]{4,4}-[0-9]{4,4}-[0-9]{5,5}/) // --- sin comillas
 	const resultado = regExp.test(identidad);
@@ -344,6 +352,87 @@ function newbloque(e) {
 
 }
 
+function newlote(e) {
+	e.preventDefault();
+	let numero = document.querySelector('#numero').value,
+		id_bloques = document.querySelector('#id_bloques').value,
+		areav2 = document.querySelector('#areav2').value,
+		estado = document.querySelector('#estado').value,
+		colindancias = document.querySelector('#colindancias').value,
+		path_lote = document.querySelector('#path_lote').value,
+		combo = document.getElementById("id_bloques"),
+		selected = combo.options[combo.selectedIndex].text,
+		tipo = document.querySelector('#tipo').value;
+
+	if (numero === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar los campos',
+		});
+	} else {
+		//Campos son correctos - Ejecutamos AJAX
+		//Crear  FormData - Datos que se envían al servidor
+		console.log('enviar');
+		let datos = new FormData();
+		datos.append('numero', numero);
+		datos.append('id_bloques', id_bloques);
+		datos.append('areav2', areav2);
+		datos.append('estado', estado);
+		datos.append('colindancias', colindancias);
+		datos.append('path_lote', path_lote);
+		datos.append('accion', tipo);
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-nuevo.php', true);
+
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'newlote') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Solicitud realizada!',
+							text: 'Se ha creado el bloque con éxito',
+							position: 'center',
+							showConfirmButton: true
+
+						}).then(function () {
+							window.location = "lotes.php";
+						});;
+					}
+				} else if (respuesta.respuesta == 'duplicado') {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'El número de lote ¡ya existe!, por favor verifique'
+					})
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+
+}
+
+
+
+
 function asignarLote(e) {
 	e.preventDefault();
 	if (document.getElementById('lote')) {
@@ -420,7 +509,7 @@ function asignarLote(e) {
 }
 
 
-//-------------------Editar Graduado-------------------
+//-------------------Editar Lote-------------------
 function editarLote(e) {
 	e.preventDefault();
 

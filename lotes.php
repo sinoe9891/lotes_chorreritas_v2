@@ -91,7 +91,7 @@ include 'includes/templates/header.php';
 									?>
 								</tbody>
 							</table>
-							<a href="new-lote.php" class="btn btn-primary">Nuevo Registro</a>
+							<a href="new-lote.php" class="btn btn-primary">Nuevo Lote</a>
 						</div>
 					</div>
 				</section>

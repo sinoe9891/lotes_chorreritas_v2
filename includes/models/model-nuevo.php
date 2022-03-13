@@ -129,14 +129,14 @@ if ($accion === 'nuevoBloque') {
 	$name = $_POST['nombres'];
 	$proyecto = $_POST['proyecto'];
 	$accion = $_POST['accion'];
-	
+
 	//Importar la conexión
 	include '../conexion.php';
 	try {
 		//Preparar la consulta de insertar bloque
-// 		id_bloque	
-// bloque	
-// id_proyecto	
+		// 		id_bloque	
+		// bloque	
+		// id_proyecto	
 
 		$statement = $conn->prepare("INSERT INTO bloques (bloque, id_proyecto) VALUES (?,?)");
 		$statement->bind_param('ss', $name, $proyecto);
@@ -154,6 +154,72 @@ if ($accion === 'nuevoBloque') {
 				'respuesta' => 'error',
 			);
 		}
+		$statement->close();
+		$conn->close();
+	} catch (Exception $e) {
+		//En caso de un error, tomar la exepción
+		$respuesta = array(
+			//Arreglo asociativo
+			'pass' => $e->getMessage(),
+			// 'pass' => $hash_password
+		);
+	}
+	echo json_encode($respuesta);
+}
+
+if ($accion === 'newlote') {
+	$numero = $_POST['numero'];
+	$id_bloques = $_POST['id_bloques'];
+	$areav2 = $_POST['areav2'];
+	$estado = $_POST['estado'];
+	$colindancias = $_POST['colindancias'];
+	$path_lote = $_POST['path_lote'];
+	//Importar la conexión
+	include '../conexion.php';
+	try {
+		//Preparar la consulta de insertar bloque
+		$statement = $conn->prepare("INSERT INTO lotes (numero, id_bloque, areav2, estado, colindancias, path_lote) VALUES (?,?,?,?,?,?)");
+		$statement->bind_param('ssssss', $numero, $id_bloques, $areav2, $estado, $colindancias, $path_lote);
+		$enviado = '';
+		$consulta = $conn->query("SELECT * FROM lotes");
+		while ($row = $consulta->fetch_assoc()) {
+			if ($row['numero'] == $numero && $row['id_bloque'] == $id_bloques) {
+				$enviado = false;
+			} elseif ($row['numero'] != $numero && $row['id_bloque'] != $id_bloques) {
+				$enviado = true;
+			}
+		}
+
+		if ($enviado == true) {
+			$statement->execute();
+			$respuesta = array(
+				'respuesta' => 'correcto',
+				'numerolote' => $numero,
+				'id_bloques' => $id_bloques,
+				'areav2' => $areav2,
+				'estado' => $estado,
+				'colindancias' => $colindancias,
+				'path_lote' => $path_lote,
+				'tipo' => $accion,
+			);
+		}else if($enviado == false) {
+			$respuesta = array(
+				'respuesta' => 'duplicado',
+				'numerolote' => $numero,
+				'id_bloques' => $id_bloques,
+				'areav2' => $areav2,
+				'estado' => $estado,
+				'colindancias' => $colindancias,
+				'path_lote' => $path_lote,
+				'tipo' => $accion,
+			);
+			
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+			);
+		}
+
 		$statement->close();
 		$conn->close();
 	} catch (Exception $e) {
