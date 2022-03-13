@@ -36,12 +36,12 @@
 	<link rel="icon" href="./assets/images/favicon.png" type="image/x-icon" />
 	<meta name="description" content="Somos una empresa inmobiliaria que brinda apoyo para que puedas comprar tu lote de terreno en Siguatepue.">
 	<meta name="robots" content="noodp">
-	<link rel="canonical" href="https://kidan.dev/chorreritas/">
+	<link rel="canonical" href="https://kidan.dev/chorreritasv2/">
 	<meta property="og:locale" content="es_ES">
 	<meta property="og:type" content="website">
 	<meta property="og:title" content="Lotes Chorreritas - Siguatepeque">
 	<meta property="og:description" content="Lotes Chorreritas es una empresa inmobiliaria que brinda apoyo para que puedas comprar tu lote de terreno en Siguatepue.">
-	<meta property="og:url" content="https://kidan.dev/chorreritas/">
+	<meta property="og:url" content="https://kidan.dev/chorreritasv2/">
 	<meta property="og:site_name" content="Lotes Chorreritas - Siguatepeque">
 	<meta property="og:image" content="https://kidan.dev/chorreritas/images/openg.jpg">
 	<meta name="twitter:card" content="summary">
