@@ -87,7 +87,7 @@ date_default_timezone_set('America/Tegucigalpa');
 										<div class="col-12 d-flex justify-content-end">
 											<input type="hidden" class="btn btn-primary me-1 mb-1" id="tipo" value="nuevoBloque">
 											<input class="btn btn-primary me-1 mb-1" type="submit" value="Crear Bloque" name="update">
-											<a href="clientes.php">
+											<a href="bloques.php">
 												<div class="btn btn-light-secondary me-1 mb-1">Regresar</div>
 											</a>
 										</div>

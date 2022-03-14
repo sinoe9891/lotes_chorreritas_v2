@@ -26,7 +26,7 @@ date_default_timezone_set('America/Tegucigalpa');
 				<div class="page-title">
 					<div class="row">
 						<div class="col-12 col-md-6 order-md-1 order-last">
-							<h3>Clientes</h3>
+							<h3>Ventas</h3>
 						</div>
 						<div class="col-12 col-md-6 order-md-2 order-first">
 							<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -41,7 +41,7 @@ date_default_timezone_set('America/Tegucigalpa');
 				<section class="section">
 					<div class="card">
 						<div class="card-header">
-							<h5 class="card-title">Nuevo Cliente/Prospecto</h5>
+							<h5 class="card-title">Nueva Venta</h5>
 						</div>
 						<div class="card-body">
 							<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -514,8 +514,8 @@ date_default_timezone_set('America/Tegucigalpa');
 									</div>
 									<div class="col-12 d-flex justify-content-end">
 										<input type="hidden" class="btn btn-primary me-1 mb-1" id="tipo" value="solicitud">
-										<input class="btn btn-primary me-1 mb-1" type="submit" value="Crear Cliente" name="update">
-										<a href="clientes.php">
+										<input class="btn btn-primary me-1 mb-1" type="submit" value="Generar Venta" name="update">
+										<a href="ventas.php">
 											<div class="btn btn-light-secondary me-1 mb-1">Regresar</div>
 										</a>
 									</div>

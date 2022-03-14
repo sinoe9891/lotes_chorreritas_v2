@@ -42,26 +42,69 @@ include 'includes/templates/header.php';
 								<thead>
 									<tr>
 										<th>No.</th>
-										<th>Nombre Completo</th>
-										<th>Identidad</th>
-										<th>Celular</th>
-										<th>Observaciones</th>
+										<th>Cliente</th>
+										<th>ID</th>
+										<th>Fecha</th>
+										<th>Tip.V.</th>
+										<th>Total</th>
+										<th>Estado</th>
+										<th>Contrato</th>
 										<th>Acciones</th>
 									</tr>
 								</thead>
 								<tbody>
-
 									<?php
-									$consulta = $conn->query("SELECT * FROM fucha_compra");
+									$consultaProyecto = $conn->query("SELECT * FROM ficha_compra a, proyectos_ajustes b WHERE a.id_proyecto = b.id_proyecto");
+									while ($consulta = $consultaProyecto->fetch_array()) {
+										$preciovara = $consulta['precio_vara2'];
+									}
+									$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_registro = b.id GROUP BY id_registro");
 									$numero = $consulta->num_rows;
+									$contador = 0;
+									$total = 0;
 									while ($solicitud = $consulta->fetch_array()) {
 									?>
 										<tr id="solicitud:<?php echo $solicitud['id'] ?>">
 											<td><?php echo $numero--; ?></td>
 											<td><?php echo $solicitud['nombre_completo'] ?></td>
 											<td><?php echo $solicitud['identidad'] ?></td>
-											<td><?php echo $solicitud['celular'] ?></td>
-											<td><?php echo $solicitud['observaciones'] ?></td>
+											<td><?php echo $solicitud['fecha_venta'] ?></td>
+											<td><?php echo $solicitud['tipo'] ?></td>
+											<td>
+											<?php
+												// echo $contador++;
+												$prima = $solicitud['prima'];
+												$sumavaras = $solicitud['suma'];
+												$grantotal = ($sumavaras * 750)-$prima;
+												// echo $total;
+												echo 'L.'.number_format($grantotal, 2, '.', ',');
+
+												$estado = $solicitud['estado'];
+
+												if ($estado == 'en') {
+													$estadoVenta = 'En Curso';
+													$color = 'bg-success';
+												} elseif ($estado == 'an') {
+													$estadoVenta = 'Anulado';
+													$color = 'bg-secondary';
+												}  elseif ($estado == 'co') {
+													$estadoVenta = 'Concluido';
+													$color = 'bg-primary';
+												} elseif ($estado == 'pa') {
+													$estadoVenta = 'Pausado';
+													$color = 'bg-info';
+												} elseif ($estado == 'ca') {
+													$estadoVenta = 'Cancelado';
+													$color = 'bg-danger';
+												}else{
+													$estadoVenta = 'Pendiente';
+													$color = 'bg-warning';
+												}
+												?>
+											</td>
+											
+											<td> <span class="badge <?php echo $color ?> "> <?php echo $estadoVenta ?></span></td>
+											<td>Contrato</td>
 											<td>
 												<a href="edit-cliente.php?ID=<?php echo $solicitud['id'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 												<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
