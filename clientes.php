@@ -53,7 +53,7 @@ include 'includes/templates/header.php';
 
 									<?php
 									$solicitudes = obtenerFichas('id');
-									$consulta = $conn->query("SELECT * FROM ficha_directorio ORDER BY fecha_solicitud DESC, hora_solicitud DESC");
+									$consulta = $conn->query("SELECT * FROM ficha_directorio ORDER BY fecha_solicitud DESC, hora_solicitud ASC");
 									$numero = $consulta->num_rows;
 									while ($solicitud = $consulta->fetch_array()) {
 									?>

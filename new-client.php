@@ -69,7 +69,7 @@ date_default_timezone_set('America/Tegucigalpa');
 									<a class="nav-link" id="referencias-tab" data-bs-toggle="tab" href="#referencias" role="tab" aria-controls="referencias" aria-selected="false">Referencias</a>
 								</li>
 								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="observaciones-tab" data-bs-toggle="tab" href="#observaciones" role="tab" aria-controls="observaciones" aria-selected="false">Observaciones</a>
+									<a class="nav-link" id="observaciones-tab" data-bs-toggle="tab" href="#observacion" role="tab" aria-controls="observaciones-tab" aria-selected="false">Observaciones</a>
 								</li>
 							</ul>
 							<form class="form" id="nuevoRegistro" method="post">
@@ -496,7 +496,7 @@ date_default_timezone_set('America/Tegucigalpa');
 											</div>
 										</div>
 									</div>
-									<div class="tab-pane fade" id="observaciones" role="tabpanel" aria-labelledby="contact-tab">
+									<div class="tab-pane fade" id="observacion" role="tabpanel" aria-labelledby="contact-tab">
 										<div class="card">
 											<div class="card-content">
 												<div class="card-body">
