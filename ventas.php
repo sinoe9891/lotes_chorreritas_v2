@@ -35,7 +35,7 @@ include 'includes/templates/header.php';
 						</div>
 					</div>
 				</div>
-				<section class="section clientes">
+				<section class="section ventas">
 					<div class="card">
 						<div class="card-body">
 							<table class="table table-striped" id="table1">
@@ -80,25 +80,31 @@ include 'includes/templates/header.php';
 												echo 'L.'.number_format($grantotal, 2, '.', ',');
 
 												$estado = $solicitud['estado'];
-
+												$view='';
 												if ($estado == 'en') {
 													$estadoVenta = 'En Curso';
 													$color = 'bg-success';
+													$noview = "display:none";
 												} elseif ($estado == 'an') {
 													$estadoVenta = 'Anulado';
 													$color = 'bg-secondary';
+													$view = "initial";
 												}  elseif ($estado == 'co') {
 													$estadoVenta = 'Concluido';
 													$color = 'bg-primary';
+													$noview = "none";
 												} elseif ($estado == 'pa') {
-													$estadoVenta = 'Pausado';
+													$estadoVenta = 'Inactivo';
 													$color = 'bg-info';
+													$view = "initial";
 												} elseif ($estado == 'ca') {
 													$estadoVenta = 'Cancelado';
 													$color = 'bg-danger';
+													$view = "initial";
 												}else{
 													$estadoVenta = 'Pendiente';
 													$color = 'bg-warning';
+													$view = "initial";
 												}
 												?>
 											</td>
@@ -108,7 +114,7 @@ include 'includes/templates/header.php';
 											<td>
 												<a href="edit-cliente.php?ID=<?php echo $solicitud['id'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 												<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
-												<i class="fas fa-trash"></i>
+												<i class="fas fa-trash" style="<?php echo $noview.$view ?>;"></i>
 											</td>
 										</tr>
 									<?php

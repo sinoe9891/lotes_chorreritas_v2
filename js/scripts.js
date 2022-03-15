@@ -584,6 +584,44 @@ function editarLote(e) {
 
 }
 
+//Agregar un nuevo elemento de la
+var lineCount = 0;
+addAddressLine = function () {
+    var contenido = document.querySelector('#bloque').value;
+    var combo = document.getElementById("bloque");
+    var selected = combo.options[combo.selectedIndex].text;
+    combo.remove(combo.selectedIndex) //Solo se agrego esta linea para eliminar del select
+    var i = document.createElement('input');
+    i.setAttribute("type", "text");
+    i.setAttribute("id", contenido);
+    i.setAttribute("name", contenido);
+    i.setAttribute("value", selected);
+    i.setAttribute("readonly", "readonly");
+  
+    //Regresar item al select/ Parte 2 del favor
+    var btn = document.createElement('button');
+    btn.innerHTML = "X"
+    btn.id = selected;
+    btn.onclick = function(){
+      var x = document.getElementById("bloque");
+      var option = document.createElement("option");
+      option.text = selected;
+      x.add(option);
+      
+      document.getElementById(contenido).remove();
+      document.getElementById(selected).remove();
+      return;
+    };
+    document.body.appendChild(btn);
+    //
+    var addressContainer = document.getElementById("opciones");
+    addressContainer.appendChild(i);
+  return;
+ 
+}
+
+
+
 
 
 function editarRegistro(e) {

@@ -39,6 +39,17 @@ function addEventListener() {
 			}
 		});
 	}
+	//Acciones de solicitudes
+	let solicitudVenta = document.querySelector('.ventas');
+	if (solicitudVenta) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-venta';
+		solicitudVenta.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event,modelo,eliminar);
+			}
+		});
+	}
 
 	let fichaGraduado = document.querySelector('.caja-ficha');
 	if (fichaGraduado) {
@@ -236,7 +247,7 @@ const removeAccents = (str) => {
 // Funcion eliminar registro de la tabla
 function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 	let idSolicitud = solicitudEliminar.id.split(':');
-	// console.log(idSolicitud[1]);
+	console.log(idSolicitud[1]);
 	//Crear llamado a AJAX
 	let xhr = new XMLHttpRequest();
 

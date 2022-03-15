@@ -16,7 +16,7 @@
     }else{
         echo '<script src="js/scripts.js"></script>';
     }
-	if($actual === 'clientes' || $actual === 'bloques' || $actual === 'lotes'){
+	if($actual === 'clientes' || $actual === 'bloques' || $actual === 'lotes' || $actual = 'ventas'){
 		echo '<script src="js/validaciones.js"></script>';
 	}
 ?> 

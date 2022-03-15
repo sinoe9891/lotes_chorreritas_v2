@@ -115,6 +115,19 @@ function obtenerTodo($tabla = null) {
     }
 }
 
+function obtenerTodoBloque() {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT concat_ws('', b.bloque, a.numero) AS bloqueresult, a.id_lote, a.numero, a.areav2, a.estado, b.bloque, a.estado, b.id_bloque FROM lotes a, bloques b WHERE a.id_bloque = b.id_bloque and a.estado = 'd'");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+
+
+
 
 
 
