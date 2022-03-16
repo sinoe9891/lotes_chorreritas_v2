@@ -30,6 +30,11 @@ function addEventListener() {
 	if (nuevoLote) {
 		nuevoLote.addEventListener('submit', newlote);
 	}
+	//Nuevo venta
+	let nuevaventa = document.querySelector('#nuevaventa');
+	if (nuevaventa) {
+		nuevaventa.addEventListener('submit', newventa);
+	}
 	let editarBloque = document.querySelector('#editarRegistroBloque');
 	if (editarBloque) {
 		editarBloque.addEventListener('submit', editarRegistroBloque);
@@ -430,6 +435,100 @@ function newlote(e) {
 
 }
 
+function newventa(e) {
+	e.preventDefault();
+	let fechaSolicitud = document.querySelector('#fechaSolicitud').value,
+		horaSolicitud = document.querySelector('#horaSolicitud').value,
+		id_registro = document.querySelector('#nombre_completo').value,
+		fecha_venta = document.querySelector('#fecha_venta').value,
+		tipo_venta = document.querySelector('#tipo_venta').value,
+		prima = document.querySelector('#prima').value,
+		plazo_meses = document.querySelector('#plazo_meses').value,
+		vendedor = document.querySelector('#vendedor').value,
+		cuenta_bancaria = document.querySelector('#cuenta_bancaria').value,
+		fecha_primer_cuota = document.querySelector('#fecha_primer_cuota').value,
+		dia_pago = document.querySelector('#dia_pago').value,
+		proyecto = document.querySelector('#proyecto').value,
+		tipo = document.querySelector('#tipo').value,
+		bloque = document.querySelectorAll('.tabla-bloque');
+
+	//if (fechaSolicitud === '' || horaSolicitud === '' || nombre_completo === '' || fecha_venta === '' || prima === '' || plazo_meses === '' || vendedor === '' || cuenta_bancanria === '' || fecha_primer_cuota === '') {
+	if (nombre_completo === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar los campos',
+		});
+	} else {
+		//Campos son correctos - Ejecutamos AJAX
+		//Crear  FormData - Datos que se envían al servidor
+		console.log('enviar');
+		let datos = new FormData();
+		datos.append('fechaSolicitud', fechaSolicitud);
+		datos.append('horaSolicitud', horaSolicitud);
+		datos.append('id_registro', id_registro);
+		datos.append('fecha_venta', fecha_venta);
+		datos.append('tipo_venta', tipo_venta);
+		datos.append('prima', prima);
+		datos.append('tipo_venta', tipo_venta);
+		datos.append('plazo_meses', plazo_meses);
+		datos.append('vendedor', vendedor);
+		datos.append('cuenta_bancaria', cuenta_bancaria);
+		datos.append('fecha_primer_cuota', fecha_primer_cuota);
+		datos.append('dia_pago', dia_pago);
+		datos.append('proyecto', proyecto);
+		datos.append('cuenta_bancaria', cuenta_bancaria);
+		for (let i = 0; i < bloque.length; i++) {
+			hola = bloque[i].id;
+			datos.append('lotes[]', hola);
+			console.log(hola);
+		}
+		// datos.append('lotes', bloque);
+		datos.append('accion', tipo);
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-nuevo.php', true);
+		console.log('enviar1');
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+				console.log('Recibe respuesta');
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'newventa') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Asignación realizada!',
+							text: 'Ahora cambia el estado del lote',
+							position: 'center',
+							showConfirmButton: true
+
+						}).then(function () {
+							// urllote = '?ID=' + lote + '&bloque=' + bloque;
+							window.location = "ventas.php";
+						});;
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+
+}
+
 
 
 
@@ -587,42 +686,88 @@ function editarLote(e) {
 //Agregar un nuevo elemento de la
 var lineCount = 0;
 addAddressLine = function () {
-    var contenido = document.querySelector('#bloque').value;
-    var combo = document.getElementById("bloque");
-    var selected = combo.options[combo.selectedIndex].text;
-    combo.remove(combo.selectedIndex) //Solo se agrego esta linea para eliminar del select
-    var i = document.createElement('input');
-    i.setAttribute("type", "text");
-    i.setAttribute("id", contenido);
-    i.setAttribute("name", contenido);
-    i.setAttribute("value", selected);
-    i.setAttribute("readonly", "readonly");
-  
-    //Regresar item al select/ Parte 2 del favor
-    var btn = document.createElement('button');
-    btn.innerHTML = "X"
-    btn.id = selected;
-    btn.onclick = function(){
-      var x = document.getElementById("bloque");
-      var option = document.createElement("option");
-      option.text = selected;
-      x.add(option);
-      
-      document.getElementById(contenido).remove();
-      document.getElementById(selected).remove();
-      return;
-    };
-    document.body.appendChild(btn);
-    //
-    var addressContainer = document.getElementById("opciones");
-    addressContainer.appendChild(i);
-  return;
- 
+	var contenido = document.querySelector('#bloque').value;
+	var combo = document.getElementById("bloque");
+	var selected = combo.options[combo.selectedIndex].text;
+	combo.remove(combo.selectedIndex) //Solo se agrego esta linea para eliminar del select
+
+
+	//agregar contenido
+	var i = document.createElement('input');
+	i.setAttribute("type", "text");
+	i.setAttribute("id", contenido);
+	i.setAttribute("name", contenido);
+	i.setAttribute("value", selected);
+	i.setAttribute("readonly", "readonly");
+
+	//Regresar item al select/ Parte 2 del favor
+	var btn = document.createElement('div');
+	// btn.setAttribute("type", "button");
+	btn.setAttribute("class", "btn btn-light-secondary me-1 mb-1");
+	btn.setAttribute("id", "X");
+	btn.setAttribute("name", "X");
+	btn.setAttribute("value", "X");
+	btn.setAttribute("readonly", "readonly");
+	btn.innerHTML = "Eliminar";
+	btn.id = selected;
+
+	// Eliminar elemento
+	btn.onclick = function () {
+		var x = document.getElementById("bloque");
+		var option = document.createElement("option");
+		option.text = selected;
+		x.add(option);
+
+		document.getElementById(contenido).remove();
+		document.getElementById(selected).remove();
+		return;
+	};
+
+	// document.body.appendChild(btn);
+	//insertar celda y elimnar filas
+	var table = document.getElementById("tabla");
+	var row = table.insertRow(lineCount);
+
+	lineCount++;
+	var row = table.insertRow(-1).innerHTML = '<td class="text-bold-500 tabla-bloque" name="fila[]" id="' + contenido + '" value="' + contenido + '">' + lineCount + '</td><td class="text-bold-500">' + selected + '</td><td class="text-bold-500"><button class="btn btn-danger" onclick="deleteRow(this)">Quitar</button></td>';
+	document.getElementById("bloque").value = "";
+
+
+	//eliminar fila
+	return;
+
 }
 
+function deleteRow(r) {
+	var table = document.getElementById("tabla");
+	var rowCount = table.rows.length;
+	//console.log(rowCount);
 
+	if (rowCount <= 0)
+		alert('No se puede eliminar el encabezado');
+	else
+		table.deleteRow(rowCount - 1);
+}
 
+//document.querySelectorAll('.tabla-bloque')[0].id[0]
+//funcion para enviar filas de un array por medio de ajax para guardar en la base de datos
+function guardar_lote() {
+	//Obtener los datos del formulario
+	let bloque = document.querySelectorAll('.tabla-bloque');
+	let bloque_array = [];
+	//enviar por ajax
+	for (let i = 0; i < bloque.length; i++) {
+		bloque_array.push(bloque[i].id);
+	}
+	//console.log(bloque_array);
+	let datos = new FormData();
+	datos.append('bloque', bloque_array);
+	datos.append('user_id', user_id);
+	datos.append('areav2', areav2);
+	datos.append('path', path);
+	datos.append('accion', 'guardar');
 
+}
 
 function editarRegistro(e) {
 	e.preventDefault();
@@ -916,6 +1061,7 @@ function editarRegistroLote(e) {
 	datos.append('estado', estado);
 	datos.append('user_id', user_id);
 	datos.append('accion', tipo);
+
 	//Validar que el campo tenga algo escrito
 	if (numero === '') {
 		//validación Falló

@@ -189,7 +189,6 @@ if ($accion === 'newlote') {
 				$enviado = true;
 			}
 		}
-
 		if ($enviado == true) {
 			$statement->execute();
 			$respuesta = array(
@@ -202,7 +201,7 @@ if ($accion === 'newlote') {
 				'path_lote' => $path_lote,
 				'tipo' => $accion,
 			);
-		}else if($enviado == false) {
+		} else if ($enviado == false) {
 			$respuesta = array(
 				'respuesta' => 'duplicado',
 				'numerolote' => $numero,
@@ -213,13 +212,99 @@ if ($accion === 'newlote') {
 				'path_lote' => $path_lote,
 				'tipo' => $accion,
 			);
-			
 		} else {
 			$respuesta = array(
 				'respuesta' => 'error',
 			);
 		}
 
+		$statement->close();
+		$conn->close();
+	} catch (Exception $e) {
+		//En caso de un error, tomar la exepción
+		$respuesta = array(
+			//Arreglo asociativo
+			'pass' => $e->getMessage(),
+			// 'pass' => $hash_password
+		);
+	}
+	echo json_encode($respuesta);
+}
+
+
+if ($accion === 'newventa') {
+
+	//info general
+	$fechaSolicitud = $_POST['fechaSolicitud'];
+	$horaSolicitud = $_POST['horaSolicitud'];
+	$id_registro = $_POST['id_registro'];
+	$fecha_venta = $_POST['fecha_venta'];
+	$prima = $_POST['prima'];
+	$plazo_meses = $_POST['plazo_meses'];
+	$plazo_anios = $plazo_meses / 12;
+	$fecha_primer_cuota = $_POST['fecha_primer_cuota'];
+	$tipo_venta = $_POST['tipo_venta'];
+	$vendedor = $_POST['vendedor'];
+	$dia_pago = $_POST['dia_pago'];
+	$cuenta_bancaria = $_POST['cuenta_bancaria'];
+	$estado = 'pa';
+	//Info Bloque de venta
+	$id_proyecto = 1;
+	$id_bloque = 1;
+	$areav2 = 518.04;
+	$precio_vara2 = 750;
+	$total = ($areav2 * $precio_vara2);
+	$cuota = ($total / $plazo_meses);
+	$estado_lote = 'v';
+	$accion === 'newventa';
+
+	//conexion
+	include '../conexion.php';
+	try {
+		//Preparar la consulta de insertar bloque
+		$statement = $conn->prepare("INSERT INTO ficha_compra (fechaSolicitud, horaSolicitud, id_registro, fecha_venta, prima, plazo_anios, cuota, dia_pago, fecha_primer_cuota, plazo_meses, tipo, id_proyecto, estado, vendedor, cuenta_bancaria) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$statement->bind_param('sssssssssssssss', $fechaSolicitud, $horaSolicitud, $id_registro, $fecha_venta, $prima, $plazo_anios, $cuota, $dia_pago, $fecha_primer_cuota, $plazo_meses, $tipo_venta, $id_proyecto, $estado, $vendedor, $cuenta_bancaria);
+		$statement->execute();
+		$last_id = mysqli_insert_id($conn);
+
+		//ciclo for con arreglo de lotes de venta con metodo posts
+		$lotes = $_POST["lotes"];
+		// echo $lotes;
+		for ($i = 0; $i < sizeof($lotes); $i++) {
+			$id_lote = $lotes[$i];
+			$id_compra = $last_id;
+			$stmtcompra = $conn->prepare("INSERT INTO ficha_compra_lotes (id_lote,id_registro,id_compra) VALUES (?,?,?)");
+			$stmtcompra->bind_param('sss', $id_lote, $id_registro, $id_compra);
+			$stmtcompra->execute();
+			//enviar a tabla ficha compra bloques
+			$stmt = $conn->prepare("UPDATE lotes SET estado = ?, id_registro = ? WHERE id_lote = ?");
+			$stmt->bind_param('sss', $estado_lote, $id_registro, $id_lote);
+			$stmt->execute();
+			$estadoquery = true;
+		}
+
+		//consulta si esta duplicado
+		if ($statement->affected_rows > 0 && $estadoquery == true) {
+			$respuesta = array(
+				'respuesta' => 'correcto',
+				'fechaSolicitud' => $fechaSolicitud,
+				'horaSolicitud' => $horaSolicitud,
+				'id_registro' => $id_registro,
+				'fecha_venta' => $fecha_venta,
+				'tipo_venta' => $tipo_venta,
+				'prima' => $prima,
+				'plazo_meses' => $plazo_meses,
+				'vendedor' => $vendedor,
+				'cuenta_bancanria' => $cuenta_bancaria,
+				'fecha_primer_cuota' => $fecha_primer_cuota,
+				'tipo' => $accion,
+				'array' => $lotes
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+			);
+		}
 		$statement->close();
 		$conn->close();
 	} catch (Exception $e) {

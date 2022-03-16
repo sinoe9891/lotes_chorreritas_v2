@@ -58,14 +58,14 @@ include 'includes/templates/header.php';
 									while ($consulta = $consultaProyecto->fetch_array()) {
 										$preciovara = $consulta['precio_vara2'];
 									}
-									$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_registro = b.id GROUP BY id_registro");
-									$numero = $consulta->num_rows;
+									$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_registro = b.id GROUP BY id_registro ORDER BY a.id_registro DESC");
+									$numero = 1;
 									$contador = 0;
 									$total = 0;
 									while ($solicitud = $consulta->fetch_array()) {
 									?>
 										<tr id="solicitud:<?php echo $solicitud['id'] ?>">
-											<td><?php echo $numero--; ?></td>
+											<td><?php echo $numero++; ?></td>
 											<td><?php echo $solicitud['nombre_completo'] ?></td>
 											<td><?php echo $solicitud['identidad'] ?></td>
 											<td><?php echo $solicitud['fecha_venta'] ?></td>
