@@ -452,8 +452,7 @@ function newventa(e) {
 		tipo = document.querySelector('#tipo').value,
 		bloque = document.querySelectorAll('.tabla-bloque');
 
-	//if (fechaSolicitud === '' || horaSolicitud === '' || nombre_completo === '' || fecha_venta === '' || prima === '' || plazo_meses === '' || vendedor === '' || cuenta_bancanria === '' || fecha_primer_cuota === '') {
-	if (nombre_completo === '') {
+	if (fechaSolicitud === '' || horaSolicitud === '' || nombre_completo === '' || fecha_venta === '' || prima === '' || plazo_meses === '' || vendedor === '' || cuenta_bancaria === '' || fecha_primer_cuota === '') {
 		//validación Falló
 		Swal.fire({
 			icon: 'error',
@@ -689,7 +688,7 @@ addAddressLine = function () {
 	var contenido = document.querySelector('#bloque').value;
 	var combo = document.getElementById("bloque");
 	var selected = combo.options[combo.selectedIndex].text;
-	combo.remove(combo.selectedIndex) //Solo se agrego esta linea para eliminar del select
+	// combo.remove(combo.selectedIndex) //Solo se agrego esta linea para eliminar del select
 
 
 	//agregar contenido

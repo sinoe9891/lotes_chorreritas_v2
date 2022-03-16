@@ -67,7 +67,7 @@ date_default_timezone_set('America/Tegucigalpa');
 																<label for="first-name-column">Nombre Completo</label>
 																<input type="hidden" id="fechaSolicitud" name="fechaSolicitud" value="<?php echo date('Y-m-d'); ?>">
 																<input type="hidden" id="horaSolicitud" name="horaSolicitud" value="<?php echo date('H:i:s'); ?>">
-																<select class="choices form-select" id="nombre_completo" name="nombre_completo" >
+																<select class="choices form-select" id="nombre_completo" name="nombre_completo" required>
 																	<option name="lote" value="">Buscar Cliente</option>
 																	<?php
 																	$nombres = obtenerFichas();
@@ -85,7 +85,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-12 col-12">
 															<div class="form-group">
 																<label for="first-name-column">Fecha de Cotrato</label>
-																<input type="date" class="form-control" name="fecha_venta" id="fecha_venta" value="" >
+																<input type="date" class="form-control" name="fecha_venta" id="fecha_venta" value="" required>
 															</div>
 														</div>
 														<div class="col-md-12 col-12">
@@ -100,13 +100,13 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-12 col-12">
 															<div class="form-group">
 																<label for="company-column">Prima</label>
-																<input type="number" class="form-control" name="prima" id="prima" value="" placeholder="00.00" >
+																<input type="number" class="form-control" name="prima" id="prima" value="" placeholder="00.00" required>
 															</div>
 														</div>
 														<div class="col-md-12 col-12">
 															<div class="form-group">
 																<label for="country-floating">No. de Cuotas(meses)</label>
-																<input type="number" class="form-control" id="plazo_meses" name="plazo_meses" value="" placeholder="0" >
+																<input type="number" class="form-control" id="plazo_meses" name="plazo_meses" value="" placeholder="0" required>
 															</div>
 														</div>
 													</div>
@@ -152,7 +152,6 @@ date_default_timezone_set('America/Tegucigalpa');
 																</select>
 															</div>
 														</div>
-													
 													<div class="col-12 d-flex justify-content-end">
 														<div class="btn btn-primary me-1 mb-1">
 															<i class="fa fa-arrow-down" style="color:white;" aria-hidden="true"></i>
@@ -187,7 +186,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-12 col-12">
 															<div class="form-group">
 																<label for="first-name-column">Vendedor</label>
-																<select class="choices form-select" id="vendedor" name="vendedor" >
+																<select class="choices form-select" id="vendedor" name="vendedor" required>
 																	<option name="lote" value="">Buscar Vendedor</option>
 																	<?php
 																	$vendedor = obtenerTodo('vendedores');
@@ -205,7 +204,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-12  col-12">
 															<div class="form-group">
 																<label for="last-name-column">Deposito en Banco</label>
-																<select class="choices form-select" id="cuenta_bancaria" name="cuenta_bancaria" >
+																<select class="choices form-select" id="cuenta_bancaria" name="cuenta_bancaria" required>
 																	<option name="lote" value="">Buscar Banco</option>
 																	<?php
 																	$cuenta_bancaria = obtenerTodo('cuentas_bancarias');
@@ -223,13 +222,13 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="city-column">Fecha Pago Primera Cuota *</label>
-																<input type="date" class="form-control" name="fecha_primer_cuota" id="fecha_primer_cuota" value="" >
+																<input type="date" class="form-control" name="fecha_primer_cuota" id="fecha_primer_cuota" value="" required>
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="city-column">Día de Pago *</label>
-																<input type="number" class="form-control" name="dia_pago" id="dia_pago" max="30" min="1" vvalue="" placeholder="1 al 30" >
+																<input type="number" class="form-control" name="dia_pago" id="dia_pago" max="30" min="1" vvalue="" placeholder="1 al 30" required>
 															</div>
 														</div>
 													</div>
