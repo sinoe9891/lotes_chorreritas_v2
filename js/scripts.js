@@ -105,10 +105,14 @@ function formatID(identidad) {
 	// console.log(resultado);
 }
 
-
-
+//Funcion para ver en que pagina estoy
+function filename() {
+	var rutaAbsoluta = self.location.href;
+	var posicionUltimaBarra = rutaAbsoluta.lastIndexOf("/");
+	var rutaRelativa = rutaAbsoluta.substring(posicionUltimaBarra + "/".length, rutaAbsoluta.length);
+	return rutaRelativa;
+}
 //-------------------Solicitud de Graduado para actualziación-------------------
-
 function nuevoCliente(e) {
 	e.preventDefault();
 
@@ -263,10 +267,11 @@ function nuevoCliente(e) {
 				//esta es la respuesta la que tenemos en el model
 				// let respuesta = xhr.responseText;
 				let respuesta = JSON.parse(xhr.responseText);
+				let urlactual = filename()
 				console.log(respuesta);
 				if (respuesta.respuesta === 'correcto') {
 					//si es un nuevo usuario 
-					if (respuesta.tipo == 'solicitud') {
+					if (respuesta.tipo == 'solicitud' && urlactual == 'new-client.php') {
 						Swal.fire({
 							icon: 'success',
 							title: '¡Solicitud realizada!',
@@ -276,6 +281,16 @@ function nuevoCliente(e) {
 
 						}).then(function () {
 							window.location = "clientes.php";
+						});;
+					} else if (respuesta.tipo == 'solicitud' && urlactual == 'precontrato.php') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Solicitud realizada!',
+							text: 'Se verificarán los datos y se aprobará la actualización',
+							position: 'center',
+							showConfirmButton: true
+						}).then(function () {
+							window.location.reload();
 						});;
 					}
 				} else {
