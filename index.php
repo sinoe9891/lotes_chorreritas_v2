@@ -310,6 +310,17 @@ include 'includes/templates/sidebar.php';
 	</div>
 </div>
 </div>
+<script src="js/sweetalert2.all.min.js"></script>
+<script>
+	Swal.fire({
+		icon: 'success',
+		title: '¡Nueva Actualización!',
+		text: 'Ya se puede editar el lote y crear una venta. Falta eliminar o agregar más lotes al momento de editar una venta',
+		position: 'center',
+		showConfirmButton: true
+
+	})
+</script>
 <?php
 include 'includes/templates/footer.php';
 ?>
