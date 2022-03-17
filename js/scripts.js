@@ -1,5 +1,5 @@
 addEventListener();
-
+// Hola
 function addEventListener() {
 	// Creación de registro
 	let evento = document.querySelector('#formulario');
@@ -1057,7 +1057,7 @@ function editarRegistroBloque(e) {
 
 function editarRegistroLote(e) {
 	e.preventDefault();
-
+	console.log('llego');
 	let user_id = document.querySelector('#user_id').value,
 		numero = document.querySelector('#numero').value,
 		id_bloque = document.querySelector('#bloque').value,

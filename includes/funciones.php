@@ -58,6 +58,16 @@ function obtenerInfoFichaPerfil($id = null) {
         return false;
     }
 }
+function obtenerInfoVenta($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM ficha_compra a, ficha_compra_lotes b, ficha_directorio c WHERE a.id = {$id} and b.id_compra = a.id and a.id_registro = c.id;");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
 
 
 function obtenerListaLote() {

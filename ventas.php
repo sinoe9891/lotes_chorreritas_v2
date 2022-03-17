@@ -112,7 +112,7 @@ include 'includes/templates/header.php';
 											<td> <span class="badge <?php echo $color ?> "> <?php echo $estadoVenta ?></span></td>
 											<td>Contrato</td>
 											<td>
-												<a href="edit-cliente.php?ID=<?php echo $solicitud['id'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
+												<a href="edit-venta.php?ID=<?php echo $solicitud['id'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 												<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
 												<i class="fas fa-trash" style="<?php echo $noview.$view ?>;"></i>
 											</td>
