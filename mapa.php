@@ -61,7 +61,7 @@ include 'includes/templates/sidebar.php';
 											$boton = 'btn-info';
 											$estado = 'Reservado';
 										}
-										echo '<p><strong>Estado: <a href="#" class="btn ' . $boton . '">' . $estado . '</a><br>Lote: ' . $bloque . '-' . $id_lote . '</p></strong>';
+										echo '<p><strong><a href="#" class="btn ' . $boton . '">' . $estado . '</a><a href="edit-lote.php?ID='.$id_lote.'" class="btn" style="margin-left:10px;color:white;background-color:#ff7976;">Editar Lote</a></p></strong>';
 										echo '<div class="card-header">
 												<h5 class="card-title">Estado: ' . $estado . '<br>Lote: ' . $bloque . '-' . $id_lote . '</h5>
 											</div>';
