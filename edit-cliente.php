@@ -89,7 +89,7 @@ include 'includes/templates/sidebar.php';
 											if ($solicitudes->num_rows > 0) {
 												while ($row = $solicitudes->fetch_assoc()) {
 													$id = $row['id'];
-													$estado = $row['estado'];
+													$estado = $row['estado_registro'];
 													$nombres = $row['nombre_completo'];
 													$fechaN = $row['fecha_nacimiento'];
 													setlocale(LC_TIME, 'es_ES', 'Spanish_Spain', 'Spanish');

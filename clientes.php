@@ -59,7 +59,7 @@ include 'includes/templates/sidebar.php';
 									<td><?php echo $solicitud['observaciones'] ?></td>
 									<td>
 										<a href="edit-cliente.php?ID=<?php echo $solicitud['id'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
-										<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
+										<i class="far fa-check-circle <?php echo ($solicitud['estado_registro'] === '1' ? 'completo' : '') ?>"></i>
 										<i class="fas fa-trash"></i>
 									</td>
 								</tr>

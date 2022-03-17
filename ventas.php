@@ -52,7 +52,7 @@ include 'includes/templates/sidebar.php';
 							while ($consulta = $consultaProyecto->fetch_array()) {
 								$preciovara = $consulta['precio_vara2'];
 							}
-							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_registro = b.id GROUP BY id_registro ORDER BY a.id_registro DESC");
+							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id_ficha_compra, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_registro = b.id GROUP BY id_registro ORDER BY a.id_registro DESC");
 							$numero = 1;
 							$contador = 0;
 							$total = 0;
@@ -106,7 +106,7 @@ include 'includes/templates/sidebar.php';
 									<td> <span class="badge <?php echo $color ?> "> <?php echo $estadoVenta ?></span></td>
 									<td>Contrato</td>
 									<td>
-										<a href="edit-venta.php?ID=<?php echo $solicitud['id'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
+										<a href="edit-venta.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 										<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
 										<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
 									</td>

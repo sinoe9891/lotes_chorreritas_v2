@@ -61,7 +61,17 @@ function obtenerInfoFichaPerfil($id = null) {
 function obtenerInfoVenta($id = null) {
     include 'conexion.php';
     try {
-        return $conn->query("SELECT * FROM ficha_compra a, ficha_compra_lotes b, ficha_directorio c WHERE a.id = {$id} and b.id_compra = a.id and a.id_registro = c.id;");
+        return $conn->query("SELECT * FROM ficha_compra a, ficha_directorio c WHERE a.id_ficha_compra = {$id} and a.id_registro = c.id");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+function obtenerInfoLoteComprado($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM ficha_compra_lotes a, lotes b WHERE a.id_compra = {$id} and a.id_lote = b.id_lote");
 
     } catch(Exception $e) {
         echo "Error! : " . $e->getMessage();
@@ -85,7 +95,7 @@ function obtenerListaLote() {
 function obtenerFichas() {
     include 'conexion.php';
     try {
-		return $conn->query("SELECT * FROM ficha_directorio WHERE estado = 0 ORDER BY id DESC");
+		return $conn->query("SELECT * FROM ficha_directorio WHERE estado_registro = 0 ORDER BY id DESC");
     } catch(Exception $e) {
 		echo "Error! : " . $e->getMessage();
         return false;
@@ -161,7 +171,7 @@ function obtenerPrecioLote($id_lote)	{
 function obtenerTodoBloque() {
     include 'conexion.php';
     try {
-        return $conn->query("SELECT concat_ws('', b.bloque, a.numero) AS bloqueresult, a.id_lote, a.numero, a.areav2, a.estado, b.bloque, a.estado, b.id_bloque, c.precio_vara2, b.id_proyecto FROM lotes a, bloques b, proyectos_ajustes c WHERE a.id_bloque = b.id_bloque and a.estado = 'd'");
+        return $conn->query("SELECT concat_ws('', b.bloque, a.numero) AS bloqueresult, a.id_lote, a.numero, a.areav2, a.estado, b.bloque, b.id_bloque, c.precio_vara2, b.id_proyecto FROM lotes a, bloques b, proyectos_ajustes c WHERE a.id_bloque = b.id_bloque and a.estado = 'd'");
 
     } catch(Exception $e) {
         echo "Error! : " . $e->getMessage();
@@ -237,7 +247,7 @@ function obtenerSolicitudes() {
 function obtenerNumeroSolicitudes() {
 	include 'conexion.php';
     try {
-		return $conn->query("SELECT * FROM ficha_directorio WHERE estado = 0 ORDER BY id DESC");
+		return $conn->query("SELECT * FROM ficha_directorio WHERE estado_registro = 0 ORDER BY id DESC");
     } catch(Exception $e) {
 		echo "Error! : " . $e->getMessage();
         return false;

@@ -35,6 +35,11 @@ function addEventListener() {
 	if (nuevaventa) {
 		nuevaventa.addEventListener('submit', newventa);
 	}
+	//Nuevo venta
+	let editarventa = document.querySelector('#editarventa');
+	if (editarventa) {
+		editarventa.addEventListener('submit', editventa);
+	}
 	let editarBloque = document.querySelector('#editarRegistroBloque');
 	if (editarBloque) {
 		editarBloque.addEventListener('submit', editarRegistroBloque);
@@ -551,6 +556,103 @@ function newventa(e) {
 
 }
 
+function editventa(e) {
+	e.preventDefault();
+	let fechaSolicitud = document.querySelector('#fechaSolicitud').value,
+		horaSolicitud = document.querySelector('#horaSolicitud').value,
+		id_registro = document.querySelector('#id_registro').value,
+		id_ficha_compra = document.querySelector('#id_ficha_compra').value,
+		fecha_venta = document.querySelector('#fecha_venta').value,
+		tipo_venta = document.querySelector('#tipo_venta').value,
+		prima = document.querySelector('#prima').value,
+		plazo_meses = document.querySelector('#plazo_meses').value,
+		vendedor = document.querySelector('#vendedor').value,
+		cuenta_bancaria = document.querySelector('#cuenta_bancaria').value,
+		fecha_primer_cuota = document.querySelector('#fecha_primer_cuota').value,
+		dia_pago = document.querySelector('#dia_pago').value,
+		proyecto = document.querySelector('#proyecto').value,
+		estado = document.querySelector('#estado').value,
+		tipo = document.querySelector('#tipo').value,
+		bloque = document.querySelectorAll('.tabla-bloque');
+
+	if (fechaSolicitud === '' ||  fecha_venta === '' || prima === '' || vendedor === '' || cuenta_bancaria === '' || fecha_primer_cuota === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos',
+		});
+	} else {
+		//Campos son correctos - Ejecutamos AJAX
+		//Crear  FormData - Datos que se envían al servidor
+		console.log('enviar');
+		let datos = new FormData();
+		datos.append('fechaSolicitud', fechaSolicitud);
+		datos.append('horaSolicitud', horaSolicitud);
+		datos.append('id_registro', id_registro);
+		datos.append('id_ficha_compra', id_ficha_compra);
+		datos.append('fecha_venta', fecha_venta);
+		datos.append('tipo_venta', tipo_venta);
+		datos.append('prima', prima);
+		datos.append('tipo_venta', tipo_venta);
+		datos.append('plazo_meses', plazo_meses);
+		datos.append('vendedor', vendedor);
+		datos.append('cuenta_bancaria', cuenta_bancaria);
+		datos.append('fecha_primer_cuota', fecha_primer_cuota);
+		datos.append('dia_pago', dia_pago);
+		datos.append('estado', estado);
+		datos.append('proyecto', proyecto);
+		datos.append('cuenta_bancaria', cuenta_bancaria);
+		for (let i = 0; i < bloque.length; i++) {
+			hola = bloque[i].id;
+			datos.append('lotes[]', hola);
+			console.log(hola);
+		}
+		// datos.append('lotes', bloque);
+		datos.append('accion', tipo);
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-editar-registro.php', true);
+		console.log('enviar1');
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+				console.log('Recibe respuesta');
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'editarventa') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Actualización!',
+							text: 'Se ha realizado el cambio',
+							position: 'center',
+							showConfirmButton: true
+
+						}).then(function () {
+							// urllote = '?ID=' + lote + '&bloque=' + bloque;
+							window.location = "ventas.php";
+						});;
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+
+}
+
 
 
 
@@ -712,8 +814,8 @@ addAddressLine = function () {
 	var combo = document.getElementById("bloque");
 	var selected = combo.options[combo.selectedIndex].text;
 	// combo.remove(combo.selectedIndex) //Solo se agrego esta linea para eliminar del select
-
-
+	let cuentaactual = document.querySelectorAll('.tabla-bloque').length;
+	lineCount = cuentaactual;
 	//agregar contenido
 	var i = document.createElement('input');
 	i.setAttribute("type", "text");

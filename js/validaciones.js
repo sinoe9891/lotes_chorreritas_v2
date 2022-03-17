@@ -163,13 +163,9 @@ function validarBuscar(e) {
 
 //acciones de solicitudes cambia estado o elimina
 function acciones(e, modelo) {
-	// e.preventDefault();
-	// console.log('click de acciones listado');
-
-	// console.log(e.target.classList.contains('fa-check-circle'));
-	// console.log(e.target.classList.contains('fa-trash'));
-	console.log(modelo);
+	// console.log(modelo);
 	//Delegation
+	// console.log(e.target);
 	if (e.target.classList.contains('fa-check-circle')) {
 		if (e.target.classList.contains('completo')) {
 			e.target.classList.remove('completo');
@@ -214,7 +210,8 @@ function acciones(e, modelo) {
 
 //Función de Cambio de Estado
 function cambiarEstado(solicitud, estado, model) {
-	let idSolicitud = solicitud.parentElement.parentElement.parentElement.id.split(':');
+	//acceder hasta donde esta el ID!
+	let idSolicitud = solicitud.parentElement.parentElement.id.split(':');
 	// console.log(idSolicitud[1]);
 
 	//Crear llamado a AJAX
@@ -232,7 +229,7 @@ function cambiarEstado(solicitud, estado, model) {
 	//on load
 	xhr.onload = function () {
 		if (this.status === 200) {
-			// console.log(JSON.parse(xhr.responseText));
+			console.log(JSON.parse(xhr.responseText));
 		}
 	}
 	//Enviar la petición

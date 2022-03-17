@@ -49,6 +49,7 @@ include 'includes/templates/sidebar.php';
 										$v2 = $row['areav2'];
 										$bloque = $row['bloque'];
 										$estado = $row['estado'];
+										$numero = $row['numero'];
 										$preciovra = 750;
 
 										if ($estado == 'v') {
@@ -63,7 +64,7 @@ include 'includes/templates/sidebar.php';
 										}
 										echo '<p><strong><a href="#" class="btn ' . $boton . '">' . $estado . '</a><a href="edit-lote.php?ID='.$id_lote.'" class="btn" style="margin-left:10px;color:white;background-color:#ff7976;">Editar Lote</a></p></strong>';
 										echo '<div class="card-header">
-												<h5 class="card-title">Estado: ' . $estado . '<br>Lote: ' . $bloque . '-' . $id_lote . '</h5>
+												<h5 class="card-title">Estado: ' . $estado . '<br>Lote: ' . $bloque . '-' . $numero . '</h5>
 											</div>';
 								?>
 										<table class="table table-striped mb-0">

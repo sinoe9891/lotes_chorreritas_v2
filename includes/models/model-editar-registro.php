@@ -1,4 +1,5 @@
 <?php
+include '../funciones.php';
 date_default_timezone_set('America/Tegucigalpa');
 $accion = $_POST['accion'];
 
@@ -215,6 +216,123 @@ if ($accion === 'editlote') {
 		}
 		$stmt->close();
 		// $stmt_counter->close();
+		$conn->close();
+	} catch (Exception $e) {
+		//En caso de un error, tomar la exepción
+		$respuesta = array(
+			//Arreglo asociativo
+			'pass' => $e->getMessage(),
+			// 'pass' => $hash_password
+		);
+	}
+	echo json_encode($respuesta);
+}
+
+
+if ($accion === 'editarventa') {
+
+	//info general
+	$fechaSolicitud = $_POST['fechaSolicitud'];
+	$horaSolicitud = $_POST['horaSolicitud'];
+	$id_registro = $_POST['id_registro'];
+	$id_ficha_compra = $_POST['id_ficha_compra'];
+	$fecha_venta = $_POST['fecha_venta'];
+	$prima = $_POST['prima'];
+	$plazo_meses = $_POST['plazo_meses'];
+	$plazo_anios = ($plazo_meses / 12);
+	$fecha_primer_cuota = $_POST['fecha_primer_cuota'];
+	$tipo_venta = $_POST['tipo_venta'];
+	$vendedor = $_POST['vendedor'];
+	$dia_pago = $_POST['dia_pago'];
+	$cuenta_bancaria = $_POST['cuenta_bancaria'];
+	$proyecto = $_POST['proyecto'];
+	$estado =  $_POST['estado'];
+	$estado_lote = 'v';
+
+	//info de proyecto
+	$resultado = obtenerProy($proyecto);
+	$row = $resultado->fetch_assoc();
+	$precio_vara2 = $row['precio_vara2'];
+	$accion === 'editarventa';
+
+	//condicion si el $lotes = $_POST["lotes"] viene vacio
+	// if (empty($_POST["lotes"])) {
+	// 	$lotes = array();
+	// } else {
+	// 	$lotes = $_POST["lotes"];
+	// }
+	
+	// // funcion insertar ficha_compra_lotes
+	// function insertarFichaCompra($idlote, $cliente, $idcompra)
+	// {
+	// 	include '../conexion.php';
+	// 	$stmtcompra = $conn->prepare("INSERT INTO ficha_compra_lotes (id_lote,id_registro,id_compra) VALUES (?,?,?)");
+	// 	$stmtcompra->bind_param('sss', $idlote, $cliente, $idcompra);
+	// 	$stmtcompra->execute();
+	// 	return;
+	// }
+	// // funciona actualizar lote
+	// function actualizarLote($estado, $cliente, $lote)
+	// {
+	// 	include '../conexion.php';
+	// 	$stmtLotes = $conn->prepare("UPDATE lotes SET estado = ?, id_registro = ? WHERE id_lote = ?");
+	// 	$stmtLotes->bind_param('sss', $estado, $cliente, $lote);
+	// 	$stmtLotes->execute();
+	// 	return;
+	// }
+	// // funciona cuota lote
+	// function cuotaLote($area, $preciovara, $idcompra, $meses)
+	// {
+	// 	include '../conexion.php';
+	// 	$stmtCuota = $conn->prepare("UPDATE ficha_compra SET cuota = ? WHERE id = ?");
+	// 	$total = ($area * $preciovara);
+	// 	$cuota = ($total / $meses);
+	// 	$stmtCuota->bind_param('ss', $cuota, $idcompra);
+	// 	$stmtCuota->execute();
+	// 	return;
+	// }
+	//conexion
+	include '../conexion.php';
+	try {
+		//Preparar la consulta de insertar bloque
+		$statement = $conn->prepare("UPDATE ficha_compra SET fechaSolicitud = ?, horaSolicitud = ?, id_registro = ?, fecha_venta = ?, prima = ?, plazo_anios = ?, dia_pago = ?, fecha_primer_cuota = ?, plazo_meses = ?, tipo = ?, id_proyecto = ?, estado = ?, vendedor = ?, cuenta_bancaria = ? WHERE id_ficha_compra = ?");
+		$statement->bind_param('sssssssssssssss', $fechaSolicitud, $horaSolicitud, $id_registro, $fecha_venta, $prima, $plazo_anios, $dia_pago, $fecha_primer_cuota, $plazo_meses, $tipo_venta, $proyecto, $estado, $vendedor, $cuenta_bancaria, $id_ficha_compra);
+		$statement->execute();
+
+		//ciclo for con arreglo de lotes de venta con metodo posts
+		// $lotes = $_POST["lotes"];
+		// for ($i = 0; $i < sizeof($lotes); $i++) {
+		// 	$id_lote = $lotes[$i];
+		// 	// echo $id_lote;
+		// 	$id_compra = $last_id;
+		// 	insertarFichaCompra($id_lote, $id_registro, $id_compra);
+		// 	actualizarLote($estado_lote, $id_registro, $id_lote);
+
+		// 	$resultadoPrecio = obtenerPrecioLote($id_lote);
+		// 	$row = $resultadoPrecio->fetch_assoc();
+		// 	$areav2 = $row['areav2'];
+		// 	cuotaLote($areav2, $precio_vara2, $id_compra, $plazo_meses);
+
+		// 	$estadoquery = true;
+		// }
+		//consulta si esta duplicado
+		// if ($statement->affected_rows > 0 && $estadoquery) {
+		if ($statement->affected_rows > 0) {
+			$respuesta = array(
+				'respuesta' => 'correcto',
+				'fechaSolicitud' => $fechaSolicitud,
+				'estado' => $estado,
+				'tipo_venta' => $tipo_venta,
+				'horaSolicitud' => $horaSolicitud,
+				'id_registro' => $id_registro,
+				'tipo' => $accion
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+			);
+		}
+		$statement->close();
 		$conn->close();
 	} catch (Exception $e) {
 		//En caso de un error, tomar la exepción

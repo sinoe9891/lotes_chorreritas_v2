@@ -62,29 +62,34 @@ include 'includes/templates/sidebar.php';
 											if ($_GET) {
 												// $solicitudes = obtenerInfoSolicitud($user_id);
 												$solicitudes = obtenerInfoVenta($user_id);
-												$referenciasQuery = obtenerRerferencias($user_id);
-												$beneficiarioQuery = obtenerBeneficiario($user_id);
-												$financieraQuery = obtenerFinanciera($user_id);
 											} else {
 												header('Location: ventas.php');
 											};;
 											if ($solicitudes->num_rows > 0) {
-												while ($row = $solicitudes->fetch_assoc()) {
-													$nombre_completo = $row['nombre_completo'];
-													$fecha_venta = $row['fecha_venta'];
-													$tipo = $row['tipo'];
-													$prima = $row['prima'];
-													$plazo_meses = $row['plazo_meses'];
-													$vendedor = $row['vendedor'];
+												while ($filasVentas = $solicitudes->fetch_assoc()) {
+													$id_compra = $filasVentas['id_ficha_compra'];
+													$id_registro = $filasVentas['id_registro'];
+													$nombre_completo = $filasVentas['nombre_completo'];
+													$fecha_venta = $filasVentas['fecha_venta'];
+													$tipo = $filasVentas['tipo'];
+													$estado = $filasVentas['estado'];
+													$prima = $filasVentas['prima'];
+													$plazo_meses = $filasVentas['plazo_meses'];
+													$id_vendedor = $filasVentas['vendedor'];
+													$id_proyecto = $filasVentas['id_proyecto'];
+													$cuentabank = $filasVentas['cuenta_bancaria'];
+													$fecha_primer_cuota = $filasVentas['fecha_primer_cuota'];
+													$dia_pago = $filasVentas['dia_pago'];
 
 											?>
 													<div class="row">
 														<div class="col-md-12 col-12">
 															<div class="form-group">
 																<label for="first-name-column">Nombre Completo</label>
-																<?php echo $vendedor . $plazo_meses ?>
 																<input type="hidden" id="fechaSolicitud" name="fechaSolicitud" value="<?php echo date('Y-m-d'); ?>">
 																<input type="hidden" id="horaSolicitud" name="horaSolicitud" value="<?php echo date('H:i:s'); ?>">
+																<input type="hidden" class="form-control" id="id_registro" name="id_registro" value="<?php echo $id_registro; ?>" readonly>
+																<input type="hidden" class="form-control" id="id_ficha_compra" name="id_ficha_compra" value="<?php echo $id_compra; ?>" readonly>
 																<input type="text" class="form-control" id="nombre_completo" name="nombre_completo" value="<?php echo $nombre_completo; ?>" readonly>
 															</div>
 														</div>
@@ -122,6 +127,30 @@ include 'includes/templates/sidebar.php';
 																<input type="number" class="form-control" id="plazo_meses" name="plazo_meses" value="<?php echo $plazo_meses; ?>" required>
 															</div>
 														</div>
+														<div class="col-md-12 col-12">
+															<div class="form-group">
+																<select class="form-select" id="estado" name="estado">
+																	<?php
+																	//array de las opciones de un select
+																	$opciones = array('en', 'an', 'co', 'pa', 'ca', 'pe');
+																	$nombres = array('En curso', 'Anulado', 'Concluido', 'Inactivo', 'Cancelado', 'Pendiente');
+																	//array bidimensional con las $opciones y $nombres
+																	$select = array_combine($opciones, $nombres);
+																	//recorremos el array bidimensional
+																	foreach ($select as $opcion => $nombre) {
+																		//si la opcion es igual a la que esta en la base de datos 
+																		if ($opcion == $estado) {
+																			//seleccionamos la opcion
+																			echo '<option value="' . $opcion . '" selected>' . $nombre . '</option>';
+																		} else {
+																			//sino seleccionamos la opcion
+																			echo '<option value="' . $opcion . '">' . $nombre . '</option>';
+																		}
+																	}
+																	?>
+																</select>
+															</div>
+														</div>
 													</div>
 											<?php
 												}
@@ -138,29 +167,17 @@ include 'includes/templates/sidebar.php';
 											<div class="row">
 												<div class="col-md-12 mb-12">
 													<label for="country-floating">Bloque</label>
+													<input type="hidden" id="proyecto" name="proyecto" class="form-control" value="<?php echo $id_proyecto; ?>" placeholder="<?php echo $id_proyecto; ?>">
 													<?php
 													$bloque = obtenerTodoBloque();
-													$proyectos = obtenerProyecto('1');
-													if ($proyectos->num_rows > 0) {
-														while ($row = $proyectos->fetch_assoc()) {
-															$id_proyecto = $row['id_proyecto'];
-															$nombre = $row['nombre'];
-															echo '<input type="hidden" id="proyecto" name="proyecto" class="form-control" value="' . $id_proyecto . '" placeholder="' . $nombre . '">';
-														}
-													}
-
 													?>
-
 													<div class="form-group">
 														<select class="choices form-select" id="bloque" name="bloque">
 															<option name="lote" value="">Buscar Lote...(Ej. B2)</option>
 															<?php
 															if ($bloque->num_rows > 0) {
 																while ($row = $bloque->fetch_assoc()) {
-																	$id_bloque = $row['id_bloque'];
 																	$id_lote = $row['id_lote'];
-																	$areav2 = $row['areav2'];
-																	$precio = $row['areav2'] * $row['precio_vara2'];
 																	$nombre = $row['bloqueresult'];
 																	echo '<option name="lote" value="' . $id_lote . '">' . $nombre . '</option>';
 																}
@@ -185,6 +202,27 @@ include 'includes/templates/sidebar.php';
 															</tr>
 														</thead>
 														<tbody id="tabla">
+															<?php
+															$compralot = obtenerInfoLoteComprado($id_compra);
+															if ($compralot->num_rows > 0) {
+																while ($compra = $compralot->fetch_assoc()) {
+																	$id_compra_lote = $compra['id_compra_lote'];
+																	$id_lote_compra = $compra['id_lote'];
+																	$bloque = $compra['bloque'];
+																	$id_registro = $compra['id_registro'];
+																	$id_compra = $compra['id_compra'];
+															?>
+																	<tr>
+																		<td class="text-bold-500 tabla-bloque" name="fila[]" id="<?php echo $id_lote_compra; ?>" value="<?php echo $id_lote_compra; ?>">1</td>
+																		<td class="text-bold-500"><?php echo $bloque . $id_lote_compra; ?></td>
+																		<td class="text-bold-500"><button class="btn btn-danger" onclick="deleteRow(this)">Quitar</button></td>
+																	</tr>
+															<?php
+
+
+																}
+															}
+															?>
 															<div id="opciones">
 															</div>
 														</tbody>
@@ -209,12 +247,12 @@ include 'includes/templates/sidebar.php';
 															$vendedor = obtenerTodo('vendedores');
 															if ($vendedor->num_rows > 0) {
 																while ($row = $vendedor->fetch_assoc()) {
-																	$id_vendedor = $row['id_vendedor'];
+																	$id_vend = $row['id_vendedor'];
 																	$nombre_vendedor = $row['nombre_vendedor'];
-																	if ($id_vendedor == $vendedor) {
-																		echo '<option name="id_vendedor" value="' . $id_vendedor . '" selected>' . $nombre_vendedor . '</option>';
+																	if ($id_vend == $id_vendedor) {
+																		echo '<option name="id_vendedor" value="' . $id_vend . '" selected>' . $nombre_vendedor . '</option>';
 																	} else {
-																		echo '<option name="id_vendedor" value="' . $id_vendedor . '">' . $nombre_vendedor . '</option>';
+																		echo '<option name="id_vendedor" value="' . $id_vend . '">' . $nombre_vendedor . '</option>';
 																	}
 																}
 															}
@@ -225,7 +263,7 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-12  col-12">
 													<div class="form-group">
 														<label for="last-name-column">Deposito en Banco</label>
-														<select class="choices form-select" id="cuenta_bancaria" name="cuenta_bancaria" required>
+														<select class="choices form-select" id="cuenta_bancaria" name="cuenta_bancaria">
 															<option name="lote" value="">Buscar Banco</option>
 															<?php
 															$cuenta_bancaria = obtenerTodo('cuentas_bancarias');
@@ -233,7 +271,11 @@ include 'includes/templates/sidebar.php';
 																while ($row = $cuenta_bancaria->fetch_assoc()) {
 																	$id = $row['id_cuenta'];
 																	$nombre_completo = $row['institucion_bancaria'];
-																	echo '<option name="cuenta_bancaria" value="' . $id . '">' . $nombre_completo . '</option>';
+																	if ($id == $cuentabank) {
+																		echo '<option name="cuenta_bancaria" value="' . $id . '" selected>' . $nombre_completo . '</option>';
+																	} else {
+																		echo '<option name="cuenta_bancaria" value="' . $id . '">' . $nombre_completo . '</option>';
+																	}
 																}
 															}
 															?>
@@ -243,13 +285,13 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-6 col-12">
 													<div class="form-group">
 														<label for="city-column">Fecha Pago Primera Cuota *</label>
-														<input type="date" class="form-control" name="fecha_primer_cuota" id="fecha_primer_cuota" value="" required>
+														<input type="date" class="form-control" name="fecha_primer_cuota" id="fecha_primer_cuota" value="<?php echo $fecha_primer_cuota; ?>" >
 													</div>
 												</div>
 												<div class="col-md-6 col-12">
 													<div class="form-group">
 														<label for="city-column">Día de Pago *</label>
-														<input type="number" class="form-control" name="dia_pago" id="dia_pago" max="30" min="1" vvalue="" placeholder="1 al 30" required>
+														<input type="number" class="form-control" name="dia_pago" id="dia_pago" max="30" min="1" value="<?php echo $dia_pago; ?>" placeholder="1 al 30" >
 													</div>
 												</div>
 											</div>
@@ -258,8 +300,8 @@ include 'includes/templates/sidebar.php';
 								</div>
 							</div>
 							<div class="col-12 d-flex justify-content-end">
-								<input type="hidden" class="btn btn-primary me-1 mb-1" id="tipo" value="newventa">
-								<input class="btn btn-primary me-1 mb-1" type="submit" value="Generar Venta" name="update">
+								<input type="hidden" class="btn btn-primary me-1 mb-1" id="tipo" value="editarventa">
+								<input class="btn btn-primary me-1 mb-1" type="submit" value="Actualizar" name="update">
 								<a href="ventas.php">
 									<div class="btn btn-light-secondary me-1 mb-1">Regresar</div>
 								</a>
@@ -282,7 +324,7 @@ include('includes/templates/footer.php');
 ?>
 <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="assets/js/bootstrap.bundle.min.js"></script>
-
+<!-- <script src="assets/vendors/choices.js/choices.min.js"></script> -->
 <script src="assets/js/main.js"></script>
 </body>
 
