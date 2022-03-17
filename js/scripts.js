@@ -176,136 +176,137 @@ function nuevoCliente(e) {
 		celular_beneficiario = document.querySelector('#celular_beneficiario').value,
 		pais_reside_beneficiario = document.querySelector('#pais_reside_beneficiario').value;
 
-	const regExp = new RegExp(/[0-9]{4,4}-[0-9]{4,4}-[0-9]{5,5}/) // --- sin comillas
-	const resultado = regExp.test(identidad);
-	console.log(resultado);
+	let verficarid = formatID(identidad);
+	let verficaridbeneficiario = formatID(identidad_beneficiario);
 
-
-	if (nombres === '' && identidad === '') {
+	if (nombres === '' || identidad === '' || identidad_beneficiario === '' || nombre_beneficiario === '' && fechanac === '' ) {
 		//validación Falló
 		Swal.fire({
 			icon: 'error',
 			title: 'Oops...',
-			text: 'Debe de llenar todos de forma correcta los campos',
+			text: 'Debe de llenar los campos obligatorios',
 		});
 	} else {
-		//Campos son correctos - Ejecutamos AJAX
-		//Crear  FormData - Datos que se envían al servidor
-		console.log('enviar');
-		let datos = new FormData();
-		datos.append('horaSolicitud', horaSolicitud);
-		datos.append('fechaSolicitud', fechaSolicitud);
-		datos.append('nombres', nombres);
-		datos.append('fechanac', fechanac);
-		datos.append('identidad', identidad);
-		datos.append('nacionalidad', nacionalidad);
-		datos.append('genero', genero);
-		datos.append('estado_civil', estado_civil);
-		datos.append('pais_reside', pais_reside);
-		datos.append('direccion', direccion);
-		datos.append('ciudad', ciudad);
-		datos.append('departamento', departamento);
-		datos.append('email', email);
-		datos.append('celular', celular);
-		datos.append('telefono', telefono);
-		datos.append('dependientes', dependientes);
-		datos.append('observaciones', observaciones);
-		datos.append('profesion', profesion);
-		datos.append('empresa_labora', empresa_labora);
-		datos.append('direccion_empleo', direccion_empleo);
-		datos.append('telefono_empleo', telefono_empleo);
-		datos.append('cargo', cargo);
-		datos.append('tiempo_laborando', tiempo_laborando);
-		datos.append('sueldos', sueldos);
-		datos.append('remesas', remesas);
-		datos.append('otros_ingresos', otros_ingresos);
-		datos.append('prestamos', prestamos);
-		datos.append('alquiler', alquiler);
-		datos.append('otros_egresos', otros_egresos);
-		datos.append('nombre_conyugue', nombre_conyugue);
-		datos.append('fechnac_conyugue', fechnac_conyugue);
-		datos.append('identidad_conyugue', identidad_conyugue);
-		datos.append('celular_conyugue', celular_conyugue);
-		datos.append('empresa_labora_conyugue', empresa_labora_conyugue);
-		datos.append('telefono_empleo_conyugue', telefono_empleo_conyugue);
-		datos.append('cargo_conyugue', cargo_conyugue);
-		datos.append('tiempo_laborando_conyugue', tiempo_laborando_conyugue);
-		datos.append('nombre_referencia_1', nombre_referencia_1);
-		datos.append('direccion_referencia_1', direccion_referencia_1);
-		datos.append('celular_referencia_1', celular_referencia_1);
-		datos.append('telefono_referencia_1', telefono_referencia_1);
-		datos.append('empresa_labora_referencia_1', empresa_labora_referencia_1);
-		datos.append('telefono_empleo_referencia_1', telefono_empleo_referencia_1);
-		datos.append('nombre_referencia_2', nombre_referencia_2);
-		datos.append('direccion_referencia_2', direccion_referencia_2);
-		datos.append('celular_referencia_2', celular_referencia_2);
-		datos.append('telefono_referencia_2', telefono_referencia_2);
-		datos.append('empresa_labora_referencia_2', empresa_labora_referencia_2);
-		datos.append('telefono_empleo_referencia_2', telefono_empleo_referencia_2);
-		datos.append('nombre_beneficiario', nombre_beneficiario);
-		datos.append('genero_beneficiario', genero_beneficiario);
-		datos.append('identidad_beneficiario', identidad_beneficiario);
-		datos.append('direccion_beneficiario', direccion_beneficiario);
-		datos.append('ciudad_beneficiario', ciudad_beneficiario);
-		datos.append('departamento_beneficiario', departamento_beneficiario);
-		datos.append('celular_beneficiario', celular_beneficiario);
-		datos.append('pais_reside_beneficiario', pais_reside_beneficiario);
+		if (verficarid && verficaridbeneficiario) {
+			//Campos son correctos - Ejecutamos AJAX
+			//Crear  FormData - Datos que se envían al servidor
+			console.log('enviar');
+			let datos = new FormData();
+			datos.append('horaSolicitud', horaSolicitud);
+			datos.append('fechaSolicitud', fechaSolicitud);
+			datos.append('nombres', nombres);
+			datos.append('fechanac', fechanac);
+			datos.append('identidad', identidad);
+			datos.append('nacionalidad', nacionalidad);
+			datos.append('genero', genero);
+			datos.append('estado_civil', estado_civil);
+			datos.append('pais_reside', pais_reside);
+			datos.append('direccion', direccion);
+			datos.append('ciudad', ciudad);
+			datos.append('departamento', departamento);
+			datos.append('email', email);
+			datos.append('celular', celular);
+			datos.append('telefono', telefono);
+			datos.append('dependientes', dependientes);
+			datos.append('observaciones', observaciones);
+			datos.append('profesion', profesion);
+			datos.append('empresa_labora', empresa_labora);
+			datos.append('direccion_empleo', direccion_empleo);
+			datos.append('telefono_empleo', telefono_empleo);
+			datos.append('cargo', cargo);
+			datos.append('tiempo_laborando', tiempo_laborando);
+			datos.append('sueldos', sueldos);
+			datos.append('remesas', remesas);
+			datos.append('otros_ingresos', otros_ingresos);
+			datos.append('prestamos', prestamos);
+			datos.append('alquiler', alquiler);
+			datos.append('otros_egresos', otros_egresos);
+			datos.append('nombre_conyugue', nombre_conyugue);
+			datos.append('fechnac_conyugue', fechnac_conyugue);
+			datos.append('identidad_conyugue', identidad_conyugue);
+			datos.append('celular_conyugue', celular_conyugue);
+			datos.append('empresa_labora_conyugue', empresa_labora_conyugue);
+			datos.append('telefono_empleo_conyugue', telefono_empleo_conyugue);
+			datos.append('cargo_conyugue', cargo_conyugue);
+			datos.append('tiempo_laborando_conyugue', tiempo_laborando_conyugue);
+			datos.append('nombre_referencia_1', nombre_referencia_1);
+			datos.append('direccion_referencia_1', direccion_referencia_1);
+			datos.append('celular_referencia_1', celular_referencia_1);
+			datos.append('telefono_referencia_1', telefono_referencia_1);
+			datos.append('empresa_labora_referencia_1', empresa_labora_referencia_1);
+			datos.append('telefono_empleo_referencia_1', telefono_empleo_referencia_1);
+			datos.append('nombre_referencia_2', nombre_referencia_2);
+			datos.append('direccion_referencia_2', direccion_referencia_2);
+			datos.append('celular_referencia_2', celular_referencia_2);
+			datos.append('telefono_referencia_2', telefono_referencia_2);
+			datos.append('empresa_labora_referencia_2', empresa_labora_referencia_2);
+			datos.append('telefono_empleo_referencia_2', telefono_empleo_referencia_2);
+			datos.append('nombre_beneficiario', nombre_beneficiario);
+			datos.append('genero_beneficiario', genero_beneficiario);
+			datos.append('identidad_beneficiario', identidad_beneficiario);
+			datos.append('direccion_beneficiario', direccion_beneficiario);
+			datos.append('ciudad_beneficiario', ciudad_beneficiario);
+			datos.append('departamento_beneficiario', departamento_beneficiario);
+			datos.append('celular_beneficiario', celular_beneficiario);
+			datos.append('pais_reside_beneficiario', pais_reside_beneficiario);
+			datos.append('accion', tipo);
+			//Crear  el llamado a Ajax
+			let xhr = new XMLHttpRequest();
+			//Abrir la Conexión
+			xhr.open('POST', 'includes/models/model-nuevo.php', true);
 
-		// for (const archivo of fotos) {
-		// 	datos.append('archivos[]', archivo);
-		// }
+			//Retorno de Datos
+			xhr.onload = function () {
+				if (this.status === 200) {
+					//esta es la respuesta la que tenemos en el model
+					// let respuesta = xhr.responseText;
+					let respuesta = JSON.parse(xhr.responseText);
+					let urlactual = filename()
+					console.log(respuesta);
+					if (respuesta.respuesta === 'correcto') {
+						//si es un nuevo usuario 
+						if (respuesta.tipo == 'solicitud' && urlactual == 'new-client.php') {
+							Swal.fire({
+								icon: 'success',
+								title: '¡Solicitud realizada!',
+								text: 'Se verificarán los datos y se aprobará la actualización',
+								position: 'center',
+								showConfirmButton: true
 
-		datos.append('accion', tipo);
-		//Crear  el llamado a Ajax
-		let xhr = new XMLHttpRequest();
-		//Abrir la Conexión
-		xhr.open('POST', 'includes/models/model-nuevo.php', true);
-
-		//Retorno de Datos
-		xhr.onload = function () {
-			if (this.status === 200) {
-				//esta es la respuesta la que tenemos en el model
-				// let respuesta = xhr.responseText;
-				let respuesta = JSON.parse(xhr.responseText);
-				let urlactual = filename()
-				console.log(respuesta);
-				if (respuesta.respuesta === 'correcto') {
-					//si es un nuevo usuario 
-					if (respuesta.tipo == 'solicitud' && urlactual == 'new-client.php') {
+							}).then(function () {
+								window.location = "clientes.php";
+							});;
+						} else if (respuesta.tipo == 'solicitud' && urlactual == 'precontrato.php') {
+							Swal.fire({
+								icon: 'success',
+								title: '¡Precontrato Enviado!',
+								text: 'Se verificarán los datos y se contactarán con usted',
+								position: 'center',
+								showConfirmButton: true
+							}).then(function () {
+								window.location.reload();
+							});;
+						}
+					} else {
 						Swal.fire({
-							icon: 'success',
-							title: '¡Solicitud realizada!',
-							text: 'Se verificarán los datos y se aprobará la actualización',
-							position: 'center',
-							showConfirmButton: true
-
-						}).then(function () {
-							window.location = "clientes.php";
-						});;
-					} else if (respuesta.tipo == 'solicitud' && urlactual == 'precontrato.php') {
-						Swal.fire({
-							icon: 'success',
-							title: '¡Solicitud realizada!',
-							text: 'Se verificarán los datos y se aprobará la actualización',
-							position: 'center',
-							showConfirmButton: true
-						}).then(function () {
-							window.location.reload();
-						});;
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Hubo un error en la solicitud'
+						})
 					}
-				} else {
-					Swal.fire({
-						icon: 'error',
-						title: 'Oops...',
-						text: 'Hubo un error en la solicitud'
-					})
 				}
 			}
+			// Enviar la petición
+			xhr.send(datos);
+		} else {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'ID Invalido Cliente y Beneficiario (13 digitos más guiones) '
+			});
 		}
-		// Enviar la petición
-		xhr.send(datos);
-	}
 
+	}
 }
 
 function newbloque(e) {

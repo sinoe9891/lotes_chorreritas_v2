@@ -167,7 +167,7 @@ date_default_timezone_set('America/Tegucigalpa');
 																<div class="col-md-6 col-12">
 																	<div class="form-group">
 																		<label for="country-floating">Nacionalidad</label>
-																		<input type="text" class="form-control" id="nacionalidad" name="nacionalidad" value="<?php echo $nacionalidad; ?>" placeholder="Nacionalidad">
+																		<input type="text" class="form-control" id="nacionalidad" name="nacionalidad" value="<?php echo $nacionalidad; ?>" placeholder="Nacionalidad" required>
 																	</div>
 																</div>
 																<div class="col-md-6 col-12">
