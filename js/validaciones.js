@@ -13,7 +13,7 @@ function addEventListener() {
 		eliminar = 'eliminar-cliente';
 		solicitud.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo);
+				acciones(event,modelo,eliminar);
 			}
 		});
 	}
@@ -165,15 +165,20 @@ function validarBuscar(e) {
 function acciones(e, modelo) {
 	// console.log(modelo);
 	//Delegation
-	// console.log(e.target);
+	console.log(e.target);
 	if (e.target.classList.contains('fa-check-circle')) {
+		let bandera = '';
 		if (e.target.classList.contains('completo')) {
+			console.log('remover');
 			e.target.classList.remove('completo');
-			cambiarEstado(e.target, 0, modelo);
+			bandera = 0;
 		} else {
 			e.target.classList.add('completo');
-			cambiarEstado(e.target, 1, modelo);
+			console.log('agregar');
+			bandera = 1;
 		}
+
+		cambiarEstado(e.target, bandera, modelo);
 	}
 	// condicion de eliminar con alert
 	if (e.target.classList.contains('fa-trash')) {
@@ -212,8 +217,8 @@ function acciones(e, modelo) {
 function cambiarEstado(solicitud, estado, model) {
 	//acceder hasta donde esta el ID!
 	let idSolicitud = solicitud.parentElement.parentElement.id.split(':');
-	// console.log(idSolicitud[1]);
-
+	console.log(idSolicitud);
+	// console.log('entró')
 	//Crear llamado a AJAX
 	let xhr = new XMLHttpRequest();
 

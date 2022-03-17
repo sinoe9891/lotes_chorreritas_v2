@@ -46,7 +46,9 @@ if ($accion === 'actualizar') {
 		$stmt->execute();
 		if ($stmt->affected_rows > 0) {
 			$respuesta = array(
-				'respuesta' => 'correcto'
+				'respuesta' => 'correcto',
+				'id' => $id_solicitud,
+				'estado' => $estado
 			);
 		} else {
 			$respuesta = array(
