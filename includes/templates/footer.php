@@ -13,9 +13,10 @@
 		<script src="assets/vendors/apexcharts/apexcharts.js"></script>
 		<script src="assets/js/pages/dashboard.js"></script>
 		<script src="assets/js/main.js"></script>';
+		echo '<script src="js/scripts.js"></script>';
     }else{
-        echo '<script src="js/scripts.js"></script>';
-    }
+		echo '<script src="js/scripts.js"></script>';
+	}
 	if($actual === 'clientes' || $actual === 'bloques' || $actual === 'lotes' || $actual = 'ventas'){
 		echo '<script src="js/validaciones.js"></script>';
 	}

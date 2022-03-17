@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
+	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv='cache-control' content='no-cache'>
 	<meta http-equiv='expires' content='0'>
@@ -53,9 +53,9 @@
 
 </head>
 <?php
-	date_default_timezone_set('America/Tegucigalpa');
-	header ("Expires: Fri, 14 Mar 1980 20:53:00 GMT"); //la pagina expira en fecha pasada 
-	header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); //ultima actualizacion ahora cuando la cargamos 
-	header ("Cache-Control: no-cache, must-revalidate"); //no guardar en CACHE 
-	header ("Pragma: no-cache");;
+date_default_timezone_set('America/Tegucigalpa');
+header("Expires: Fri, 14 Mar 1980 20:53:00 GMT"); //la pagina expira en fecha pasada 
+header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); //ultima actualizacion ahora cuando la cargamos 
+header("Cache-Control: no-cache, must-revalidate"); //no guardar en CACHE 
+header("Pragma: no-cache");;
 ?>

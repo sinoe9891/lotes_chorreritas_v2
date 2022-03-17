@@ -81,6 +81,13 @@ function addEventListener() {
 
 }
 
+minimizar();
+function minimizar() {
+	if (window.innerWidth < 400) {
+		// alert('Hello' + window.innerWidth);
+		document.getElementById('sidebar').classList.remove('active');
+	}
+}
 window.onload = function () { almacenaValoresIniciales(); };
 // Función almacenar la información de los formularios
 function almacenaValoresIniciales() {
