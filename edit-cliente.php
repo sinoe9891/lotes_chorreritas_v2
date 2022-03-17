@@ -46,30 +46,30 @@ date_default_timezone_set('America/Tegucigalpa');
 						<div class="card-body">
 							<ul class="nav nav-tabs" id="myTab" role="tablist">
 								<li class="nav-item" role="presentation">
-									<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cliente</a>
+									<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">1.-Cliente</a>
 								</li>
 								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Información Personal</a>
-								</li>
-
-								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="laboral-tab" data-bs-toggle="tab" href="#laboral" role="tab" aria-controls="laboral" aria-selected="false">Información Laboral</a>
+									<a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">2.-Información Personal</a>
 								</li>
 
 								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="conyugue-tab" data-bs-toggle="tab" href="#conyugue" role="tab" aria-controls="conyugue" aria-selected="false">Conyugue</a>
+									<a class="nav-link" id="laboral-tab" data-bs-toggle="tab" href="#laboral" role="tab" aria-controls="laboral" aria-selected="false">3.-Información Laboral</a>
+								</li>
+
+								<li class="nav-item" role="presentation">
+									<a class="nav-link" id="conyugue-tab" data-bs-toggle="tab" href="#conyugue" role="tab" aria-controls="conyugue" aria-selected="false">4.-Conyugue</a>
 								</li>
 								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="beneficiario-tab" data-bs-toggle="tab" href="#beneficiario" role="tab" aria-controls="beneficiario" aria-selected="false">Beneficiario</a>
+									<a class="nav-link" id="beneficiario-tab" data-bs-toggle="tab" href="#beneficiario" role="tab" aria-controls="beneficiario" aria-selected="false">5.-Beneficiario</a>
 								</li>
 								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="financiera-tab" data-bs-toggle="tab" href="#financiera" role="tab" aria-controls="financiera" aria-selected="false">Financiera</a>
+									<a class="nav-link" id="financiera-tab" data-bs-toggle="tab" href="#financiera" role="tab" aria-controls="financiera" aria-selected="false">6.-Financiera</a>
 								</li>
 								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="referencias-tab" data-bs-toggle="tab" href="#referencias" role="tab" aria-controls="referencias" aria-selected="false">Referencias</a>
+									<a class="nav-link" id="referencias-tab" data-bs-toggle="tab" href="#referencias" role="tab" aria-controls="referencias" aria-selected="false">7.-Referencias</a>
 								</li>
 								<li class="nav-item" role="presentation">
-									<a class="nav-link" id="observacionestab-tab" data-bs-toggle="tab" href="#observacionestab" role="tab" aria-controls="observacionestab" aria-selected="false">Observaciones</a>
+									<a class="nav-link" id="observacionestab-tab" data-bs-toggle="tab" href="#observacionestab" role="tab" aria-controls="observacionestab-tab" aria-selected="false">8.-Observaciones</a>
 								</li>
 							</ul>
 							<form class="form" id="editarRegistro" method="post">
