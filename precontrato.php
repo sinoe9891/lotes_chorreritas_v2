@@ -195,7 +195,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="first-name-column">Empresa donde labora</label>
-																<input type="tel" class="form-control" name="empresa_labora" id="empresa_labora" value="" placeholder="Nombre Empresa, …">
+																<input type="text" class="form-control" name="empresa_labora" id="empresa_labora" value="" placeholder="Nombre Empresa, …">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
@@ -305,7 +305,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="last-name-column">Estado Civil</label>
+																<label for="last-name-column">Género</label>
 																<select class="form-select" name="genero_beneficiario" id="genero_beneficiario">
 																	<option value="F">Femenino</option>
 																	<option value="M">Masculino</option>
