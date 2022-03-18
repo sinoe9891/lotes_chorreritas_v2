@@ -157,6 +157,17 @@ function obtenerProy($id_proyecto)	{
 	}
 }
 
+function obtenerTotalVarasContrato($idcontrato)	{
+	include '../conexion.php';
+	try {
+		return $conn->query("SELECT SUM(areav2) as suma FROM lotes a, ficha_compra c WHERE c.id_contrato_compra = a.id_contrato and a.id_contrato = '$idcontrato' ORDER BY a.id_contrato DESC");
+
+	} catch(Exception $e) {
+		echo "Error! : " . $e->getMessage();
+		return false;
+	}
+}
+
 function obtenerPrecioLote($id_lote)	{
 	include '../conexion.php';
 	try {

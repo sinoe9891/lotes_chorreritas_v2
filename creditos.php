@@ -17,7 +17,7 @@ include 'includes/templates/sidebar.php';
 		<div class="page-title">
 			<div class="row">
 				<div class="col-12 col-md-6 order-md-1 order-last">
-					<h3>Ventas</h3>
+					<h3>Créditos</h3>
 				</div>
 				<div class="col-12 col-md-6 order-md-2 order-first">
 					<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -37,14 +37,13 @@ include 'includes/templates/sidebar.php';
 							<tr>
 								<th>No.</th>
 								<th>Cliente</th>
-								<th>ID</th>
-								<th>Contrato</th>
-								<th>Fecha</th>
-								<th>Tip.V.</th>
-								<th>Total</th>
-								<th>Estado</th>
-								<th>Contrato</th>
-								<th>Acciones</th>
+								<th>Sig. Pago</th>
+								<th>Cuota</th>
+								<th>Saldo</th>
+								<th>Total Venta</th>
+								<th>Cronograma</th>
+								<th>Letra</th>
+								<th>Cobros</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -56,8 +55,7 @@ include 'includes/templates/sidebar.php';
 							}else{
 								$precio_vara2 = 0;
 							}
-							// SELECT SUM(areav2) as suma FROM lotes a, ficha_compra c WHERE c.id_contrato_compra = a.id_contrato and a.id_contrato = 'LO2203-1-1' ORDER BY a.id_contrato DESC
-							// SELECT SUM(areav2) as suma FROM lotes a, ficha_compra c WHERE c.id_contrato_compra = a.id_contrato and a.id_contrato = 'LO2203-1-3' GROUP BY id_contrato  ORDER BY a.id_contrato DESC
+							
 							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id_ficha_compra, c.id_contrato_compra, a.id_contrato, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_contrato_compra = a.id_contrato GROUP BY id_contrato ORDER BY a.id_registro DESC");
 							$numero = 1;
 							$contador = 0;
@@ -68,7 +66,6 @@ include 'includes/templates/sidebar.php';
 									<td><?php echo $numero++; ?></td>
 									<td><?php echo $solicitud['nombre_completo'] ?></td>
 									<td><?php echo $solicitud['identidad'] ?></td>
-									<td><?php echo $solicitud['id_contrato'] ?></td>
 									<td><?php echo $solicitud['fecha_venta'] ?></td>
 									<td><?php echo $solicitud['tipo'] ?></td>
 									<td>
@@ -125,7 +122,6 @@ include 'includes/templates/sidebar.php';
 							?>
 						</tbody>
 					</table>
-					<a href="new-venta.php" class="btn btn-primary">Nueva Venta</a>
 				</div>
 			</div>
 		</section>

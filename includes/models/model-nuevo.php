@@ -276,6 +276,7 @@ if ($accion === 'newventa') {
 		$stmtLotes->execute();
 		return;
 	}
+
 	// funciona cuota lote
 	function cuotaLote($area, $preciovara, $idcompra, $meses)
 	{
@@ -288,15 +289,56 @@ if ($accion === 'newventa') {
 		return;
 	}
 
+	//generar un  id_contrato_compra con año, id_registro, mes y last_id
+	function generarIdContrato($last_id, $lote, $id_registro, $fechaventa, $prima, $precio_vara2, $id_compra, $plazo_anios)
+	{
+		include '../conexion.php';
+		$ano = date('y', strtotime($fechaventa));
+		$mes = date('m', strtotime($fechaventa));
+		$id_contrato = 'LO' . $ano . $mes . '-' . $id_registro . '-' . $last_id;
+
+		$stmtIdContrato = $conn->prepare("UPDATE ficha_compra SET id_contrato_compra = ? WHERE id_ficha_compra = ?");
+		$stmtIdContrato->bind_param('ss', $id_contrato, $last_id);
+		$stmtIdContrato->execute();
+
+		$stmtIdContratoLote = $conn->prepare("UPDATE lotes SET id_contrato = ? WHERE id_lote = ?");
+		$stmtIdContratoLote->bind_param('ss', $id_contrato, $lote);
+		$stmtIdContratoLote->execute();
+
+		totalCompra($precio_vara2, $prima, $id_compra, $id_contrato, $plazo_anios);
+
+		return;
+	}
+
+
+	// Calacular total de la compra
+	function totalCompra($preciovara, $prima, $idcompra, $idcontrato, $plazo)
+	{
+		include '../conexion.php';
+		$resultado = obtenerTotalVarasContrato($idcontrato);
+		$row = $resultado->fetch_assoc();
+		//suma de varas
+		$sumavaras = $row['suma'];
+		//gran total
+		$grantotal = ($sumavaras * $preciovara);
+		//saldo actual menos prima
+		$saldo = ($grantotal - $prima);
+		//sacar cuota
+		$cuota = ($saldo / $plazo);
+
+		$stmtTotal = $conn->prepare("UPDATE ficha_compra SET total_venta = ?, saldo_actual = ?, cuota = ? WHERE id_ficha_compra = ?");
+		$stmtTotal->bind_param('ssss', $grantotal, $saldo, $cuota, $idcompra);
+		$stmtTotal->execute();
+		return;
+	}
+
 	//conexion
-	// include '../conexion.php';
 	try {
 		//Preparar la consulta de insertar bloque
 		$statement = $conn->prepare("INSERT INTO ficha_compra (fechaSolicitud, horaSolicitud, id_registro, fecha_venta, prima, plazo_anios, dia_pago, fecha_primer_cuota, plazo_meses, tipo, id_proyecto, estado, vendedor, cuenta_bancaria) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 		$statement->bind_param('ssssssssssssss', $fechaSolicitud, $horaSolicitud, $id_registro, $fecha_venta, $prima, $plazo_anios, $dia_pago, $fecha_primer_cuota, $plazo_meses, $tipo_venta, $proyecto, $estado, $vendedor, $cuenta_bancaria);
 		$statement->execute();
 		$last_id = mysqli_insert_id($conn);
-
 		//ciclo for con arreglo de lotes de venta con metodo posts
 		$lotes = $_POST["lotes"];
 		for ($i = 0; $i < sizeof($lotes); $i++) {
@@ -306,10 +348,14 @@ if ($accion === 'newventa') {
 			insertarFichaCompra($id_lote, $id_registro, $id_compra);
 			actualizarLote($estado_lote, $id_registro, $id_lote);
 
+
 			$resultadoPrecio = obtenerPrecioLote($id_lote);
 			$row = $resultadoPrecio->fetch_assoc();
 			$areav2 = $row['areav2'];
-			cuotaLote($areav2, $precio_vara2, $id_compra, $plazo_meses);
+
+			// cuotaLote($areav2, $precio_vara2, $id_compra, $plazo_meses);
+
+			generarIdContrato($last_id, $id_lote, $id_registro, $fecha_venta, $prima, $precio_vara2, $id_compra, $plazo_anios);
 
 			$estadoquery = true;
 		}

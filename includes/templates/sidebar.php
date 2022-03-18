@@ -86,7 +86,7 @@
 									<a href="ventas.php">Contratos</a>
 								</li>
 								<li class="submenu-item ">
-									<a href="#">Créditos</a>
+									<a href="creditos.php">Créditos</a>
 								</li>
 								<li class="submenu-item ">
 									<a href="#">Cobros</a>
