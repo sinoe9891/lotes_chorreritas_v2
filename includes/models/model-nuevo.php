@@ -280,7 +280,7 @@ if ($accion === 'newventa') {
 	function cuotaLote($area, $preciovara, $idcompra, $meses)
 	{
 		include '../conexion.php';
-		$stmtCuota = $conn->prepare("UPDATE ficha_compra SET cuota = ? WHERE id = ?");
+		$stmtCuota = $conn->prepare("UPDATE ficha_compra SET cuota = ? WHERE id_ficha_compra = ?");
 		$total = ($area * $preciovara);
 		$cuota = ($total / $meses);
 		$stmtCuota->bind_param('ss', $cuota, $idcompra);

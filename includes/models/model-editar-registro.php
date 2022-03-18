@@ -281,16 +281,17 @@ if ($accion === 'editarventa') {
 	// 	return;
 	// }
 	// // funciona cuota lote
-	// function cuotaLote($area, $preciovara, $idcompra, $meses)
-	// {
-	// 	include '../conexion.php';
-	// 	$stmtCuota = $conn->prepare("UPDATE ficha_compra SET cuota = ? WHERE id = ?");
-	// 	$total = ($area * $preciovara);
-	// 	$cuota = ($total / $meses);
-	// 	$stmtCuota->bind_param('ss', $cuota, $idcompra);
-	// 	$stmtCuota->execute();
-	// 	return;
-	// }
+	function cuotaLote($area, $preciovara, $idcompra, $meses)
+	{
+		include '../conexion.php';
+		$stmtCuota = $conn->prepare("UPDATE ficha_compra SET cuota = ? WHERE id_ficha_compra = ?");
+		$total = ($area * $preciovara);
+		$cuota = ($total / $meses);
+		$stmtCuota->bind_param('ss', $cuota, $idcompra);
+		$stmtCuota->execute();
+
+		return;
+	}
 	//conexion
 	include '../conexion.php';
 	try {
@@ -302,7 +303,7 @@ if ($accion === 'editarventa') {
 
 		$resultadoInfoCompraLotes = obtenerInfoLoteComprado($id_ficha_compra);
 		while ($row = $resultadoInfoCompraLotes->fetch_assoc()) {
-			
+
 			$id_compra_lotes = $row['id_compra_lote'];
 			$id_compra = $row['id_compra'];
 			$id_loteactual = $row['id_lote'];
@@ -316,41 +317,44 @@ if ($accion === 'editarventa') {
 				$stmt = $conn->prepare("UPDATE lotes SET estado = ?, id_registro = ? WHERE id_lote = ?");
 				$stmt->bind_param('sss', $estado_lote, $id_registro, $id_loteactual);
 				$stmt->execute();
+				//actualizar campo cuota de estado de ficha_compra
+				$cuota_clean = 0;
+				$stmt = $conn->prepare("UPDATE ficha_compra SET cuota = ? WHERE id_ficha_compra = ?");
+				$stmt->bind_param('ss', $cuota_clean, $id_ficha_compra);
+				$stmt->execute();
+				// //actualizar id_registro lotes
+				$estado_registro_lote = 0;
+				$stmtLote = $conn->prepare("UPDATE lotes SET id_registro = ? WHERE id_lote = ?");
+				$stmtLote->bind_param('ss', $estado_registro_lote, $id_loteactual);
+				$stmtLote->execute();
 			}
 		}
+
 		$lotes = $_POST["lotes"];
 		if (sizeof($lotes) > 0) {
 			for ($i = 0; $i < sizeof($lotes); $i++) {
 				$id_lote = $lotes[$i];
 				// insertar lote de ficha compra
 				insertarFichaCompra($id_lote, $id_registro, $id_ficha_compra);
+				// actualizar precio lote de compra
+				$resultadoPrecio = obtenerPrecioLote($id_lote);
+				$row = $resultadoPrecio->fetch_assoc();
+				$areav2 = $row['areav2'];
+				cuotaLote($areav2, $precio_vara2, $id_ficha_compra, $plazo_meses);
 				//cambiar estado de lote de ficha compra
 				$estado_lote = 'v';
-				$stmt = $conn->prepare("UPDATE lotes SET estado = ? WHERE id_lote = ?");
-				$stmt->bind_param('ss', $estado_lote, $id_lote);
+				$stmt = $conn->prepare("UPDATE lotes SET estado = ?, id_registro = ? WHERE id_lote = ?");
+				$stmt->bind_param('sss', $estado_lote, $id_registro, $id_lote);
 				$stmt->execute();
 				// echo "entro";
 			}
 			$estadoquery = true;
-		}else{
+		} else {
 			$estadoquery = false;
 		}
-		// echo $id_compra;
-		// $id_compra = $last_id;
-
-		// 	insertarFichaCompra($id_lote, $id_registro, $id_compra);
-		// 	actualizarLote($estado_lote, $id_registro, $id_lote);
-
-		// 	$resultadoPrecio = obtenerPrecioLote($id_lote);
-		// 	$row = $resultadoPrecio->fetch_assoc();
-		// 	$areav2 = $row['areav2'];
-		// 	cuotaLote($areav2, $precio_vara2, $id_compra, $plazo_meses);
-
-		// 	$estadoquery = true;
-
 		//consulta si esta duplicado
-		// if ($statement->affected_rows > 0 && $estadoquery) {
-		if ($statement->affected_rows > 0) {
+		if ($statement->affected_rows > 0 && $estadoquery) {
+		// if ($statement->affected_rows > 0) {
 			$respuesta = array(
 				'respuesta' => 'correcto',
 				'fechaSolicitud' => $fechaSolicitud,

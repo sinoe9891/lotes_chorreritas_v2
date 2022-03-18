@@ -49,10 +49,10 @@ include 'includes/templates/sidebar.php';
 						<tbody>
 							<?php
 							$consultaProyecto = $conn->query("SELECT * FROM ficha_compra a, proyectos_ajustes b WHERE a.id_proyecto = b.id_proyecto");
-							while ($consulta = $consultaProyecto->fetch_array()) {
-								$preciovara = $consulta['precio_vara2'];
-							}
-							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id_ficha_compra, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_registro = b.id GROUP BY id_registro ORDER BY a.id_registro DESC");
+							$ajusteProyecto = $consultaProyecto->fetch_assoc();
+							$precio_vara2 = $ajusteProyecto['precio_vara2'];
+
+							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id_ficha_compra, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_registro = b.id GROUP BY id_registro ORDER BY a.id_registro DESC");
 							$numero = 1;
 							$contador = 0;
 							$total = 0;
@@ -66,10 +66,12 @@ include 'includes/templates/sidebar.php';
 									<td><?php echo $solicitud['tipo'] ?></td>
 									<td>
 										<?php
+										// $precioProyecto = obtenerProy($solicitud['id_proyecto']);
+
 										// echo $contador++;
 										$prima = $solicitud['prima'];
 										$sumavaras = $solicitud['suma'];
-										$grantotal = ($sumavaras * 750) - $prima;
+										$grantotal = ($sumavaras * $precio_vara2) - $prima;
 										// echo $total;
 										echo 'L.' . number_format($grantotal, 2, '.', ',');
 
