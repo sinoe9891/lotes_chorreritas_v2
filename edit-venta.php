@@ -213,13 +213,11 @@ include 'includes/templates/sidebar.php';
 																	$id_compra = $compra['id_compra'];
 															?>
 																	<tr>
-																		<td class="text-bold-500 tabla-bloque" name="fila[]" id="<?php echo $id_lote_compra; ?>" value="<?php echo $id_lote_compra; ?>">1</td>
+																		<td class="text-bold-500 tabla-bloque" name="fila[]" id="<?php echo $id_lote_compra; ?>" value="<?php echo $id_compra_lote; ?>">1</td>
 																		<td class="text-bold-500"><?php echo $bloque . $id_lote_compra; ?></td>
 																		<td class="text-bold-500"><button class="btn btn-danger" onclick="deleteRow(this)">Quitar</button></td>
 																	</tr>
 															<?php
-
-
 																}
 															}
 															?>
@@ -241,7 +239,7 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-12 col-12">
 													<div class="form-group">
 														<label for="first-name-column">Vendedor</label>
-														<select class="choices form-select" id="vendedor" name="vendedor" required>
+														<select class="choices form-select" id="vendedor" name="vendedor">
 															<option name="lote" value="">Buscar Vendedor</option>
 															<?php
 															$vendedor = obtenerTodo('vendedores');
@@ -285,13 +283,13 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-6 col-12">
 													<div class="form-group">
 														<label for="city-column">Fecha Pago Primera Cuota *</label>
-														<input type="date" class="form-control" name="fecha_primer_cuota" id="fecha_primer_cuota" value="<?php echo $fecha_primer_cuota; ?>" >
+														<input type="date" class="form-control" name="fecha_primer_cuota" id="fecha_primer_cuota" value="<?php echo $fecha_primer_cuota; ?>">
 													</div>
 												</div>
 												<div class="col-md-6 col-12">
 													<div class="form-group">
 														<label for="city-column">Día de Pago *</label>
-														<input type="number" class="form-control" name="dia_pago" id="dia_pago" max="30" min="1" value="<?php echo $dia_pago; ?>" placeholder="1 al 30" >
+														<input type="number" class="form-control" name="dia_pago" id="dia_pago" max="30" min="1" value="<?php echo $dia_pago; ?>" placeholder="1 al 30">
 													</div>
 												</div>
 											</div>
@@ -324,7 +322,7 @@ include('includes/templates/footer.php');
 ?>
 <script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="assets/js/bootstrap.bundle.min.js"></script>
-<!-- <script src="assets/vendors/choices.js/choices.min.js"></script> -->
+<script src="assets/vendors/choices.js/choices.min.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 

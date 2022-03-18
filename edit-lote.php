@@ -51,7 +51,7 @@ include 'includes/templates/sidebar.php';
 										<div class="card-body">
 											<?php
 											$bloques = obtenerTodo('bloques');
-											$consulta = $conn->query("SELECT a.id_lote, a.id_bloque, a.colindancias, a.path_lote, a.numero, a.areav2, a.estado, b.bloque, d.precio_vara2, c.nombre FROM lotes a, bloques b, proyectos c, proyectos_ajustes d WHERE a.id_lote = $user_id and a.id_bloque = b.id_bloque and b.id_proyecto = c.id_proyecto and c.id_proyecto = d.id_proyecto;");
+											$consulta = $conn->query("SELECT DISTINCT a.id_lote, a.id_bloque, a.colindancias, a.path_lote, a.numero, a.areav2, a.estado, b.bloque, d.precio_vara2, c.nombre FROM lotes a, bloques b, proyectos c, proyectos_ajustes d WHERE a.id_lote = $user_id and a.id_bloque = b.id_bloque and b.id_proyecto = c.id_proyecto and c.id_proyecto = d.id_proyecto;");
 											$numero = 1;
 											while ($solicitud = $consulta->fetch_array()) {
 												$id_lote = $solicitud['id_lote'];

@@ -47,7 +47,7 @@ include 'includes/templates/sidebar.php';
 						<tbody>
 
 							<?php
-							$consulta = $conn->query("SELECT a.id_lote, a.numero, a.areav2, a.estado, b.bloque, d.precio_vara2, a.estado, c.nombre FROM lotes a, bloques b, proyectos c, proyectos_ajustes d WHERE a.id_bloque = b.id_bloque and b.id_proyecto = c.id_proyecto and c.id_proyecto = d.id_proyecto");
+							$consulta = $conn->query("SELECT DISTINCT a.id_lote, a.numero, a.areav2, a.estado, b.bloque, d.precio_vara2, a.estado, c.nombre FROM lotes a, bloques b, proyectos c, proyectos_ajustes d WHERE a.id_bloque = b.id_bloque and b.id_proyecto = c.id_proyecto and c.id_proyecto = d.id_proyecto");
 							$contador = 1;
 							while ($solicitud = $consulta->fetch_array()) {
 								$id_lote = $solicitud['id_lote'];

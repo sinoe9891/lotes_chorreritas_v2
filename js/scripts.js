@@ -191,7 +191,7 @@ function nuevoCliente(e) {
 	let verficarid = formatID(identidad);
 	let verficaridbeneficiario = formatID(identidad_beneficiario);
 
-	if (nombres === '' || identidad === '' || identidad_beneficiario === '' || nombre_beneficiario === '' && fechanac === '' ) {
+	if (nombres === '' || identidad === '' || identidad_beneficiario === '' || nombre_beneficiario === '' && fechanac === '') {
 		//validación Falló
 		Swal.fire({
 			icon: 'error',
@@ -575,7 +575,14 @@ function editventa(e) {
 		tipo = document.querySelector('#tipo').value,
 		bloque = document.querySelectorAll('.tabla-bloque');
 
-	if (fechaSolicitud === '' ||  fecha_venta === '' || prima === '' || vendedor === '' || cuenta_bancaria === '' || fecha_primer_cuota === '') {
+
+	if (bloque.length == 0) {
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de seleccionar un bloque'
+		})
+	} else if (fechaSolicitud === '' || fecha_venta === '' || prima === '' || vendedor === '' || cuenta_bancaria === '' || fecha_primer_cuota === '') {
 		//validación Falló
 		Swal.fire({
 			icon: 'error',
@@ -650,8 +657,8 @@ function editventa(e) {
 		// Enviar la petición
 		xhr.send(datos);
 	}
-
 }
+
 
 
 

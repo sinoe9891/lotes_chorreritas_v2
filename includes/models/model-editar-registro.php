@@ -156,7 +156,7 @@ if ($accion === 'editbloque') {
 				'tipo' => $accion
 			);
 		}
-		
+
 		$stmt->close();
 		// $stmt_counter->close();
 		$conn->close();
@@ -261,16 +261,16 @@ if ($accion === 'editarventa') {
 	// } else {
 	// 	$lotes = $_POST["lotes"];
 	// }
-	
+
 	// // funcion insertar ficha_compra_lotes
-	// function insertarFichaCompra($idlote, $cliente, $idcompra)
-	// {
-	// 	include '../conexion.php';
-	// 	$stmtcompra = $conn->prepare("INSERT INTO ficha_compra_lotes (id_lote,id_registro,id_compra) VALUES (?,?,?)");
-	// 	$stmtcompra->bind_param('sss', $idlote, $cliente, $idcompra);
-	// 	$stmtcompra->execute();
-	// 	return;
-	// }
+	function insertarFichaCompra($idlote, $cliente, $idcompra)
+	{
+		include '../conexion.php';
+		$stmtcompra = $conn->prepare("INSERT INTO ficha_compra_lotes (id_lote,id_registro,id_compra) VALUES (?,?,?)");
+		$stmtcompra->bind_param('sss', $idlote, $cliente, $idcompra);
+		$stmtcompra->execute();
+		return;
+	}
 	// // funciona actualizar lote
 	// function actualizarLote($estado, $cliente, $lote)
 	// {
@@ -299,12 +299,45 @@ if ($accion === 'editarventa') {
 		$statement->bind_param('sssssssssssssss', $fechaSolicitud, $horaSolicitud, $id_registro, $fecha_venta, $prima, $plazo_anios, $dia_pago, $fecha_primer_cuota, $plazo_meses, $tipo_venta, $proyecto, $estado, $vendedor, $cuenta_bancaria, $id_ficha_compra);
 		$statement->execute();
 
-		//ciclo for con arreglo de lotes de venta con metodo posts
-		// $lotes = $_POST["lotes"];
-		// for ($i = 0; $i < sizeof($lotes); $i++) {
-		// 	$id_lote = $lotes[$i];
-		// 	// echo $id_lote;
-		// 	$id_compra = $last_id;
+
+		$resultadoInfoCompraLotes = obtenerInfoLoteComprado($id_ficha_compra);
+		while ($row = $resultadoInfoCompraLotes->fetch_assoc()) {
+			
+			$id_compra_lotes = $row['id_compra_lote'];
+			$id_compra = $row['id_compra'];
+			$id_loteactual = $row['id_lote'];
+			if ($resultadoInfoCompraLotes->num_rows > 0) {
+				//eliminar registros de id_compra del lote
+				$stmt = $conn->prepare("DELETE FROM ficha_compra_lotes WHERE id_compra_lote = ?");
+				$stmt->bind_param('s', $id_compra_lotes);
+				$stmt->execute();
+				//actualizar estado lote de compra
+				$estado_lote = 'd';
+				$stmt = $conn->prepare("UPDATE lotes SET estado = ?, id_registro = ? WHERE id_lote = ?");
+				$stmt->bind_param('sss', $estado_lote, $id_registro, $id_loteactual);
+				$stmt->execute();
+			}
+		}
+		$lotes = $_POST["lotes"];
+		if (sizeof($lotes) > 0) {
+			for ($i = 0; $i < sizeof($lotes); $i++) {
+				$id_lote = $lotes[$i];
+				// insertar lote de ficha compra
+				insertarFichaCompra($id_lote, $id_registro, $id_ficha_compra);
+				//cambiar estado de lote de ficha compra
+				$estado_lote = 'v';
+				$stmt = $conn->prepare("UPDATE lotes SET estado = ? WHERE id_lote = ?");
+				$stmt->bind_param('ss', $estado_lote, $id_lote);
+				$stmt->execute();
+				// echo "entro";
+			}
+			$estadoquery = true;
+		}else{
+			$estadoquery = false;
+		}
+		// echo $id_compra;
+		// $id_compra = $last_id;
+
 		// 	insertarFichaCompra($id_lote, $id_registro, $id_compra);
 		// 	actualizarLote($estado_lote, $id_registro, $id_lote);
 
@@ -314,7 +347,7 @@ if ($accion === 'editarventa') {
 		// 	cuotaLote($areav2, $precio_vara2, $id_compra, $plazo_meses);
 
 		// 	$estadoquery = true;
-		// }
+
 		//consulta si esta duplicado
 		// if ($statement->affected_rows > 0 && $estadoquery) {
 		if ($statement->affected_rows > 0) {
@@ -322,6 +355,7 @@ if ($accion === 'editarventa') {
 				'respuesta' => 'correcto',
 				'fechaSolicitud' => $fechaSolicitud,
 				'estado' => $estado,
+				'id_ficha_compra' => $id_ficha_compra,
 				'tipo_venta' => $tipo_venta,
 				'horaSolicitud' => $horaSolicitud,
 				'id_registro' => $id_registro,

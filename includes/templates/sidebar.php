@@ -1,4 +1,3 @@
-
 <body onload="minimizar()">
 	<div id="app">
 		<div id="sidebar" class="active">
@@ -17,35 +16,40 @@
 				$aqui = '';
 				if (obtenerPaginaActual() == 'clientes' || obtenerPaginaActual() == 'edit-cliente' || obtenerPaginaActual() == 'new-client') {
 					$clientes = 'active';
-				}else{
+				} else {
 					$clientes = '';
 				}
-				
+
 				if (obtenerPaginaActual() != 'mapa') {
 					$mapa = '';
-				}else{
+				} else {
 					$mapa = 'active';
 				}
-				
+
 				if (obtenerPaginaActual() != 'index') {
 					$aqui = '';
-				}else{
+				} else {
 					$aqui = 'active';
 				}
 				if (obtenerPaginaActual() === 'bloques' || obtenerPaginaActual() === 'edit-bloque' || obtenerPaginaActual() === 'new-bloque') {
 					$bloque = 'active';
-				}else{
+				} else {
 					$bloque = '';
 				}
 				if (obtenerPaginaActual() === 'lotes' || obtenerPaginaActual() === 'edit-lote' || obtenerPaginaActual() === 'new-lote') {
 					$lotes = 'active';
-				}else{
+				} else {
 					$lotes = '';
 				}
 				if (obtenerPaginaActual() == 'ventas' || obtenerPaginaActual() == 'edit-venta' || obtenerPaginaActual() == 'new-venta') {
 					$ventas = 'active';
-				}else{
+				} else {
 					$ventas = '';
+				}
+				if (obtenerPaginaActual() == 'ventas' || obtenerPaginaActual() == 'edit-venta' || obtenerPaginaActual() == 'new-venta') {
+					$soporte = 'active';
+				} else {
+					$soporte = '';
 				}
 				?>
 				<div class="sidebar-menu">
@@ -69,17 +73,17 @@
 								</li>
 							</ul>
 						</li>
-						<li class="sidebar-item  has-sub <?php echo $clientes.$ventas?>">
+						<li class="sidebar-item  has-sub <?php echo $clientes . $ventas ?>">
 							<a href="#" class='sidebar-link'>
-							<i class="fa fa-table"></i>
+								<i class="fa fa-table"></i>
 								<span>Facturación</span>
 							</a>
-							<ul class="submenu <?php echo $clientes.$ventas ?>">
+							<ul class="submenu <?php echo $clientes . $ventas ?>">
 								<li class="submenu-item <?php echo $clientes ?>">
 									<a href="clientes.php">Clientes</a>
 								</li>
 								<li class="submenu-item <?php echo $ventas ?> ">
-									<a href="ventas.php">Ventas</a>
+									<a href="ventas.php">Contratos</a>
 								</li>
 								<li class="submenu-item ">
 									<a href="#">Créditos</a>
@@ -95,12 +99,12 @@
 								</li>
 							</ul>
 						</li>
-						<li class="sidebar-item  has-sub <?php echo $bloque.$lotes ?>">
+						<li class="sidebar-item  has-sub <?php echo $bloque . $lotes ?>">
 							<a href="#" class='sidebar-link'>
 								<i class="bi bi-stack"></i>
 								<span>Logística</span>
 							</a>
-							<ul class="submenu <?php echo $bloque.$lotes ?>">
+							<ul class="submenu <?php echo $bloque . $lotes ?>">
 								<li class="submenu-item <?php echo $bloque ?>">
 									<a href="bloques.php">Bloques</a>
 								</li>
@@ -109,19 +113,21 @@
 								</li>
 							</ul>
 						</li>
+						<li class="sidebar-item  has-sub">
+							<a href="#" class='sidebar-link'>
+								<i class="bi bi-life-preserver"></i>
+								<span>Configuración</span>
+							</a>
+							<ul class="submenu">
+								<li class="submenu-item">
+									<a href="backup_database.php?pass=Stark9891">Backup DB</a>
+								</li>
+							</ul>
+						</li>
 						<li class="sidebar-item  ">
 							<a href="login.php?cerrar_sesion=true" class='sidebar-link'>
 								<img src="assets/images/icons/logout.svg" alt="">
 								<span>Logout</span>
-							</a>
-						</li>
-
-						<li class="sidebar-title">Soporte</li>
-
-						<li class="sidebar-item  ">
-							<a href="#" class='sidebar-link'>
-								<i class="bi bi-life-preserver"></i>
-								<span>Documentation</span>
 							</a>
 						</li>
 					</ul>

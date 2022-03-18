@@ -171,7 +171,7 @@ function obtenerPrecioLote($id_lote)	{
 function obtenerTodoBloque() {
     include 'conexion.php';
     try {
-        return $conn->query("SELECT concat_ws('', b.bloque, a.numero) AS bloqueresult, a.id_lote, a.numero, a.areav2, a.estado, b.bloque, b.id_bloque, c.precio_vara2, b.id_proyecto FROM lotes a, bloques b, proyectos_ajustes c WHERE a.id_bloque = b.id_bloque and a.estado = 'd'");
+        return $conn->query("SELECT DISTINCT concat_ws('', b.bloque, a.numero) AS bloqueresult, a.id_lote, a.numero, a.areav2, a.estado, b.bloque, b.id_bloque, c.precio_vara2, b.id_proyecto FROM lotes a, bloques b, proyectos_ajustes c WHERE a.id_bloque = b.id_bloque and a.estado = 'd'");
 
     } catch(Exception $e) {
         echo "Error! : " . $e->getMessage();
