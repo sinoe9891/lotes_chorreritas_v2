@@ -48,11 +48,11 @@ include 'includes/templates/sidebar.php';
 							<?php
 							$solicitudes = obtenerFichas('id');
 							$consulta = $conn->query("SELECT * FROM ficha_directorio ORDER BY fecha_solicitud DESC, hora_solicitud ASC");
-							$numero = $consulta->num_rows;
+							$numero = 1;
 							while ($solicitud = $consulta->fetch_array()) {
 							?>
 								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
-									<td><?php echo $numero--; ?></td>
+									<td><?php echo $numero++ ?></td>
 									<td><?php echo $solicitud['nombre_completo'] ?></td>
 									<td><?php echo $solicitud['identidad'] ?></td>
 									<td><?php echo $solicitud['celular'] ?></td>
