@@ -35,6 +35,8 @@
 			<th>Cliente</th>
 			<th>Fecha Pago</th>
 			<th>Siguiente Pago</th>
+			<th>Restante</th>
+			<th>Total Venta</th>
 			<th>Estado</th>
 		</tr>
 		<?php
@@ -49,19 +51,22 @@
 
 		
 		// $estadoCuenta = $conn->query("SELECT * FROM control_credito_lote a, ficha_compra b WHERE a.id_compra = 15 and b.id_ficha_compra = a.id_compra");
-		$estadoCuenta = $conn->query("SELECT c.nombre_completo, a.id_compra, a.fecha_pago, a.fecha_vencimiento, MIN(id_credito_lote) ID FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id GROUP BY a.id_compra ORDER BY a.id_compra;");
+		$estadoCuenta = $conn->query("SELECT c.nombre_completo, a.id_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, MIN(id_credito_lote) ID FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id GROUP BY a.id_compra ORDER BY a.id_compra;");
 		$contador = 1;
 		while ($solicitud = $estadoCuenta->fetch_array()) {
-			$fecha_vencimiento = $solicitud['fecha_vencimiento'];
 			$fecha_pago = $solicitud['fecha_pago'];
 			$nombre_completo = $solicitud['nombre_completo'];
+			$saldo_actual = $solicitud['saldo_actual'];
+			$cuota = $solicitud['cuota'];
+			$total_venta = $solicitud['total_venta'];
 		?>
 			<tr>
 				<td><?php echo $contador++; ?></td>
 				<td><?php echo $nombre_completo; ?></td>
 				<td><?php echo $fecha_pago; ?></td>
-				<td><?php echo $fecha_vencimiento; ?></td>
-				<!-- <td><?php echo $cuota; ?></td> -->
+				<td><?php echo $cuota; ?></td>
+				<td><?php echo $saldo_actual; ?></td>
+				<td><?php echo $total_venta; ?></td>
 				<td>
 					<?php
 					$fecha_pago1 = new DateTime($fecha_pago);

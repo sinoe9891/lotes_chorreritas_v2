@@ -278,8 +278,6 @@ if ($accion === 'editarventa') {
 		$granTotal = ($sumavaras * $preciovara);
 		//Saldo Actaul = gran total - prima
 		$saldoActual = ($granTotal - $prim);
-		echo $saldoActual. "\n";
-		echo $meses . "\n";
 		//Cuota = saldo actual / plazo
 		$cuota = ($saldoActual / $meses);
 		//Actualizar Registro

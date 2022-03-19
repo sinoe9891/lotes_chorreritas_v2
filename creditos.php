@@ -44,42 +44,65 @@ include 'includes/templates/sidebar.php';
 								<th>Cronograma</th>
 								<th>Letra</th>
 								<th>Cobros</th>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php
 							$consultaProyecto = $conn->query("SELECT * FROM ficha_compra a, proyectos_ajustes b WHERE a.id_proyecto = b.id_proyecto");
 							$ajusteProyecto = $consultaProyecto->fetch_assoc();
-							if ($ajusteProyecto> 0){
+							if ($ajusteProyecto > 0) {
 								$precio_vara2 = $ajusteProyecto['precio_vara2'];
-							}else{
+							} else {
 								$precio_vara2 = 0;
 							}
-							
-							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id_ficha_compra, c.id_contrato_compra, a.id_contrato, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_contrato_compra = a.id_contrato GROUP BY id_contrato ORDER BY a.id_registro DESC");
+
+							$consulta = $conn->query("SELECT c.nombre_completo, a.id_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, b.estado, MIN(id_credito_lote) ID FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id GROUP BY a.id_compra ORDER BY a.id_compra");
 							$numero = 1;
-							$contador = 0;
+							$contador = 1;
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
+								$fecha_pago = $solicitud['fecha_pago'];
+								$nombre_completo = $solicitud['nombre_completo'];
+								$saldo_actual = $solicitud['saldo_actual'];
+								$cuota = $solicitud['cuota'];
+								$total_venta = $solicitud['total_venta'];
+								$estado = $solicitud['estado'];
 							?>
 								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
-									<td><?php echo $numero++; ?></td>
-									<td><?php echo $solicitud['nombre_completo'] ?></td>
-									<td><?php echo $solicitud['identidad'] ?></td>
-									<td><?php echo $solicitud['fecha_venta'] ?></td>
-									<td><?php echo $solicitud['tipo'] ?></td>
+									<td><?php echo $contador++; ?></td>
+									<td><?php echo $nombre_completo; ?></td>
 									<td>
 										<?php
-										// $precioProyecto = obtenerProy($solicitud['id_proyecto']);
-
-										// echo $contador++;
-										$prima = $solicitud['prima'];
-										$sumavaras = $solicitud['suma'];
-										$grantotal = ($sumavaras * $precio_vara2) - $prima;
-										// echo $total;
-										echo 'L.' . number_format($grantotal, 2, '.', ',');
-
-										$estado = $solicitud['estado'];
+										$fecha_pago1 = new DateTime($fecha_pago);
+										echo '<p>' . $fecha_pago1->format('d-m-Y') . '</p>';
+										$fechahoy = new DateTime();
+										$interval = $fecha_pago1->diff($fechahoy);
+										$dias = $interval->format('%r%a');
+										echo '<p>' . $dias . '</p>';
+										if ($dias > 0) {
+											echo "<p>Vencido</p>";
+										} elseif ($dias == 0) {
+											echo "Vence hoy";
+										} elseif ($dias < 0) {
+											echo "Pendiente";
+										}
+										?>
+										<span class="badge <?php echo $color ?> "><?php echo $fecha_pago; ?></span>
+									</td>
+									<td><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></td>
+									<td><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></td>
+									<td><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></td>
+									<td>
+										<p>Cronograma</p>
+									</td>
+									<td>
+										<p>Letra</p>
+									</td>
+									<td><a href="edit-venta.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
+									</td>
+									<td>
+										<?php
 										$view = '';
 										if ($estado == 'en') {
 											$estadoVenta = 'En Curso';
@@ -108,11 +131,9 @@ include 'includes/templates/sidebar.php';
 										}
 										?>
 									</td>
-
 									<td> <span class="badge <?php echo $color ?> "> <?php echo $estadoVenta ?></span></td>
-									<td>Contrato</td>
 									<td>
-										<a href="edit-venta.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
+
 										<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
 										<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
 									</td>
