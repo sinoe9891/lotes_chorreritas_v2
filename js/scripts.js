@@ -562,6 +562,7 @@ function editventa(e) {
 		horaSolicitud = document.querySelector('#horaSolicitud').value,
 		id_registro = document.querySelector('#id_registro').value,
 		id_ficha_compra = document.querySelector('#id_ficha_compra').value,
+		id_contrato = document.querySelector('#id_contrato').value,
 		fecha_venta = document.querySelector('#fecha_venta').value,
 		tipo_venta = document.querySelector('#tipo_venta').value,
 		prima = document.querySelector('#prima').value,
@@ -598,6 +599,7 @@ function editventa(e) {
 		datos.append('horaSolicitud', horaSolicitud);
 		datos.append('id_registro', id_registro);
 		datos.append('id_ficha_compra', id_ficha_compra);
+		datos.append('id_contrato', id_contrato);
 		datos.append('fecha_venta', fecha_venta);
 		datos.append('tipo_venta', tipo_venta);
 		datos.append('prima', prima);

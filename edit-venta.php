@@ -77,12 +77,19 @@ include 'includes/templates/sidebar.php';
 													$plazo_meses = $filasVentas['plazo_meses'];
 													$id_vendedor = $filasVentas['vendedor'];
 													$id_proyecto = $filasVentas['id_proyecto'];
+													$id_contrato = $filasVentas['id_contrato_compra'];
 													$cuentabank = $filasVentas['cuenta_bancaria'];
 													$fecha_primer_cuota = $filasVentas['fecha_primer_cuota'];
 													$dia_pago = $filasVentas['dia_pago'];
 
 											?>
 													<div class="row">
+														<div class="col-md-12 col-12">
+															<div class="form-group">
+																<label for="first-name-column">Contrato</label>
+																<input type="text" class="form-control" id="id_contrato" name="id_contrato" value="<?php echo $id_contrato; ?>" readonly>
+															</div>
+														</div>
 														<div class="col-md-12 col-12">
 															<div class="form-group">
 																<label for="first-name-column">Nombre Completo</label>

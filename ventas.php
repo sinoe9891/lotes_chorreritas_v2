@@ -56,9 +56,7 @@ include 'includes/templates/sidebar.php';
 							}else{
 								$precio_vara2 = 0;
 							}
-							// SELECT SUM(areav2) as suma FROM lotes a, ficha_compra c WHERE c.id_contrato_compra = a.id_contrato and a.id_contrato = 'LO2203-1-1' ORDER BY a.id_contrato DESC
-							// SELECT SUM(areav2) as suma FROM lotes a, ficha_compra c WHERE c.id_contrato_compra = a.id_contrato and a.id_contrato = 'LO2203-1-3' GROUP BY id_contrato  ORDER BY a.id_contrato DESC
-							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, SUM(areav2) as suma, c.id_ficha_compra, c.id_contrato_compra, a.id_contrato, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_contrato_compra = a.id_contrato GROUP BY id_contrato ORDER BY a.id_registro DESC");
+							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, c.total_venta, c.id_ficha_compra, c.id_contrato_compra, a.id_contrato, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_contrato_compra = a.id_contrato GROUP BY id_contrato ORDER BY a.id_registro DESC");
 							$numero = 1;
 							$contador = 0;
 							$total = 0;
@@ -77,8 +75,8 @@ include 'includes/templates/sidebar.php';
 
 										// echo $contador++;
 										$prima = $solicitud['prima'];
-										$sumavaras = $solicitud['suma'];
-										$grantotal = ($sumavaras * $precio_vara2) - $prima;
+										$grantotal = $solicitud['total_venta'];
+										// $grantotal = ($sumavaras * $precio_vara2) - $prima;
 										// echo $total;
 										echo 'L.' . number_format($grantotal, 2, '.', ',');
 

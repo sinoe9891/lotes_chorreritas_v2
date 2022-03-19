@@ -321,13 +321,14 @@ if ($accion === 'newventa') {
 		$sumavaras = $row['suma'];
 		//gran total = suma de varas * precio vara
 		$granTotal = ($sumavaras * $preciovara);
+
 		//Saldo Actaul = gran total - prima
 		$saldoActual = ($granTotal - $prima);
 		//cuota = saldo actual / plazo
 		$cuota = ($saldoActual / $plazo);
 		//insertar cuota en ficha_compra
 		$stmtTotal = $conn->prepare("UPDATE ficha_compra SET total_venta = ?, saldo_actual = ?, cuota = ? WHERE id_ficha_compra = ?");
-		$stmtTotal->bind_param('ssss', $grantotal, $saldo, $cuota, $idcompra);
+		$stmtTotal->bind_param('ssss', $granTotal, $saldoActual, $cuota, $idcompra);
 		$stmtTotal->execute();
 		return;
 	}

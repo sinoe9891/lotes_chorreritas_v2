@@ -236,6 +236,7 @@ if ($accion === 'editarventa') {
 	$horaSolicitud = $_POST['horaSolicitud'];
 	$id_registro = $_POST['id_registro'];
 	$id_ficha_compra = $_POST['id_ficha_compra'];
+	$id_contrato = $_POST['id_contrato'];
 	$fecha_venta = $_POST['fecha_venta'];
 	$prima = $_POST['prima'];
 	$plazo_meses = $_POST['plazo_meses'];
@@ -254,15 +255,8 @@ if ($accion === 'editarventa') {
 	$row = $resultado->fetch_assoc();
 	$precio_vara2 = $row['precio_vara2'];
 	$accion === 'editarventa';
-
-	//condicion si el $lotes = $_POST["lotes"] viene vacio
-	// if (empty($_POST["lotes"])) {
-	// 	$lotes = array();
-	// } else {
-	// 	$lotes = $_POST["lotes"];
-	// }
-
-	// // funcion insertar ficha_compra_lotes
+	
+	// funcion insertar ficha_compra_lotes
 	function insertarFichaCompra($idlote, $cliente, $idcompra)
 	{
 		include '../conexion.php';
@@ -271,23 +265,26 @@ if ($accion === 'editarventa') {
 		$stmtcompra->execute();
 		return;
 	}
-	// // funciona actualizar lote
-	// function actualizarLote($estado, $cliente, $lote)
-	// {
-	// 	include '../conexion.php';
-	// 	$stmtLotes = $conn->prepare("UPDATE lotes SET estado = ?, id_registro = ? WHERE id_lote = ?");
-	// 	$stmtLotes->bind_param('sss', $estado, $cliente, $lote);
-	// 	$stmtLotes->execute();
-	// 	return;
-	// }
-	// // funciona cuota lote
-	function cuotaLote($area, $preciovara, $idcompra, $meses)
+	// funciona cuota lote
+	function cuotaLote($area, $preciovara, $idcompra, $meses, $idcontrato, $prim)
 	{
 		include '../conexion.php';
-		$stmtCuota = $conn->prepare("UPDATE ficha_compra SET cuota = ? WHERE id_ficha_compra = ?");
-		$total = ($area * $preciovara);
-		$cuota = ($total / $meses);
-		$stmtCuota->bind_param('ss', $cuota, $idcompra);
+		//CSuma varas
+		$resultado = obtenerTotalVarasContrato($idcontrato);
+		$row = $resultado->fetch_assoc();
+		//suma de varas
+		$sumavaras = $row['suma'];
+		//gran total = suma de varas * precio vara
+		$granTotal = ($sumavaras * $preciovara);
+		//Saldo Actaul = gran total - prima
+		$saldoActual = ($granTotal - $prim);
+		echo $saldoActual. "\n";
+		echo $meses . "\n";
+		//Cuota = saldo actual / plazo
+		$cuota = ($saldoActual / $meses);
+		//Actualizar Registro
+		$stmtCuota = $conn->prepare("UPDATE ficha_compra SET total_venta = ?, saldo_actual = ?, cuota = ? WHERE id_ficha_compra = ?");
+		$stmtCuota->bind_param('ssss', $granTotal,  $saldoActual, $cuota, $idcompra);
 		$stmtCuota->execute();
 
 		return;
@@ -340,7 +337,7 @@ if ($accion === 'editarventa') {
 				$resultadoPrecio = obtenerPrecioLote($id_lote);
 				$row = $resultadoPrecio->fetch_assoc();
 				$areav2 = $row['areav2'];
-				cuotaLote($areav2, $precio_vara2, $id_ficha_compra, $plazo_meses);
+				cuotaLote($areav2, $precio_vara2, $id_ficha_compra, $plazo_meses, $id_contrato, $prima);
 				//cambiar estado de lote de ficha compra
 				$estado_lote = 'v';
 				$stmt = $conn->prepare("UPDATE lotes SET estado = ?, id_registro = ? WHERE id_lote = ?");
@@ -354,7 +351,7 @@ if ($accion === 'editarventa') {
 		}
 		//consulta si esta duplicado
 		if ($statement->affected_rows > 0 && $estadoquery) {
-		// if ($statement->affected_rows > 0) {
+			// if ($statement->affected_rows > 0) {
 			$respuesta = array(
 				'respuesta' => 'correcto',
 				'fechaSolicitud' => $fechaSolicitud,
