@@ -290,7 +290,7 @@ if ($accion === 'newventa') {
 	}
 
 	//generar un  id_contrato_compra con año, id_registro, mes y last_id
-	function generarIdContrato($last_id, $lote, $id_registro, $fechaventa, $prima, $precio_vara2, $id_compra, $plazo_anios)
+	function generarIdContrato($last_id, $lote, $id_registro, $fechaventa, $prima, $precio_vara2, $id_compra, $plazo)
 	{
 		include '../conexion.php';
 		$ano = date('y', strtotime($fechaventa));
@@ -305,7 +305,7 @@ if ($accion === 'newventa') {
 		$stmtIdContratoLote->bind_param('ss', $id_contrato, $lote);
 		$stmtIdContratoLote->execute();
 
-		totalCompra($precio_vara2, $prima, $id_compra, $id_contrato, $plazo_anios);
+		totalCompra($precio_vara2, $prima, $id_compra, $id_contrato, $plazo);
 
 		return;
 	}
@@ -319,18 +319,19 @@ if ($accion === 'newventa') {
 		$row = $resultado->fetch_assoc();
 		//suma de varas
 		$sumavaras = $row['suma'];
-		//gran total
-		$grantotal = ($sumavaras * $preciovara);
-		//saldo actual menos prima
-		$saldo = ($grantotal - $prima);
-		//sacar cuota
-		$cuota = ($saldo / $plazo);
-
+		//gran total = suma de varas * precio vara
+		$granTotal = ($sumavaras * $preciovara);
+		//Saldo Actaul = gran total - prima
+		$saldoActual = ($granTotal - $prima);
+		//cuota = saldo actual / plazo
+		$cuota = ($saldoActual / $plazo);
+		//insertar cuota en ficha_compra
 		$stmtTotal = $conn->prepare("UPDATE ficha_compra SET total_venta = ?, saldo_actual = ?, cuota = ? WHERE id_ficha_compra = ?");
 		$stmtTotal->bind_param('ssss', $grantotal, $saldo, $cuota, $idcompra);
 		$stmtTotal->execute();
 		return;
 	}
+
 
 	//conexion
 	try {
@@ -355,7 +356,7 @@ if ($accion === 'newventa') {
 
 			// cuotaLote($areav2, $precio_vara2, $id_compra, $plazo_meses);
 
-			generarIdContrato($last_id, $id_lote, $id_registro, $fecha_venta, $prima, $precio_vara2, $id_compra, $plazo_anios);
+			generarIdContrato($last_id, $id_lote, $id_registro, $fecha_venta, $prima, $precio_vara2, $id_compra, $plazo_meses);
 
 			$estadoquery = true;
 		}
