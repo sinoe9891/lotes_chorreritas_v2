@@ -5,6 +5,7 @@ include 'includes/funciones.php';
 include 'includes/conexion.php';
 include 'includes/templates/header.php';
 include 'includes/templates/sidebar.php';
+date_default_timezone_set('America/Tegucigalpa');
 ?>
 <div id="main">
 	<header class="mb-3">
@@ -44,6 +45,7 @@ include 'includes/templates/sidebar.php';
 								<th>Cronograma</th>
 								<th>Letra</th>
 								<th>Cobros</th>
+								<th>Estado</th>
 								<th>Acciones</th>
 							</tr>
 						</thead>
@@ -68,6 +70,33 @@ include 'includes/templates/sidebar.php';
 								$cuota = $solicitud['cuota'];
 								$total_venta = $solicitud['total_venta'];
 								$estado = $solicitud['estado'];
+								$view = '';
+								if ($estado == 'en') {
+									$estadoVenta = 'En Curso';
+									$color = 'bg-success';
+									$noview = "display:none";
+								} elseif ($estado == 'an') {
+									$estadoVenta = 'Anulado';
+									$color = 'bg-secondary';
+									$view = "initial";
+								} elseif ($estado == 'co') {
+									$estadoVenta = 'Concluido';
+									$color = 'bg-primary';
+									$noview = "none";
+								} elseif ($estado == 'pa') {
+									$estadoVenta = 'Inactivo';
+									$color = 'bg-info';
+									$view = "initial";
+								} elseif ($estado == 'ca') {
+									$estadoVenta = 'Cancelado';
+									$color = 'bg-danger';
+									$view = "initial";
+								} else {
+									$estadoVenta = 'Pendiente';
+									$color = 'bg-warning';
+									$view = "initial";
+								}
+
 							?>
 								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
 									<td><?php echo $contador++; ?></td>
@@ -75,24 +104,30 @@ include 'includes/templates/sidebar.php';
 									<td>
 										<?php
 										$fecha_pago1 = new DateTime($fecha_pago);
-										echo '<p>' . $fecha_pago1->format('d-m-Y') . '</p>';
+										// echo '<p>' . $fecha_pago1->format('d-m-Y') . '</p>';
 										$fechahoy = new DateTime();
 										$interval = $fecha_pago1->diff($fechahoy);
 										$dias = $interval->format('%r%a');
-										echo '<p>' . $dias . '</p>';
-										if ($dias > 0) {
-											echo "<p>Vencido</p>";
+										// echo '<p>' . $dias . '</p>';
+										if($dias == -1){
+											$status = "Pendiente";
+											$color = 'bg-warning';
+										}elseif ($dias > 0) {
+											$status = "Vencido";
+											$color = 'bg-danger';
 										} elseif ($dias == 0) {
-											echo "Vence hoy";
+											$status = "Vence hoy";
+											$color = 'bg-warning';
 										} elseif ($dias < 0) {
-											echo "Pendiente";
-										}
+											$status =  "Pendiente";
+											$color = 'bg-success';
+										} 
 										?>
 										<span class="badge <?php echo $color ?> "><?php echo $fecha_pago; ?></span>
 									</td>
-									<td><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></td>
-									<td><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></td>
-									<td><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></td>
+									<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
+									<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
+									<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
 									<td>
 										<p>Cronograma</p>
 									</td>
@@ -102,39 +137,9 @@ include 'includes/templates/sidebar.php';
 									<td><a href="edit-venta.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
 									</td>
 									<td>
-										<?php
-										$view = '';
-										if ($estado == 'en') {
-											$estadoVenta = 'En Curso';
-											$color = 'bg-success';
-											$noview = "display:none";
-										} elseif ($estado == 'an') {
-											$estadoVenta = 'Anulado';
-											$color = 'bg-secondary';
-											$view = "initial";
-										} elseif ($estado == 'co') {
-											$estadoVenta = 'Concluido';
-											$color = 'bg-primary';
-											$noview = "none";
-										} elseif ($estado == 'pa') {
-											$estadoVenta = 'Inactivo';
-											$color = 'bg-info';
-											$view = "initial";
-										} elseif ($estado == 'ca') {
-											$estadoVenta = 'Cancelado';
-											$color = 'bg-danger';
-											$view = "initial";
-										} else {
-											$estadoVenta = 'Pendiente';
-											$color = 'bg-warning';
-											$view = "initial";
-										}
-										?>
+										<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
 									</td>
-									<td> <span class="badge <?php echo $color ?> "> <?php echo $estadoVenta ?></span></td>
 									<td>
-
-										<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
 										<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
 									</td>
 								</tr>
