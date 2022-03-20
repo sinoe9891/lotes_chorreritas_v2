@@ -387,10 +387,10 @@ if ($accion === 'editarventa') {
 
 	if ($estado == 'en') {
 		include '../conexion.php';
-		$consultaFechaCuota = $conn->query("SELECT a.fecha_primer_cuota, a.plazo_meses, a.total_venta, a.cuota FROM ficha_compra a WHERE a.id_ficha_compra = $id_ficha_compra");
+		$consultaFechaCuota = $conn->query("SELECT a.fecha_primer_cuota, a.plazo_meses, a.total_venta, a.cuota, a.saldo_actual FROM ficha_compra a WHERE a.id_ficha_compra = $id_ficha_compra");
 		$ajusteProyecto = $consultaFechaCuota->fetch_assoc();
 		$fecha_cuota = $ajusteProyecto['fecha_primer_cuota'];
-		$total_venta = $ajusteProyecto['total_venta'];
+		$total_venta = $ajusteProyecto['saldo_actual'];
 		$cuota = $ajusteProyecto['cuota'];
 		$estado_cuota = 'pen';
 		//falta la variable plazo_meses
