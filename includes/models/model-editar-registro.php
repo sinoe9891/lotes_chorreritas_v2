@@ -384,6 +384,7 @@ if ($accion === 'editarventa') {
 	$estado =  $_POST['estado'];
 	$id_ficha_compra = $_POST['id_ficha_compra'];
 	$plazo_meses = $_POST['plazo_meses']; 
+	
 	if ($estado == 'en') {
 		include '../conexion.php';
 		$consultaFechaCuota = $conn->query("SELECT a.fecha_primer_cuota, a.plazo_meses, a.total_venta, a.cuota FROM ficha_compra a WHERE a.id_ficha_compra = $id_ficha_compra");

@@ -64,19 +64,19 @@ include 'includes/templates/sidebar.php';
 								$precio_vara2 = 0;
 							}
 
-							$consulta = $conn->query("SELECT c.nombre_completo, a.id_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, b.estado, MIN(id_credito_lote) ID FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id GROUP BY a.id_compra ORDER BY a.id_compra");
+							$consulta = $conn->query("SELECT c.nombre_completo, b.id_ficha_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, a.estado_cuota, MIN(id_credito_lote) id_cuota FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id and a.id_compra = b.id_ficha_compra GROUP BY b.id_contrato_compra ORDER BY a.id_compra;");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
 								date_default_timezone_set('America/Tegucigalpa');
 								$fecha_pago = $solicitud['fecha_pago'];
-								$id_compra = $solicitud['id_compra'];
+								$id_compra = $solicitud['id_ficha_compra'];
 								$nombre_completo = $solicitud['nombre_completo'];
 								$saldo_actual = $solicitud['saldo_actual'];
 								$cuota = $solicitud['cuota'];
 								$total_venta = $solicitud['total_venta'];
-								$estado = $solicitud['estado'];
+								$estado = $solicitud['estado_cuota'];
 								$view = '';
 								$noview = '';
 								if ($estado == 'en') {
