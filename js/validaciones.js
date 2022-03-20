@@ -13,7 +13,7 @@ function addEventListener() {
 		eliminar = 'eliminar-cliente';
 		solicitud.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo);
+				acciones(event,modelo,eliminar);
 			}
 		});
 	}
@@ -34,6 +34,17 @@ function addEventListener() {
 		modelo = 'model-acciones-eliminar';
 		eliminar = 'eliminar-lote';
 		solicitudLote.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event,modelo,eliminar);
+			}
+		});
+	}
+	//Acciones de solicitudes
+	let solicitudVenta = document.querySelector('.ventas');
+	if (solicitudVenta) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-venta';
+		solicitudVenta.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
 				acciones(event,modelo,eliminar);
 			}
@@ -152,21 +163,22 @@ function validarBuscar(e) {
 
 //acciones de solicitudes cambia estado o elimina
 function acciones(e, modelo) {
-	// e.preventDefault();
-	// console.log('click de acciones listado');
-
-	// console.log(e.target.classList.contains('fa-check-circle'));
-	// console.log(e.target.classList.contains('fa-trash'));
-	console.log(modelo);
+	// console.log(modelo);
 	//Delegation
+	console.log(e.target);
 	if (e.target.classList.contains('fa-check-circle')) {
+		let bandera = '';
 		if (e.target.classList.contains('completo')) {
+			console.log('remover');
 			e.target.classList.remove('completo');
-			cambiarEstado(e.target, 0, modelo);
+			bandera = 0;
 		} else {
 			e.target.classList.add('completo');
-			cambiarEstado(e.target, 1, modelo);
+			console.log('agregar');
+			bandera = 1;
 		}
+
+		cambiarEstado(e.target, bandera, modelo);
 	}
 	// condicion de eliminar con alert
 	if (e.target.classList.contains('fa-trash')) {
@@ -203,9 +215,10 @@ function acciones(e, modelo) {
 
 //Función de Cambio de Estado
 function cambiarEstado(solicitud, estado, model) {
-	let idSolicitud = solicitud.parentElement.parentElement.parentElement.id.split(':');
-	// console.log(idSolicitud[1]);
-
+	//acceder hasta donde esta el ID!
+	let idSolicitud = solicitud.parentElement.parentElement.id.split(':');
+	console.log(idSolicitud);
+	// console.log('entró')
 	//Crear llamado a AJAX
 	let xhr = new XMLHttpRequest();
 
@@ -221,7 +234,7 @@ function cambiarEstado(solicitud, estado, model) {
 	//on load
 	xhr.onload = function () {
 		if (this.status === 200) {
-			// console.log(JSON.parse(xhr.responseText));
+			console.log(JSON.parse(xhr.responseText));
 		}
 	}
 	//Enviar la petición
@@ -236,7 +249,9 @@ const removeAccents = (str) => {
 // Funcion eliminar registro de la tabla
 function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 	let idSolicitud = solicitudEliminar.id.split(':');
-	// console.log(idSolicitud[1]);
+
+	console.log(idSolicitud[1]);
+
 	//Crear llamado a AJAX
 	let xhr = new XMLHttpRequest();
 
@@ -244,7 +259,6 @@ function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 	let datos = new FormData();
 	datos.append('id', idSolicitud[1]);
 	datos.append('accion', eliminar);
-	datos.append('estado', estado);
 	datos.append('estado', estado);
 	// console.log(accion);
 	if(document.getElementById('nombre')){
@@ -260,7 +274,7 @@ function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 	xhr.onload = function () {
 		if (this.status === 200) {
 			// Ver si se puede eliminar
-			// console.log(JSON.parse(xhr.responseText));
+			console.log(JSON.parse(xhr.responseText));
 		}
 	}
 	//Enviar la petición

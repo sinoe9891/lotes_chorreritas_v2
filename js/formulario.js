@@ -4,14 +4,12 @@ addEventListener();
 const rutaParcial = 'images/icons/',
     rutaAbsoluta = new URL(rutaParcial, document.baseURI).href;
 
-
 function addEventListener() {
     document.querySelector('#formulario').addEventListener('submit', validarRegistro);
 }
 
 function validarRegistro(e) {
     e.preventDefault();
-
     let nombre = document.querySelector('#nombre').value,
         correo = document.querySelector('#correo').value,
         password = document.querySelector('#password').value,

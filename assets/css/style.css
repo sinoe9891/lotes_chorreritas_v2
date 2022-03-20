@@ -1,3 +1,11 @@
 .completo {
-    color: #00b762;
+    color: #00b762 !important;
 }
+@media only screen and (max-width: 400px){
+	li.nav-item {
+		width: 100%;
+		text-align: center;
+	}
+
+}
+	

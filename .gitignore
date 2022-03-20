@@ -13,4 +13,11 @@
 /src
 /plantilla
 /chorreritas
+/respaldos
+*.sql
 .vscode/
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz

@@ -58,6 +58,26 @@ function obtenerInfoFichaPerfil($id = null) {
         return false;
     }
 }
+function obtenerInfoVenta($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM ficha_compra a, ficha_directorio c WHERE a.id_ficha_compra = {$id} and a.id_registro = c.id");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+function obtenerInfoLoteComprado($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM ficha_compra_lotes a, lotes b WHERE a.id_compra = {$id} and a.id_lote = b.id_lote");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
 
 
 function obtenerListaLote() {
@@ -75,7 +95,7 @@ function obtenerListaLote() {
 function obtenerFichas() {
     include 'conexion.php';
     try {
-		return $conn->query("SELECT * FROM ficha_directorio WHERE estado = 0 ORDER BY id DESC");
+		return $conn->query("SELECT * FROM ficha_directorio WHERE estado_registro = 0 ORDER BY id DESC");
     } catch(Exception $e) {
 		echo "Error! : " . $e->getMessage();
         return false;
@@ -114,6 +134,63 @@ function obtenerTodo($tabla = null) {
         return false;
     }
 }
+
+function obtenerProyecto($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM proyectos WHERE id_proyecto = {$id}");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+
+function obtenerProy($id_proyecto)	{
+	include '../conexion.php';
+	try {
+		return $conn->query("SELECT precio_vara2 FROM proyectos_ajustes WHERE id_proyecto = '$id_proyecto'");
+
+	} catch(Exception $e) {
+		echo "Error! : " . $e->getMessage();
+		return false;
+	}
+}
+
+function obtenerTotalVarasContrato($idcontrato)	{
+	include '../conexion.php';
+	try {
+		return $conn->query("SELECT SUM(areav2) as suma FROM lotes a, ficha_compra c WHERE c.id_contrato_compra = a.id_contrato and a.id_contrato = '$idcontrato' ORDER BY a.id_contrato DESC");
+
+	} catch(Exception $e) {
+		echo "Error! : " . $e->getMessage();
+		return false;
+	}
+}
+
+function obtenerPrecioLote($id_lote)	{
+	include '../conexion.php';
+	try {
+		return $conn->query("SELECT areav2 FROM lotes WHERE id_lote = '$id_lote'");
+
+	} catch(Exception $e) {
+		echo "Error! : " . $e->getMessage();
+		return false;
+	}
+}
+
+function obtenerTodoBloque() {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT DISTINCT concat_ws('', b.bloque, a.numero) AS bloqueresult, a.id_lote, a.numero, a.areav2, a.estado, b.bloque, b.id_bloque, c.precio_vara2, b.id_proyecto FROM lotes a, bloques b, proyectos_ajustes c WHERE a.id_bloque = b.id_bloque and a.estado = 'd'");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+
+
 
 
 
@@ -181,7 +258,7 @@ function obtenerSolicitudes() {
 function obtenerNumeroSolicitudes() {
 	include 'conexion.php';
     try {
-		return $conn->query("SELECT * FROM ficha_directorio WHERE estado = 0 ORDER BY id DESC");
+		return $conn->query("SELECT * FROM ficha_directorio WHERE estado_registro = 0 ORDER BY id DESC");
     } catch(Exception $e) {
 		echo "Error! : " . $e->getMessage();
         return false;

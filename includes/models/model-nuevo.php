@@ -1,4 +1,6 @@
 <?php
+include '../../includes/funciones.php';
+include '../conexion.php';
 date_default_timezone_set('America/Tegucigalpa');
 $accion = $_POST['accion'];
 
@@ -69,8 +71,8 @@ if ($accion === 'solicitud') {
 	//Importar la conexión
 	include '../conexion.php';
 	try {
-		$statement = $conn->prepare("INSERT INTO ficha_directorio (fecha_solicitud, hora_solicitud, nombre_completo, fecha_nacimiento, nacionalidad, identidad, genero, estado_civil, direccion, telefono, celular, dependientes, correo, ciudad, departamento, profesion, lugar_empleo, direccion_empleo, cargo, tiempo_laborando, telefono_empleo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-		$statement->bind_param('sssssssssssssssssssss', $fechaSolicitud, $horaSolicitud, $name, $fechanac, $nacionalidad, $identidad, $genero, $estado_civil, $direccion, $telefono, $celular, $dependientes, $email, $ciudad, $departamento, $profesion, $empresa_labora, $direccion_empleo, $cargo, $tiempo_laborando, $telefono_empleo);
+		$statement = $conn->prepare("INSERT INTO ficha_directorio (fecha_solicitud, hora_solicitud, nombre_completo, fecha_nacimiento, nacionalidad, identidad, genero, estado_civil, direccion, telefono, celular, dependientes, correo, ciudad, departamento, profesion, lugar_empleo, direccion_empleo, cargo, tiempo_laborando, telefono_empleo, observaciones) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$statement->bind_param('ssssssssssssssssssssss', $fechaSolicitud, $horaSolicitud, $name, $fechanac, $nacionalidad, $identidad, $genero, $estado_civil, $direccion, $telefono, $celular, $dependientes, $email, $ciudad, $departamento, $profesion, $empresa_labora, $direccion_empleo, $cargo, $tiempo_laborando, $telefono_empleo, $observaciones);
 		$statement->execute();
 		$last_id = mysqli_insert_id($conn);
 
@@ -189,7 +191,6 @@ if ($accion === 'newlote') {
 				$enviado = true;
 			}
 		}
-
 		if ($enviado == true) {
 			$statement->execute();
 			$respuesta = array(
@@ -202,7 +203,7 @@ if ($accion === 'newlote') {
 				'path_lote' => $path_lote,
 				'tipo' => $accion,
 			);
-		}else if($enviado == false) {
+		} else if ($enviado == false) {
 			$respuesta = array(
 				'respuesta' => 'duplicado',
 				'numerolote' => $numero,
@@ -213,13 +214,167 @@ if ($accion === 'newlote') {
 				'path_lote' => $path_lote,
 				'tipo' => $accion,
 			);
-			
 		} else {
 			$respuesta = array(
 				'respuesta' => 'error',
 			);
 		}
 
+		$statement->close();
+		$conn->close();
+	} catch (Exception $e) {
+		//En caso de un error, tomar la exepción
+		$respuesta = array(
+			//Arreglo asociativo
+			'pass' => $e->getMessage(),
+			// 'pass' => $hash_password
+		);
+	}
+	echo json_encode($respuesta);
+}
+
+
+if ($accion === 'newventa') {
+
+	//info general
+	$fechaSolicitud = $_POST['fechaSolicitud'];
+	$horaSolicitud = $_POST['horaSolicitud'];
+	$id_registro = $_POST['id_registro'];
+	$fecha_venta = $_POST['fecha_venta'];
+	$prima = $_POST['prima'];
+	$plazo_meses = $_POST['plazo_meses'];
+	$plazo_anios = ($plazo_meses / 12);
+	$fecha_primer_cuota = $_POST['fecha_primer_cuota'];
+	$tipo_venta = $_POST['tipo_venta'];
+	$vendedor = $_POST['vendedor'];
+	$dia_pago = $_POST['dia_pago'];
+	$cuenta_bancaria = $_POST['cuenta_bancaria'];
+	$proyecto = $_POST['proyecto'];
+	$estado = 'pa';
+	$estado_lote = 'v';
+
+	$resultado = obtenerProy($proyecto);
+	$row = $resultado->fetch_assoc();
+	$precio_vara2 = $row['precio_vara2'];
+	$accion === 'newventa';
+
+	// funcion insertar ficha_compra_lotes
+	function insertarFichaCompra($idlote, $cliente, $idcompra)
+	{
+		include '../conexion.php';
+		$stmtcompra = $conn->prepare("INSERT INTO ficha_compra_lotes (id_lote,id_registro,id_compra) VALUES (?,?,?)");
+		$stmtcompra->bind_param('sss', $idlote, $cliente, $idcompra);
+		$stmtcompra->execute();
+		return;
+	}
+	// funciona actualizar lote
+	function actualizarLote($estado, $cliente, $lote)
+	{
+		include '../conexion.php';
+		$stmtLotes = $conn->prepare("UPDATE lotes SET estado = ?, id_registro = ? WHERE id_lote = ?");
+		$stmtLotes->bind_param('sss', $estado, $cliente, $lote);
+		$stmtLotes->execute();
+		return;
+	}
+
+	// funciona cuota lote
+	function cuotaLote($area, $preciovara, $idcompra, $meses)
+	{
+		include '../conexion.php';
+		$stmtCuota = $conn->prepare("UPDATE ficha_compra SET cuota = ? WHERE id_ficha_compra = ?");
+		$total = ($area * $preciovara);
+		$cuota = ($total / $meses);
+		$stmtCuota->bind_param('ss', $cuota, $idcompra);
+		$stmtCuota->execute();
+		return;
+	}
+
+	//generar un  id_contrato_compra con año, id_registro, mes y last_id
+	function generarIdContrato($last_id, $lote, $id_registro, $fechaventa, $prima, $precio_vara2, $id_compra, $plazo)
+	{
+		include '../conexion.php';
+		$ano = date('y', strtotime($fechaventa));
+		$mes = date('m', strtotime($fechaventa));
+		$id_contrato = 'LO' . $ano . $mes . '-' . $id_registro . '-' . $last_id;
+
+		$stmtIdContrato = $conn->prepare("UPDATE ficha_compra SET id_contrato_compra = ? WHERE id_ficha_compra = ?");
+		$stmtIdContrato->bind_param('ss', $id_contrato, $last_id);
+		$stmtIdContrato->execute();
+
+		$stmtIdContratoLote = $conn->prepare("UPDATE lotes SET id_contrato = ? WHERE id_lote = ?");
+		$stmtIdContratoLote->bind_param('ss', $id_contrato, $lote);
+		$stmtIdContratoLote->execute();
+
+		totalCompra($precio_vara2, $prima, $id_compra, $id_contrato, $plazo);
+
+		return;
+	}
+
+
+	// Calacular total de la compra
+	function totalCompra($preciovara, $prima, $idcompra, $idcontrato, $plazo)
+	{
+		include '../conexion.php';
+		$resultado = obtenerTotalVarasContrato($idcontrato);
+		$row = $resultado->fetch_assoc();
+		//suma de varas
+		$sumavaras = $row['suma'];
+		//gran total = suma de varas * precio vara
+		$granTotal = ($sumavaras * $preciovara);
+
+		//Saldo Actaul = gran total - prima
+		$saldoActual = ($granTotal - $prima);
+		//cuota = saldo actual / plazo
+		$cuota = ($saldoActual / $plazo);
+		//insertar cuota en ficha_compra
+		$stmtTotal = $conn->prepare("UPDATE ficha_compra SET total_venta = ?, saldo_actual = ?, cuota = ? WHERE id_ficha_compra = ?");
+		$stmtTotal->bind_param('ssss', $granTotal, $saldoActual, $cuota, $idcompra);
+		$stmtTotal->execute();
+		return;
+	}
+
+
+	//conexion
+	try {
+		//Preparar la consulta de insertar bloque
+		$statement = $conn->prepare("INSERT INTO ficha_compra (fechaSolicitud, horaSolicitud, id_registro, fecha_venta, prima, plazo_anios, dia_pago, fecha_primer_cuota, plazo_meses, tipo, id_proyecto, estado, vendedor, cuenta_bancaria) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$statement->bind_param('ssssssssssssss', $fechaSolicitud, $horaSolicitud, $id_registro, $fecha_venta, $prima, $plazo_anios, $dia_pago, $fecha_primer_cuota, $plazo_meses, $tipo_venta, $proyecto, $estado, $vendedor, $cuenta_bancaria);
+		$statement->execute();
+		$last_id = mysqli_insert_id($conn);
+		//ciclo for con arreglo de lotes de venta con metodo posts
+		$lotes = $_POST["lotes"];
+		for ($i = 0; $i < sizeof($lotes); $i++) {
+			$id_lote = $lotes[$i];
+			// echo $id_lote;
+			$id_compra = $last_id;
+			insertarFichaCompra($id_lote, $id_registro, $id_compra);
+			actualizarLote($estado_lote, $id_registro, $id_lote);
+
+
+			$resultadoPrecio = obtenerPrecioLote($id_lote);
+			$row = $resultadoPrecio->fetch_assoc();
+			$areav2 = $row['areav2'];
+
+			// cuotaLote($areav2, $precio_vara2, $id_compra, $plazo_meses);
+
+			generarIdContrato($last_id, $id_lote, $id_registro, $fecha_venta, $prima, $precio_vara2, $id_compra, $plazo_meses);
+
+			$estadoquery = true;
+		}
+		//consulta si esta duplicado
+		if ($statement->affected_rows > 0 && $estadoquery) {
+			$respuesta = array(
+				'respuesta' => 'correcto',
+				'fechaSolicitud' => $fechaSolicitud,
+				'horaSolicitud' => $horaSolicitud,
+				'id_registro' => $id_registro,
+				'tipo' => $accion
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+			);
+		}
 		$statement->close();
 		$conn->close();
 	} catch (Exception $e) {

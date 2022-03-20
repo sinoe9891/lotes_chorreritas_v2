@@ -1,5 +1,5 @@
 addEventListener();
-
+// Hola
 function addEventListener() {
 	// Creación de registro
 	let evento = document.querySelector('#formulario');
@@ -29,6 +29,16 @@ function addEventListener() {
 	let nuevoLote = document.querySelector('#nuevoLote');
 	if (nuevoLote) {
 		nuevoLote.addEventListener('submit', newlote);
+	}
+	//Nuevo venta
+	let nuevaventa = document.querySelector('#nuevaventa');
+	if (nuevaventa) {
+		nuevaventa.addEventListener('submit', newventa);
+	}
+	//Nuevo venta
+	let editarventa = document.querySelector('#editarventa');
+	if (editarventa) {
+		editarventa.addEventListener('submit', editventa);
 	}
 	let editarBloque = document.querySelector('#editarRegistroBloque');
 	if (editarBloque) {
@@ -76,6 +86,13 @@ function addEventListener() {
 
 }
 
+minimizar();
+function minimizar() {
+	if (window.innerWidth < 400) {
+		// alert('Hello' + window.innerWidth);
+		document.getElementById('sidebar').classList.remove('active');
+	}
+}
 window.onload = function () { almacenaValoresIniciales(); };
 // Función almacenar la información de los formularios
 function almacenaValoresIniciales() {
@@ -100,10 +117,14 @@ function formatID(identidad) {
 	// console.log(resultado);
 }
 
-
-
+//Funcion para ver en que pagina estoy
+function filename() {
+	var rutaAbsoluta = self.location.href;
+	var posicionUltimaBarra = rutaAbsoluta.lastIndexOf("/");
+	var rutaRelativa = rutaAbsoluta.substring(posicionUltimaBarra + "/".length, rutaAbsoluta.length);
+	return rutaRelativa;
+}
 //-------------------Solicitud de Graduado para actualziación-------------------
-
 function nuevoCliente(e) {
 	e.preventDefault();
 
@@ -167,125 +188,137 @@ function nuevoCliente(e) {
 		celular_beneficiario = document.querySelector('#celular_beneficiario').value,
 		pais_reside_beneficiario = document.querySelector('#pais_reside_beneficiario').value;
 
-	const regExp = new RegExp(/[0-9]{4,4}-[0-9]{4,4}-[0-9]{5,5}/) // --- sin comillas
-	const resultado = regExp.test(identidad);
-	console.log(resultado);
+	let verficarid = formatID(identidad);
+	let verficaridbeneficiario = formatID(identidad_beneficiario);
 
-
-	if (nombres === '' && identidad === '') {
+	if (nombres === '' || identidad === '' || identidad_beneficiario === '' || nombre_beneficiario === '' && fechanac === '') {
 		//validación Falló
 		Swal.fire({
 			icon: 'error',
 			title: 'Oops...',
-			text: 'Debe de llenar todos de forma correcta los campos',
+			text: 'Debe de llenar los campos obligatorios',
 		});
 	} else {
-		//Campos son correctos - Ejecutamos AJAX
-		//Crear  FormData - Datos que se envían al servidor
-		console.log('enviar');
-		let datos = new FormData();
-		datos.append('horaSolicitud', horaSolicitud);
-		datos.append('fechaSolicitud', fechaSolicitud);
-		datos.append('nombres', nombres);
-		datos.append('fechanac', fechanac);
-		datos.append('identidad', identidad);
-		datos.append('nacionalidad', nacionalidad);
-		datos.append('genero', genero);
-		datos.append('estado_civil', estado_civil);
-		datos.append('pais_reside', pais_reside);
-		datos.append('direccion', direccion);
-		datos.append('ciudad', ciudad);
-		datos.append('departamento', departamento);
-		datos.append('email', email);
-		datos.append('celular', celular);
-		datos.append('telefono', telefono);
-		datos.append('dependientes', dependientes);
-		datos.append('observaciones', observaciones);
-		datos.append('profesion', profesion);
-		datos.append('empresa_labora', empresa_labora);
-		datos.append('direccion_empleo', direccion_empleo);
-		datos.append('telefono_empleo', telefono_empleo);
-		datos.append('cargo', cargo);
-		datos.append('tiempo_laborando', tiempo_laborando);
-		datos.append('sueldos', sueldos);
-		datos.append('remesas', remesas);
-		datos.append('otros_ingresos', otros_ingresos);
-		datos.append('prestamos', prestamos);
-		datos.append('alquiler', alquiler);
-		datos.append('otros_egresos', otros_egresos);
-		datos.append('nombre_conyugue', nombre_conyugue);
-		datos.append('fechnac_conyugue', fechnac_conyugue);
-		datos.append('identidad_conyugue', identidad_conyugue);
-		datos.append('celular_conyugue', celular_conyugue);
-		datos.append('empresa_labora_conyugue', empresa_labora_conyugue);
-		datos.append('telefono_empleo_conyugue', telefono_empleo_conyugue);
-		datos.append('cargo_conyugue', cargo_conyugue);
-		datos.append('tiempo_laborando_conyugue', tiempo_laborando_conyugue);
-		datos.append('nombre_referencia_1', nombre_referencia_1);
-		datos.append('direccion_referencia_1', direccion_referencia_1);
-		datos.append('celular_referencia_1', celular_referencia_1);
-		datos.append('telefono_referencia_1', telefono_referencia_1);
-		datos.append('empresa_labora_referencia_1', empresa_labora_referencia_1);
-		datos.append('telefono_empleo_referencia_1', telefono_empleo_referencia_1);
-		datos.append('nombre_referencia_2', nombre_referencia_2);
-		datos.append('direccion_referencia_2', direccion_referencia_2);
-		datos.append('celular_referencia_2', celular_referencia_2);
-		datos.append('telefono_referencia_2', telefono_referencia_2);
-		datos.append('empresa_labora_referencia_2', empresa_labora_referencia_2);
-		datos.append('telefono_empleo_referencia_2', telefono_empleo_referencia_2);
-		datos.append('nombre_beneficiario', nombre_beneficiario);
-		datos.append('genero_beneficiario', genero_beneficiario);
-		datos.append('identidad_beneficiario', identidad_beneficiario);
-		datos.append('direccion_beneficiario', direccion_beneficiario);
-		datos.append('ciudad_beneficiario', ciudad_beneficiario);
-		datos.append('departamento_beneficiario', departamento_beneficiario);
-		datos.append('celular_beneficiario', celular_beneficiario);
-		datos.append('pais_reside_beneficiario', pais_reside_beneficiario);
+		if (verficarid && verficaridbeneficiario) {
+			//Campos son correctos - Ejecutamos AJAX
+			//Crear  FormData - Datos que se envían al servidor
+			console.log('enviar');
+			let datos = new FormData();
+			datos.append('horaSolicitud', horaSolicitud);
+			datos.append('fechaSolicitud', fechaSolicitud);
+			datos.append('nombres', nombres);
+			datos.append('fechanac', fechanac);
+			datos.append('identidad', identidad);
+			datos.append('nacionalidad', nacionalidad);
+			datos.append('genero', genero);
+			datos.append('estado_civil', estado_civil);
+			datos.append('pais_reside', pais_reside);
+			datos.append('direccion', direccion);
+			datos.append('ciudad', ciudad);
+			datos.append('departamento', departamento);
+			datos.append('email', email);
+			datos.append('celular', celular);
+			datos.append('telefono', telefono);
+			datos.append('dependientes', dependientes);
+			datos.append('observaciones', observaciones);
+			datos.append('profesion', profesion);
+			datos.append('empresa_labora', empresa_labora);
+			datos.append('direccion_empleo', direccion_empleo);
+			datos.append('telefono_empleo', telefono_empleo);
+			datos.append('cargo', cargo);
+			datos.append('tiempo_laborando', tiempo_laborando);
+			datos.append('sueldos', sueldos);
+			datos.append('remesas', remesas);
+			datos.append('otros_ingresos', otros_ingresos);
+			datos.append('prestamos', prestamos);
+			datos.append('alquiler', alquiler);
+			datos.append('otros_egresos', otros_egresos);
+			datos.append('nombre_conyugue', nombre_conyugue);
+			datos.append('fechnac_conyugue', fechnac_conyugue);
+			datos.append('identidad_conyugue', identidad_conyugue);
+			datos.append('celular_conyugue', celular_conyugue);
+			datos.append('empresa_labora_conyugue', empresa_labora_conyugue);
+			datos.append('telefono_empleo_conyugue', telefono_empleo_conyugue);
+			datos.append('cargo_conyugue', cargo_conyugue);
+			datos.append('tiempo_laborando_conyugue', tiempo_laborando_conyugue);
+			datos.append('nombre_referencia_1', nombre_referencia_1);
+			datos.append('direccion_referencia_1', direccion_referencia_1);
+			datos.append('celular_referencia_1', celular_referencia_1);
+			datos.append('telefono_referencia_1', telefono_referencia_1);
+			datos.append('empresa_labora_referencia_1', empresa_labora_referencia_1);
+			datos.append('telefono_empleo_referencia_1', telefono_empleo_referencia_1);
+			datos.append('nombre_referencia_2', nombre_referencia_2);
+			datos.append('direccion_referencia_2', direccion_referencia_2);
+			datos.append('celular_referencia_2', celular_referencia_2);
+			datos.append('telefono_referencia_2', telefono_referencia_2);
+			datos.append('empresa_labora_referencia_2', empresa_labora_referencia_2);
+			datos.append('telefono_empleo_referencia_2', telefono_empleo_referencia_2);
+			datos.append('nombre_beneficiario', nombre_beneficiario);
+			datos.append('genero_beneficiario', genero_beneficiario);
+			datos.append('identidad_beneficiario', identidad_beneficiario);
+			datos.append('direccion_beneficiario', direccion_beneficiario);
+			datos.append('ciudad_beneficiario', ciudad_beneficiario);
+			datos.append('departamento_beneficiario', departamento_beneficiario);
+			datos.append('celular_beneficiario', celular_beneficiario);
+			datos.append('pais_reside_beneficiario', pais_reside_beneficiario);
+			datos.append('accion', tipo);
+			//Crear  el llamado a Ajax
+			let xhr = new XMLHttpRequest();
+			//Abrir la Conexión
+			xhr.open('POST', 'includes/models/model-nuevo.php', true);
 
-		// for (const archivo of fotos) {
-		// 	datos.append('archivos[]', archivo);
-		// }
+			//Retorno de Datos
+			xhr.onload = function () {
+				if (this.status === 200) {
+					//esta es la respuesta la que tenemos en el model
+					// let respuesta = xhr.responseText;
+					let respuesta = JSON.parse(xhr.responseText);
+					let urlactual = filename()
+					console.log(respuesta);
+					if (respuesta.respuesta === 'correcto') {
+						//si es un nuevo usuario 
+						if (respuesta.tipo == 'solicitud' && urlactual == 'new-client.php') {
+							Swal.fire({
+								icon: 'success',
+								title: '¡Solicitud realizada!',
+								text: 'Se verificarán los datos y se aprobará la actualización',
+								position: 'center',
+								showConfirmButton: true
 
-		datos.append('accion', tipo);
-		//Crear  el llamado a Ajax
-		let xhr = new XMLHttpRequest();
-		//Abrir la Conexión
-		xhr.open('POST', 'includes/models/model-nuevo.php', true);
-
-		//Retorno de Datos
-		xhr.onload = function () {
-			if (this.status === 200) {
-				//esta es la respuesta la que tenemos en el model
-				// let respuesta = xhr.responseText;
-				let respuesta = JSON.parse(xhr.responseText);
-				console.log(respuesta);
-				if (respuesta.respuesta === 'correcto') {
-					//si es un nuevo usuario 
-					if (respuesta.tipo == 'solicitud') {
+							}).then(function () {
+								window.location = "clientes.php";
+							});;
+						} else if (respuesta.tipo == 'solicitud' && urlactual == 'precontrato.php') {
+							Swal.fire({
+								icon: 'success',
+								title: '¡Precontrato Enviado!',
+								text: 'Se verificarán los datos y se contactarán con usted',
+								position: 'center',
+								showConfirmButton: true
+							}).then(function () {
+								window.location.reload();
+							});;
+						}
+					} else {
 						Swal.fire({
-							icon: 'success',
-							title: '¡Solicitud realizada!',
-							text: 'Se verificarán los datos y se aprobará la actualización',
-							position: 'center',
-							showConfirmButton: true
-
-						}).then(function () {
-							window.location = "clientes.php";
-						});;
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Hubo un error en la solicitud'
+						})
 					}
-				} else {
-					Swal.fire({
-						icon: 'error',
-						title: 'Oops...',
-						text: 'Hubo un error en la solicitud'
-					})
 				}
 			}
+			// Enviar la petición
+			xhr.send(datos);
+		} else {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'ID Invalido Cliente y Beneficiario (13 digitos más guiones) '
+			});
 		}
-		// Enviar la petición
-		xhr.send(datos);
-	}
 
+	}
 }
 
 function newbloque(e) {
@@ -429,6 +462,212 @@ function newlote(e) {
 	}
 
 }
+
+function newventa(e) {
+	e.preventDefault();
+	let fechaSolicitud = document.querySelector('#fechaSolicitud').value,
+		horaSolicitud = document.querySelector('#horaSolicitud').value,
+		id_registro = document.querySelector('#nombre_completo').value,
+		fecha_venta = document.querySelector('#fecha_venta').value,
+		tipo_venta = document.querySelector('#tipo_venta').value,
+		prima = document.querySelector('#prima').value,
+		plazo_meses = document.querySelector('#plazo_meses').value,
+		vendedor = document.querySelector('#vendedor').value,
+		cuenta_bancaria = document.querySelector('#cuenta_bancaria').value,
+		fecha_primer_cuota = document.querySelector('#fecha_primer_cuota').value,
+		dia_pago = document.querySelector('#dia_pago').value,
+		proyecto = document.querySelector('#proyecto').value,
+		tipo = document.querySelector('#tipo').value,
+		bloque = document.querySelectorAll('.tabla-bloque');
+
+	if (bloque.length == 0){
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de seleccionar al menos un bloque',
+		});
+	}
+	if (fechaSolicitud === '' || horaSolicitud === '' || nombre_completo === '' || fecha_venta === '' || prima === '' || plazo_meses === '' || vendedor === '' || cuenta_bancaria === '' || fecha_primer_cuota === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos',
+		});
+	} else {
+		//Campos son correctos - Ejecutamos AJAX
+		//Crear  FormData - Datos que se envían al servidor
+		console.log('enviar');
+		let datos = new FormData();
+		datos.append('fechaSolicitud', fechaSolicitud);
+		datos.append('horaSolicitud', horaSolicitud);
+		datos.append('id_registro', id_registro);
+		datos.append('fecha_venta', fecha_venta);
+		datos.append('tipo_venta', tipo_venta);
+		datos.append('prima', prima);
+		datos.append('tipo_venta', tipo_venta);
+		datos.append('plazo_meses', plazo_meses);
+		datos.append('vendedor', vendedor);
+		datos.append('cuenta_bancaria', cuenta_bancaria);
+		datos.append('fecha_primer_cuota', fecha_primer_cuota);
+		datos.append('dia_pago', dia_pago);
+		datos.append('proyecto', proyecto);
+		datos.append('cuenta_bancaria', cuenta_bancaria);
+		for (let i = 0; i < bloque.length; i++) {
+			hola = bloque[i].id;
+			datos.append('lotes[]', hola);
+			console.log(hola);
+		}
+		// datos.append('lotes', bloque);
+		datos.append('accion', tipo);
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-nuevo.php', true);
+		console.log('enviar1');
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+				console.log('Recibe respuesta');
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'newventa') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Asignación realizada!',
+							text: 'Ahora cambia el estado del lote',
+							position: 'center',
+							showConfirmButton: true
+
+						}).then(function () {
+							// urllote = '?ID=' + lote + '&bloque=' + bloque;
+							window.location = "ventas.php";
+						});;
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+
+}
+
+function editventa(e) {
+	e.preventDefault();
+	let fechaSolicitud = document.querySelector('#fechaSolicitud').value,
+		horaSolicitud = document.querySelector('#horaSolicitud').value,
+		id_registro = document.querySelector('#id_registro').value,
+		id_ficha_compra = document.querySelector('#id_ficha_compra').value,
+		id_contrato = document.querySelector('#id_contrato').value,
+		fecha_venta = document.querySelector('#fecha_venta').value,
+		tipo_venta = document.querySelector('#tipo_venta').value,
+		prima = document.querySelector('#prima').value,
+		plazo_meses = document.querySelector('#plazo_meses').value,
+		vendedor = document.querySelector('#vendedor').value,
+		cuenta_bancaria = document.querySelector('#cuenta_bancaria').value,
+		fecha_primer_cuota = document.querySelector('#fecha_primer_cuota').value,
+		dia_pago = document.querySelector('#dia_pago').value,
+		proyecto = document.querySelector('#proyecto').value,
+		estado = document.querySelector('#estado').value,
+		tipo = document.querySelector('#tipo').value,
+		bloque = document.querySelectorAll('.tabla-bloque');
+
+
+	if (bloque.length == 0) {
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de seleccionar un bloque'
+		})
+	} else if (fechaSolicitud === '' || fecha_venta === '' || prima === '' || vendedor === '' || cuenta_bancaria === '' || fecha_primer_cuota === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos',
+		});
+	} else {
+		//Campos son correctos - Ejecutamos AJAX
+		//Crear  FormData - Datos que se envían al servidor
+		console.log('enviar');
+		let datos = new FormData();
+		datos.append('fechaSolicitud', fechaSolicitud);
+		datos.append('horaSolicitud', horaSolicitud);
+		datos.append('id_registro', id_registro);
+		datos.append('id_ficha_compra', id_ficha_compra);
+		datos.append('id_contrato', id_contrato);
+		datos.append('fecha_venta', fecha_venta);
+		datos.append('tipo_venta', tipo_venta);
+		datos.append('prima', prima);
+		datos.append('tipo_venta', tipo_venta);
+		datos.append('plazo_meses', plazo_meses);
+		datos.append('vendedor', vendedor);
+		datos.append('cuenta_bancaria', cuenta_bancaria);
+		datos.append('fecha_primer_cuota', fecha_primer_cuota);
+		datos.append('dia_pago', dia_pago);
+		datos.append('estado', estado);
+		datos.append('proyecto', proyecto);
+		datos.append('cuenta_bancaria', cuenta_bancaria);
+		for (let i = 0; i < bloque.length; i++) {
+			hola = bloque[i].id;
+			datos.append('lotes[]', hola);
+			console.log(hola);
+		}
+		// datos.append('lotes', bloque);
+		datos.append('accion', tipo);
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-editar-registro.php', true);
+		console.log('enviar1');
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+				console.log('Recibe respuesta');
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'editarventa') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Actualización!',
+							text: 'Se ha realizado el cambio',
+							position: 'center',
+							showConfirmButton: true
+
+						}).then(function () {
+							// urllote = '?ID=' + lote + '&bloque=' + bloque;
+							window.location = "ventas.php";
+						});;
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+}
+
 
 
 
@@ -584,7 +823,91 @@ function editarLote(e) {
 
 }
 
+//Agregar un nuevo elemento de la
+var lineCount = 0;
+addAddressLine = function () {
+	var contenido = document.querySelector('#bloque').value;
+	var combo = document.getElementById("bloque");
+	var selected = combo.options[combo.selectedIndex].text;
+	// combo.remove(combo.selectedIndex) //Solo se agrego esta linea para eliminar del select
+	let cuentaactual = document.querySelectorAll('.tabla-bloque').length;
+	lineCount = cuentaactual;
+	//agregar contenido
+	var i = document.createElement('input');
+	i.setAttribute("type", "text");
+	i.setAttribute("id", contenido);
+	i.setAttribute("name", contenido);
+	i.setAttribute("value", selected);
+	i.setAttribute("readonly", "readonly");
 
+	//Regresar item al select/ Parte 2 del favor
+	var btn = document.createElement('div');
+	// btn.setAttribute("type", "button");
+	btn.setAttribute("class", "btn btn-light-secondary me-1 mb-1");
+	btn.setAttribute("id", "X");
+	btn.setAttribute("name", "X");
+	btn.setAttribute("value", "X");
+	btn.setAttribute("readonly", "readonly");
+	btn.innerHTML = "Eliminar";
+	btn.id = selected;
+
+	// Eliminar elemento
+	btn.onclick = function () {
+		var x = document.getElementById("bloque");
+		var option = document.createElement("option");
+		option.text = selected;
+		x.add(option);
+
+		document.getElementById(contenido).remove();
+		document.getElementById(selected).remove();
+		return;
+	};
+
+	// document.body.appendChild(btn);
+	//insertar celda y elimnar filas
+	var table = document.getElementById("tabla");
+	var row = table.insertRow(lineCount);
+
+	lineCount++;
+	var row = table.insertRow(-1).innerHTML = '<td class="text-bold-500 tabla-bloque" name="fila[]" id="' + contenido + '" value="' + contenido + '">' + lineCount + '</td><td class="text-bold-500">' + selected + '</td><td class="text-bold-500"><button class="btn btn-danger" onclick="deleteRow(this)">Quitar</button></td>';
+	document.getElementById("bloque").value = "";
+
+
+	//eliminar fila
+	return;
+
+}
+
+function deleteRow(r) {
+	var table = document.getElementById("tabla");
+	var rowCount = table.rows.length;
+	//console.log(rowCount);
+
+	if (rowCount <= 0)
+		alert('No se puede eliminar el encabezado');
+	else
+		table.deleteRow(rowCount - 1);
+}
+
+//document.querySelectorAll('.tabla-bloque')[0].id[0]
+//funcion para enviar filas de un array por medio de ajax para guardar en la base de datos
+function guardar_lote() {
+	//Obtener los datos del formulario
+	let bloque = document.querySelectorAll('.tabla-bloque');
+	let bloque_array = [];
+	//enviar por ajax
+	for (let i = 0; i < bloque.length; i++) {
+		bloque_array.push(bloque[i].id);
+	}
+	//console.log(bloque_array);
+	let datos = new FormData();
+	datos.append('bloque', bloque_array);
+	datos.append('user_id', user_id);
+	datos.append('areav2', areav2);
+	datos.append('path', path);
+	datos.append('accion', 'guardar');
+
+}
 
 function editarRegistro(e) {
 	e.preventDefault();
@@ -859,7 +1182,7 @@ function editarRegistroBloque(e) {
 
 function editarRegistroLote(e) {
 	e.preventDefault();
-
+	console.log('llego');
 	let user_id = document.querySelector('#user_id').value,
 		numero = document.querySelector('#numero').value,
 		id_bloque = document.querySelector('#bloque').value,
@@ -878,6 +1201,7 @@ function editarRegistroLote(e) {
 	datos.append('estado', estado);
 	datos.append('user_id', user_id);
 	datos.append('accion', tipo);
+
 	//Validar que el campo tenga algo escrito
 	if (numero === '') {
 		//validación Falló
