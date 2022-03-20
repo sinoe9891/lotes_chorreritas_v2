@@ -50,6 +50,17 @@ function addEventListener() {
 			}
 		});
 	}
+	//Acciones de solicitudes
+	let solicitudCredito = document.querySelector('.eliminar-credito');
+	if (solicitudCredito) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-credito';
+		solicitudCredito.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event,modelo,eliminar);
+			}
+		});
+	}
 
 	let fichaGraduado = document.querySelector('.caja-ficha');
 	if (fichaGraduado) {

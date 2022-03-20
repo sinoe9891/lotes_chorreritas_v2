@@ -5,7 +5,7 @@ include 'includes/funciones.php';
 include 'includes/conexion.php';
 include 'includes/templates/header.php';
 include 'includes/templates/sidebar.php';
-date_default_timezone_set('America/Tegucigalpa');
+
 ?>
 <div id="main">
 	<header class="mb-3">
@@ -19,6 +19,7 @@ date_default_timezone_set('America/Tegucigalpa');
 			<div class="row">
 				<div class="col-12 col-md-6 order-md-1 order-last">
 					<h3>Créditos</h3>
+
 				</div>
 				<div class="col-12 col-md-6 order-md-2 order-first">
 					<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -30,9 +31,13 @@ date_default_timezone_set('America/Tegucigalpa');
 				</div>
 			</div>
 		</div>
-		<section class="section ventas">
+		<section class="section eliminar-credito">
 			<div class="card">
 				<div class="card-body">
+					<?php
+					$DateAndTime = date('m-d-Y h:i:s a', time());
+					echo "Hoy es:<strong> $DateAndTime.</strong>";
+					?>
 					<table class="table table-striped" id="table1">
 						<thead>
 							<tr>
@@ -64,6 +69,7 @@ date_default_timezone_set('America/Tegucigalpa');
 							$contador = 1;
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
+								date_default_timezone_set('America/Tegucigalpa');
 								$fecha_pago = $solicitud['fecha_pago'];
 								$id_compra = $solicitud['id_compra'];
 								$nombre_completo = $solicitud['nombre_completo'];
@@ -72,6 +78,7 @@ date_default_timezone_set('America/Tegucigalpa');
 								$total_venta = $solicitud['total_venta'];
 								$estado = $solicitud['estado'];
 								$view = '';
+								$noview = '';
 								if ($estado == 'en') {
 									$estadoVenta = 'En Curso';
 									$color = 'bg-success';
@@ -99,7 +106,7 @@ date_default_timezone_set('America/Tegucigalpa');
 								}
 
 							?>
-								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
+								<tr id="solicitud:<?php echo $solicitud['id_compra'] ?>">
 									<td><?php echo $contador++; ?></td>
 									<td><?php echo $nombre_completo; ?></td>
 									<td>
@@ -110,19 +117,32 @@ date_default_timezone_set('America/Tegucigalpa');
 										$interval = $fecha_pago1->diff($fechahoy);
 										$dias = $interval->format('%r%a');
 										// echo '<p>' . $dias . '</p>';
-										if($dias == -1){
-											$status = "Pendiente";
-											$color = 'bg-warning';
-										}elseif ($dias > 0) {
-											$status = "Vencido";
-											$color = 'bg-danger';
-										} elseif ($dias == 0) {
+										if ($dias == 0) {
 											$status = "Vence hoy";
 											$color = 'bg-warning';
+										}
+										if ($dias == -0) {
+											$status = "Pendiente";
+											$color = 'bg-warning';
+										} elseif ($dias > 0) {
+											$status = "Vencido";
+											$color = 'bg-danger';
 										} elseif ($dias < 0) {
 											$status =  "Pendiente";
 											$color = 'bg-success';
-										} 
+										}
+
+
+										// if($dias === -0){
+										// 	$status = "Pendiente";
+										// 	$color = 'bg-warning';
+										// }elseif ($dias > 0) {
+										// 	$status = "Vencido";
+										// 	$color = 'bg-danger';
+										// } elseif ($dias < 0) {
+										// 	$status =  "Pendiente";
+										// 	$color = 'bg-success';
+										// } 
 										?>
 										<span class="badge <?php echo $color ?> "><?php echo $fecha_pago; ?></span>
 									</td>
@@ -133,9 +153,10 @@ date_default_timezone_set('America/Tegucigalpa');
 										<a href="cronograma.php?ID=<?php echo $solicitud['id_compra'] ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
 									</td>
 									<td>
-										<p>Letra</p>
+										<a href="letra.php?ID=<?php echo $solicitud['id_compra'] ?>" class="btn btn-sm btn-outline-secondary">Letra</a>
 									</td>
-									<td><a href="edit-venta.php?ID=<?php echo $solicitud['id_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
+									<td>
+										<a href="edit-venta.php?ID=<?php echo $solicitud['id_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
 									</td>
 									<td>
 										<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>

@@ -11,11 +11,7 @@ if ($pass == "Stark9891") {
 function exportarTablas()
 {
 	// include 'includes/conexion.php';
-	$host = "localhost";
-	$username = "root";
-	$password = "";
-	$database_name = "lotes_chorreritas";
-	$conn = mysqli_connect($host, $username, $password, $database_name);
+	include 'includes/conexion.php';
 	$tables = array();
 	$sql = "SHOW TABLES";
 	$result = mysqli_query($conn, $sql);
