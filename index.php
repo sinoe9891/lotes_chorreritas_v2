@@ -315,7 +315,7 @@ include 'includes/templates/sidebar.php';
 	Swal.fire({
 		icon: 'success',
 		title: '¡Nueva Actualización!',
-		text: 'Ya se puede editar el lote y crear una venta. Falta eliminar o agregar más lotes al momento de editar una venta',
+		text: 'Ya se puede generar cronograma de pagos y eliminar venta para liberar lotes',
 		position: 'center',
 		showConfirmButton: true
 
