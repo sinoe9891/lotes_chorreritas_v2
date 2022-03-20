@@ -384,7 +384,7 @@ if ($accion === 'editarventa') {
 	$estado =  $_POST['estado'];
 	$id_ficha_compra = $_POST['id_ficha_compra'];
 	$plazo_meses = $_POST['plazo_meses']; 
-	
+
 	if ($estado == 'en') {
 		include '../conexion.php';
 		$consultaFechaCuota = $conn->query("SELECT a.fecha_primer_cuota, a.plazo_meses, a.total_venta, a.cuota FROM ficha_compra a WHERE a.id_ficha_compra = $id_ficha_compra");
@@ -398,16 +398,18 @@ if ($accion === 'editarventa') {
 			// cambiar estado de la primera cuota por siguiente
 			if ($i == 1) {
 				$estado_cuota = 'sig';
-				$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota));			
+				$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota));
+				$total_venta = $total_venta;		
 			} else {
 				$estado_cuota = 'pen';
 				$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota . " +$i month"));
+				$total_venta = $total_venta - $cuota;
 			}
 			// $fecha_pago = date("d-m-Y", strtotime($fecha_cuota . " +$i month")) . "<br>";
 			// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
 			$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago1 . " +1 month"));
 			//restar la cuota de $total_venta
-			$total_venta = $total_venta - $cuota;
+			// $total_venta = $total_venta - $cuota;
 			$no_cuota = $i;
 			$insertarFechas = $conn->query("INSERT INTO control_credito_lote (id_compra, fecha_pago, fecha_vencimiento, no_cuota, monto_restante, estado_cuota) VALUES ($id_ficha_compra,'$fecha_pago1', '$fecha_vencimiento', '$no_cuota', '$total_venta', '$estado_cuota')");
 		}

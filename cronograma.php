@@ -66,7 +66,7 @@ date_default_timezone_set('America/Tegucigalpa');
 								$total_venta = $solicitud['total_venta'];
 								$estado = $solicitud['estado_cuota'];
 								$view = '';
-
+								$noview ='';
 
 							?>
 								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
@@ -101,7 +101,7 @@ date_default_timezone_set('America/Tegucigalpa');
 										$saldo_actual = $saldo_actual - $cuota;
 									?>
 									<td>
-										<span class=""><?php echo $saldo_actual; ?></span>
+										<span class=""><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span>
 									</td>
 									<td>
 										<span class="badge <?php echo $coloractual ?>"><?php echo $status; ?></span>

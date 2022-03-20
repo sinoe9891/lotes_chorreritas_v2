@@ -64,7 +64,7 @@ include 'includes/templates/sidebar.php';
 								$precio_vara2 = 0;
 							}
 
-							$consulta = $conn->query("SELECT c.nombre_completo, b.id_ficha_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, a.estado_cuota, MIN(id_credito_lote) id_cuota FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id and a.id_compra = b.id_ficha_compra GROUP BY b.id_contrato_compra ORDER BY a.id_compra;");
+							$consulta = $conn->query("SELECT c.nombre_completo, b.id_ficha_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, b.estado, MIN(id_credito_lote) id_cuota FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id and a.id_compra = b.id_ficha_compra GROUP BY b.id_contrato_compra ORDER BY a.id_compra;");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
@@ -76,7 +76,7 @@ include 'includes/templates/sidebar.php';
 								$saldo_actual = $solicitud['saldo_actual'];
 								$cuota = $solicitud['cuota'];
 								$total_venta = $solicitud['total_venta'];
-								$estado = $solicitud['estado_cuota'];
+								$estado = $solicitud['estado'];
 								$view = '';
 								$noview = '';
 								if ($estado == 'en') {
@@ -106,7 +106,7 @@ include 'includes/templates/sidebar.php';
 								}
 
 							?>
-								<tr id="solicitud:<?php echo $solicitud['id_compra'] ?>">
+								<tr id="solicitud:<?php echo $solicitud['id_ficha_compra'] ?>">
 									<td><?php echo $contador++; ?></td>
 									<td><?php echo $nombre_completo; ?></td>
 									<td>
@@ -131,18 +131,6 @@ include 'includes/templates/sidebar.php';
 											$status =  "Pendiente";
 											$color = 'bg-success';
 										}
-
-
-										// if($dias === -0){
-										// 	$status = "Pendiente";
-										// 	$color = 'bg-warning';
-										// }elseif ($dias > 0) {
-										// 	$status = "Vencido";
-										// 	$color = 'bg-danger';
-										// } elseif ($dias < 0) {
-										// 	$status =  "Pendiente";
-										// 	$color = 'bg-success';
-										// } 
 										?>
 										<span class="badge <?php echo $color ?> "><?php echo $fecha_pago; ?></span>
 									</td>
@@ -150,7 +138,7 @@ include 'includes/templates/sidebar.php';
 									<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
 									<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
 									<td>
-										<a href="cronograma.php?ID=<?php echo $solicitud['id_compra'] ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
+										<a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
 									</td>
 									<td>
 										<a href="letra.php?ID=<?php echo $solicitud['id_compra'] ?>" class="btn btn-sm btn-outline-secondary">Letra</a>
