@@ -83,6 +83,10 @@ if ($accion === 'eliminar-venta') {
 			$stmt1 = $conn->prepare("DELETE FROM ficha_compra_lotes WHERE id_compra = ?");
 			$stmt1->bind_param('s', $id);
 			$stmt1->execute();
+			//eliminar todos los datos de la tabla ficha_compra_lotes por medio de una consulta con el $id
+			$stmt1 = $conn->prepare("DELETE FROM control_credito_lote WHERE id_compra = ?");
+			$stmt1->bind_param('s', $id);
+			$stmt1->execute();
 		}
 		//Actualizar id_registro, estado, id_contrato de la tabla lotes con la siguiente consulta SELECT DISTINCT c.numero FROM ficha_compra a, ficha_compra_lotes b, lotes c WHERE a.id_ficha_compra = $id and a.id_contrato_compra = c.id_contrato
 

@@ -61,7 +61,7 @@ date_default_timezone_set('America/Tegucigalpa');
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
 								$fecha_pago = $solicitud['fecha_pago'];
-								$saldo_actual = $solicitud['saldo_actual'];
+								$saldo_actual = $solicitud['monto_restante'];
 								$cuota = $solicitud['cuota'];
 								$total_venta = $solicitud['total_venta'];
 								$estado = $solicitud['estado_cuota'];
