@@ -62,7 +62,7 @@ include 'includes/templates/sidebar.php';
 														<label for="first-name-column">Nombre Completo</label>
 														<input type="hidden" id="fechaSolicitud" name="fechaSolicitud" value="<?php echo date('Y-m-d'); ?>">
 														<input type="hidden" id="horaSolicitud" name="horaSolicitud" value="<?php echo date('H:i:s'); ?>">
-														<select class="choices form-select" id="nombre_completo" name="nombre_completo" required>
+														<select class="choices form-select" id="nombre_completo" name="nombre_completo">
 															<option name="lote" value="">Buscar Cliente</option>
 															<?php
 															$nombres = obtenerFichas();
@@ -80,7 +80,7 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-12 col-12">
 													<div class="form-group">
 														<label for="first-name-column">Fecha de Contrato</label>
-														<input type="date" class="form-control" name="fecha_venta" id="fecha_venta" value="" required>
+														<input type="date" class="form-control" name="fecha_venta" id="fecha_venta" value="">
 													</div>
 												</div>
 												<div class="col-md-12 col-12">
@@ -95,13 +95,13 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-12 col-12">
 													<div class="form-group">
 														<label for="company-column">Prima</label>
-														<input type="number" class="form-control" name="prima" id="prima" value="" placeholder="00.00" required>
+														<input type="number" class="form-control" name="prima" id="prima" value="" placeholder="00.00">
 													</div>
 												</div>
 												<div class="col-md-12 col-12">
 													<div class="form-group">
 														<label for="country-floating">No. de Cuotas(meses)</label>
-														<input type="number" class="form-control" id="plazo_meses" name="plazo_meses" value="" placeholder="0" required>
+														<input type="number" class="form-control" id="plazo_meses" name="plazo_meses" value="" placeholder="0">
 													</div>
 												</div>
 											</div>
@@ -181,7 +181,7 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-12 col-12">
 													<div class="form-group">
 														<label for="first-name-column">Vendedor</label>
-														<select class="choices form-select" id="vendedor" name="vendedor" required>
+														<select class="choices form-select" id="vendedor" name="vendedor">
 															<option name="lote" value="">Buscar Vendedor</option>
 															<?php
 															$vendedor = obtenerTodo('vendedores');
@@ -199,7 +199,7 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-12  col-12">
 													<div class="form-group">
 														<label for="last-name-column">Deposito en Banco</label>
-														<select class="choices form-select" id="cuenta_bancaria" name="cuenta_bancaria" required>
+														<select class="choices form-select" id="cuenta_bancaria" name="cuenta_bancaria">
 															<option name="lote" value="">Buscar Banco</option>
 															<?php
 															$cuenta_bancaria = obtenerTodo('cuentas_bancarias');
@@ -217,13 +217,13 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-6 col-12">
 													<div class="form-group">
 														<label for="city-column">Fecha Pago Primera Cuota *</label>
-														<input type="date" class="form-control" name="fecha_primer_cuota" id="fecha_primer_cuota" value="" required>
+														<input type="date" class="form-control" name="fecha_primer_cuota" id="fecha_primer_cuota" value="">
 													</div>
 												</div>
 												<div class="col-md-6 col-12">
 													<div class="form-group">
 														<label for="city-column">Día de Pago *</label>
-														<input type="number" class="form-control" name="dia_pago" id="dia_pago" max="30" min="1" vvalue="" placeholder="1 al 30" required>
+														<input type="number" class="form-control" name="dia_pago" id="dia_pago" max="30" min="1" vvalue="" placeholder="1 al 30">
 													</div>
 												</div>
 											</div>

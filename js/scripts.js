@@ -480,12 +480,19 @@ function newventa(e) {
 		tipo = document.querySelector('#tipo').value,
 		bloque = document.querySelectorAll('.tabla-bloque');
 
+	if (bloque.length == 0){
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de seleccionar al menos un bloque',
+		});
+	}
 	if (fechaSolicitud === '' || horaSolicitud === '' || nombre_completo === '' || fecha_venta === '' || prima === '' || plazo_meses === '' || vendedor === '' || cuenta_bancaria === '' || fecha_primer_cuota === '') {
 		//validación Falló
 		Swal.fire({
 			icon: 'error',
 			title: 'Oops...',
-			text: 'Debe de llenar los campos',
+			text: 'Debe de llenar todos los campos',
 		});
 	} else {
 		//Campos son correctos - Ejecutamos AJAX
