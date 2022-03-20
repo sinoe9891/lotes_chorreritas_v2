@@ -249,7 +249,9 @@ const removeAccents = (str) => {
 // Funcion eliminar registro de la tabla
 function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 	let idSolicitud = solicitudEliminar.id.split(':');
+
 	console.log(idSolicitud[1]);
+
 	//Crear llamado a AJAX
 	let xhr = new XMLHttpRequest();
 
@@ -257,7 +259,6 @@ function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 	let datos = new FormData();
 	datos.append('id', idSolicitud[1]);
 	datos.append('accion', eliminar);
-	datos.append('estado', estado);
 	datos.append('estado', estado);
 	// console.log(accion);
 	if(document.getElementById('nombre')){
@@ -273,7 +274,7 @@ function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 	xhr.onload = function () {
 		if (this.status === 200) {
 			// Ver si se puede eliminar
-			// console.log(JSON.parse(xhr.responseText));
+			console.log(JSON.parse(xhr.responseText));
 		}
 	}
 	//Enviar la petición

@@ -51,6 +51,11 @@
 				} else {
 					$soporte = '';
 				}
+				if (obtenerPaginaActual() == 'creditos' || obtenerPaginaActual() == 'cobro_cuota' || obtenerPaginaActual() == 'cronograma') {
+					$creditos = 'active';
+				} else {
+					$creditos = '';
+				}
 				?>
 				<div class="sidebar-menu">
 					<ul class="menu">
@@ -78,14 +83,14 @@
 								<i class="fa fa-table"></i>
 								<span>Facturación</span>
 							</a>
-							<ul class="submenu <?php echo $clientes . $ventas ?>">
+							<ul class="submenu <?php echo $clientes . $ventas . $creditos ?>">
 								<li class="submenu-item <?php echo $clientes ?>">
 									<a href="clientes.php">Clientes</a>
 								</li>
 								<li class="submenu-item <?php echo $ventas ?> ">
 									<a href="ventas.php">Contratos</a>
 								</li>
-								<li class="submenu-item ">
+								<li class="submenu-item <?php echo $creditos ?>">
 									<a href="creditos.php">Créditos</a>
 								</li>
 								<li class="submenu-item ">

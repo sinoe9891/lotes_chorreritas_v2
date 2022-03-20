@@ -56,17 +56,20 @@ include 'includes/templates/sidebar.php';
 							}else{
 								$precio_vara2 = 0;
 							}
-							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, c.total_venta, c.id_ficha_compra, c.id_contrato_compra, a.id_contrato, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_contrato_compra = a.id_contrato GROUP BY id_contrato ORDER BY a.id_registro DESC");
+							
+							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, c.total_venta, c.id_ficha_compra, c.id_contrato_compra, a.id_contrato, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_contrato_compra = a.id_contrato GROUP BY id_contrato ORDER BY c.id_ficha_compra DESC");
 							$numero = 1;
 							$contador = 0;
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
 							?>
-								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
+								<tr id="solicitud:<?php echo $solicitud['id_ficha_compra'] ?>">
 									<td><?php echo $numero++; ?></td>
 									<td><?php echo $solicitud['nombre_completo'] ?></td>
 									<td><?php echo $solicitud['identidad'] ?></td>
-									<td><?php echo $solicitud['id_contrato'] ?></td>
+									<td>
+										<?php echo $solicitud['id_contrato'] ?>
+									</td>
 									<td><?php echo $solicitud['fecha_venta'] ?></td>
 									<td><?php echo $solicitud['tipo'] ?></td>
 									<td>
@@ -115,7 +118,7 @@ include 'includes/templates/sidebar.php';
 									<td>
 										<a href="edit-venta.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 										<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
-										<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
+										<i class="fas fa-trash"></i>
 									</td>
 								</tr>
 							<?php

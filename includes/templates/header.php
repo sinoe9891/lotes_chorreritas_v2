@@ -1,3 +1,7 @@
+<?php
+	date_default_timezone_set('America/Tegucigalpa');;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 

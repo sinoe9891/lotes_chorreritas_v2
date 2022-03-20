@@ -24,7 +24,7 @@ date_default_timezone_set('America/Tegucigalpa');
 					<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-							<li class="breadcrumb-item active" aria-current="page">Ventas</li>
+							<li class="breadcrumb-item active" aria-current="page">Créditos</li>
 						</ol>
 					</nav>
 				</div>
@@ -37,13 +37,10 @@ date_default_timezone_set('America/Tegucigalpa');
 						<thead>
 							<tr>
 								<th>No.</th>
-								<th>Cliente</th>
 								<th>Sig. Pago</th>
 								<th>Cuota</th>
 								<th>Saldo</th>
 								<th>Total Venta</th>
-								<th>Cronograma</th>
-								<th>Letra</th>
 								<th>Cobros</th>
 								<th>Estado</th>
 								<th>Acciones</th>
@@ -58,15 +55,13 @@ date_default_timezone_set('America/Tegucigalpa');
 							} else {
 								$precio_vara2 = 0;
 							}
-
-							$consulta = $conn->query("SELECT c.nombre_completo, a.id_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, b.estado, MIN(id_credito_lote) ID FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id GROUP BY a.id_compra ORDER BY a.id_compra");
+							$idcompra = $_GET['ID'];
+							$consulta = $conn->query("SELECT * FROM control_credito_lote a, ficha_compra b WHERE a.id_compra = $idcompra and b.id_ficha_compra = $idcompra");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
 								$fecha_pago = $solicitud['fecha_pago'];
-								$id_compra = $solicitud['id_compra'];
-								$nombre_completo = $solicitud['nombre_completo'];
 								$saldo_actual = $solicitud['saldo_actual'];
 								$cuota = $solicitud['cuota'];
 								$total_venta = $solicitud['total_venta'];
@@ -101,7 +96,6 @@ date_default_timezone_set('America/Tegucigalpa');
 							?>
 								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
 									<td><?php echo $contador++; ?></td>
-									<td><?php echo $nombre_completo; ?></td>
 									<td>
 										<?php
 										$fecha_pago1 = new DateTime($fecha_pago);
@@ -110,37 +104,34 @@ date_default_timezone_set('America/Tegucigalpa');
 										$interval = $fecha_pago1->diff($fechahoy);
 										$dias = $interval->format('%r%a');
 										// echo '<p>' . $dias . '</p>';
-										if($dias == -1){
+										if ($dias == -1) {
 											$status = "Pendiente";
-											$color = 'bg-warning';
-										}elseif ($dias > 0) {
+											$coloractual = 'bg-warning';
+										} elseif ($dias > 0) {
 											$status = "Vencido";
-											$color = 'bg-danger';
+											$coloractual = 'bg-danger';
 										} elseif ($dias == 0) {
 											$status = "Vence hoy";
-											$color = 'bg-warning';
+											$coloractual = 'bg-warning';
 										} elseif ($dias < 0) {
 											$status =  "Pendiente";
-											$color = 'bg-success';
-										} 
+											$coloractual = 'bg-success';
+										}
 										?>
-										<span class="badge <?php echo $color ?> "><?php echo $fecha_pago; ?></span>
+										<span class="badge <?php echo $coloractual ?> "><?php echo $fecha_pago; ?></span>
 									</td>
 									<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
 									<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
 									<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
+
 									<td>
-										<a href="cronograma.php?ID=<?php echo $solicitud['id_compra'] ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
+										<span class="badge <?php echo $color ?>"><?php echo $estadoVenta; ?></span>
 									</td>
 									<td>
-										<p>Letra</p>
-									</td>
-									<td><a href="edit-venta.php?ID=<?php echo $solicitud['id_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
+										<span class="badge <?php echo $coloractual ?>"><?php echo $status; ?></span>
 									</td>
 									<td>
-										<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
-									</td>
-									<td>
+										<a href="cobro_cuota.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
 										<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
 									</td>
 								</tr>
