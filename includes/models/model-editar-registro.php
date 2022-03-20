@@ -256,6 +256,9 @@ if ($accion === 'editarventa') {
 	$precio_vara2 = $row['precio_vara2'];
 	$accion === 'editarventa';
 	
+	//al cambiar el estado a En Curso o en 
+
+
 	// funcion insertar ficha_compra_lotes
 	function insertarFichaCompra($idlote, $cliente, $idcompra)
 	{

@@ -18,7 +18,7 @@ date_default_timezone_set('America/Tegucigalpa');
 		<div class="page-title">
 			<div class="row">
 				<div class="col-12 col-md-6 order-md-1 order-last">
-					<h3>Créditos</h3>
+					<h3>Cronograma de Pagos</h3>
 				</div>
 				<div class="col-12 col-md-6 order-md-2 order-first">
 					<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -37,10 +37,9 @@ date_default_timezone_set('America/Tegucigalpa');
 						<thead>
 							<tr>
 								<th>No.</th>
-								<th>Sig. Pago</th>
+								<th>Fecha de Pago</th>
 								<th>Cuota</th>
-								<th>Saldo</th>
-								<th>Total Venta</th>
+								<th>Saldo Actual</th>
 								<th>Cobros</th>
 								<th>Estado</th>
 								<th>Acciones</th>
@@ -65,33 +64,9 @@ date_default_timezone_set('America/Tegucigalpa');
 								$saldo_actual = $solicitud['saldo_actual'];
 								$cuota = $solicitud['cuota'];
 								$total_venta = $solicitud['total_venta'];
-								$estado = $solicitud['estado'];
+								$estado = $solicitud['estado_cuota'];
 								$view = '';
-								if ($estado == 'en') {
-									$estadoVenta = 'En Curso';
-									$color = 'bg-success';
-									$noview = "display:none";
-								} elseif ($estado == 'an') {
-									$estadoVenta = 'Anulado';
-									$color = 'bg-secondary';
-									$view = "initial";
-								} elseif ($estado == 'co') {
-									$estadoVenta = 'Concluido';
-									$color = 'bg-primary';
-									$noview = "none";
-								} elseif ($estado == 'pa') {
-									$estadoVenta = 'Inactivo';
-									$color = 'bg-info';
-									$view = "initial";
-								} elseif ($estado == 'ca') {
-									$estadoVenta = 'Cancelado';
-									$color = 'bg-danger';
-									$view = "initial";
-								} else {
-									$estadoVenta = 'Pendiente';
-									$color = 'bg-warning';
-									$view = "initial";
-								}
+
 
 							?>
 								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
@@ -122,10 +97,11 @@ date_default_timezone_set('America/Tegucigalpa');
 									</td>
 									<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
 									<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
-									<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
-
+									<?php
+										$saldo_actual = $saldo_actual - $cuota;
+									?>
 									<td>
-										<span class="badge <?php echo $color ?>"><?php echo $estadoVenta; ?></span>
+										<span class=""><?php echo $saldo_actual; ?></span>
 									</td>
 									<td>
 										<span class="badge <?php echo $coloractual ?>"><?php echo $status; ?></span>
