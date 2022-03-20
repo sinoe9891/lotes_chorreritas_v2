@@ -400,7 +400,7 @@ if ($accion === 'editarventa') {
 			} else {
 				$estado_cuota = 'pen';
 			}
-			$fecha_pago = date("d-m-Y", strtotime($fecha_cuota . " +$i month")) . "<br>";
+			// $fecha_pago = date("d-m-Y", strtotime($fecha_cuota . " +$i month")) . "<br>";
 			// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
 			$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota . " +$i month"));
 			$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago1 . " +1 month"));
