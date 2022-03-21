@@ -480,7 +480,7 @@ function newventa(e) {
 		tipo = document.querySelector('#tipo').value,
 		bloque = document.querySelectorAll('.tabla-bloque');
 
-	if (bloque.length == 0){
+	if (bloque.length == 0) {
 		Swal.fire({
 			icon: 'error',
 			title: 'Oops...',
@@ -1870,3 +1870,92 @@ function calculatehoursindays() {
 	document.getElementById('horasDias').value = hoursinDays;
 
 }
+
+
+//Reloj
+function cargarReloj() {
+
+	// Haciendo uso del objeto Date() obtenemos la hora, minuto y segundo 
+	var fechahora = new Date();
+	var hora = fechahora.getHours();
+	var minuto = fechahora.getMinutes();
+	var segundo = fechahora.getSeconds();
+
+	// Variable meridiano con el valor 'AM' 
+	var meridiano = "AM";
+
+
+	// Si la hora es igual a 0, declaramos la hora con el valor 12 
+	if (hora == 0) {
+
+		hora = 12;
+
+	}
+
+	// Si la hora es mayor a 12, restamos la hora - 12 y mostramos la variable meridiano con el valor 'PM' 
+	if (hora > 12) {
+
+		hora = hora - 12;
+
+		// Variable meridiano con el valor 'PM' 
+		meridiano = "PM";
+
+	}
+
+	// Formateamos los ceros '0' del reloj 
+	hora = (hora < 10) ? "0" + hora : hora;
+	minuto = (minuto < 10) ? "0" + minuto : minuto;
+	segundo = (segundo < 10) ? "0" + segundo : segundo;
+
+	// Enviamos la hora a la vista HTML 
+	var tiempo = hora + ":" + minuto + ":" + segundo + " " + meridiano;
+	document.getElementById("relojnumerico").innerText = tiempo;
+	document.getElementById("relojnumerico").textContent = tiempo;
+
+	// Cargamos el reloj a los 500 milisegundos 
+	setTimeout(cargarReloj, 500);
+
+}
+
+// Ejecutamos la función 'CargarReloj' 
+cargarReloj();
+
+//Previsualizar Imagen
+// var archivo = document.querySelector("seleccionArchivos").files[0];
+// archivo.addEventListener("change", function (event) {
+// 	leer();
+// }
+// );
+// funcion para mostrar una imagen de un input files
+// function leer() {
+// 	console.log('Entró');
+// 	var archivo = document.querySelector("#seleccionArchivos").files[0];
+// 	if (archivo) {
+// 		var lector = new FileReader();
+// 		lector.readAsDataURL(archivo);
+// 		lector.addEventListener("load", function () {
+// 			document.getElementById("imagenPrevisualizacion").src = lector.result;
+// 		});
+// 	}
+// }
+// }
+var archivo = document.querySelector("#seleccionArchivos");
+archivo.addEventListener("change", function (event) {
+	console.log('Hola');
+	var imagen = archivo.files[0];
+	if (imagen) {
+		console.log(imagen);
+		var lector = new FileReader();
+		console.log(lector);
+		// lector.readAsText(imagen);
+		let esto = lector.readAsDataURL(imagen);
+		console.log(esto);
+		console.log(lector.result);
+		// document.getElementById("imagenPrevisualizacion").src = lector.result;
+		lector.addEventListener("load", function() {
+			document.getElementById("imagenPrevisualizacion").value = lector.result;
+			document.getElementById("imagenPrevisualizacion").src = lector.result;
+		});
+	}
+}
+);

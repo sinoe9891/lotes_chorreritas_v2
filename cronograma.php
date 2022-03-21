@@ -39,8 +39,8 @@ date_default_timezone_set('America/Tegucigalpa');
 								<th>No.</th>
 								<th>Fecha de Pago</th>
 								<th>Cuota</th>
+								<th>Saldo Inicial</th>
 								<th>Saldo Actual</th>
-								<th>Cobros</th>
 								<th>Estado</th>
 								<th>Acciones</th>
 							</tr>
@@ -108,7 +108,6 @@ date_default_timezone_set('America/Tegucigalpa');
 									</td>
 									<td>
 										<a href="cobro_cuota.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
-										<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
 									</td>
 								</tr>
 							<?php

@@ -1,4 +1,4 @@
-<body onload="minimizar()">
+<body onload="minimizar();cargarReloj()">
 	<div id="app">
 		<div id="sidebar" class="active">
 			<div class="sidebar-wrapper active">
@@ -56,6 +56,11 @@
 				} else {
 					$creditos = '';
 				}
+				if (obtenerPaginaActual() == 'cobros' || obtenerPaginaActual() == 'new-cobro') {
+					$cobros = 'active';
+				} else {
+					$cobros = '';
+				}
 				?>
 				<div class="sidebar-menu">
 					<ul class="menu">
@@ -78,12 +83,12 @@
 								</li>
 							</ul>
 						</li>
-						<li class="sidebar-item  has-sub <?php echo $clientes . $ventas ?>">
+						<li class="sidebar-item  has-sub <?php echo $clientes . $ventas . $cobros ?>">
 							<a href="#" class='sidebar-link'>
 								<i class="fa fa-table"></i>
 								<span>Facturación</span>
 							</a>
-							<ul class="submenu <?php echo $clientes . $ventas . $creditos ?>">
+							<ul class="submenu <?php echo $clientes . $ventas . $creditos . $cobros ?>">
 								<li class="submenu-item <?php echo $clientes ?>">
 									<a href="clientes.php">Clientes</a>
 								</li>
@@ -93,8 +98,8 @@
 								<li class="submenu-item <?php echo $creditos ?>">
 									<a href="creditos.php">Créditos</a>
 								</li>
-								<li class="submenu-item ">
-									<a href="#">Cobros</a>
+								<li class="submenu-item <?php echo $cobros ?>">
+									<a href="cobros.php">Cobros</a>
 								</li>
 								<li class="submenu-item ">
 									<a href="#">Cotizaciones</a>
