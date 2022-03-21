@@ -64,7 +64,7 @@ include 'includes/templates/sidebar.php';
 								$precio_vara2 = 0;
 							}
 
-							$consulta = $conn->query("SELECT c.nombre_completo, b.id_ficha_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, b.estado, MIN(id_credito_lote) id_cuota FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id and a.id_compra = b.id_ficha_compra GROUP BY b.id_contrato_compra ORDER BY a.id_compra;");
+							$consulta = $conn->query("SELECT c.nombre_completo, b.id_ficha_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, b.estado, MIN(id_credito_lote) id_cuota FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id and a.id_compra = b.id_ficha_compra GROUP BY b.id_contrato_compra ORDER BY a.fecha_pago;");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
