@@ -1882,7 +1882,7 @@ function cargarReloj() {
 	var segundo = fechahora.getSeconds();
 
 	// Variable meridiano con el valor 'AM' 
-	var meridiano = "AM";
+	var meridiano = "PM";
 
 
 	// Si la hora es igual a 0, declaramos la hora con el valor 12 
@@ -1893,12 +1893,11 @@ function cargarReloj() {
 	}
 
 	// Si la hora es mayor a 12, restamos la hora - 12 y mostramos la variable meridiano con el valor 'PM' 
-	if (hora > 12) {
+	if (hora < 12) {
 
 		hora = hora - 12;
-
 		// Variable meridiano con el valor 'PM' 
-		meridiano = "PM";
+		meridiano = "AM";
 
 	}
 
@@ -1920,25 +1919,7 @@ function cargarReloj() {
 // Ejecutamos la función 'CargarReloj' 
 cargarReloj();
 
-//Previsualizar Imagen
-// var archivo = document.querySelector("seleccionArchivos").files[0];
-// archivo.addEventListener("change", function (event) {
-// 	leer();
-// }
-// );
-// funcion para mostrar una imagen de un input files
-// function leer() {
-// 	console.log('Entró');
-// 	var archivo = document.querySelector("#seleccionArchivos").files[0];
-// 	if (archivo) {
-// 		var lector = new FileReader();
-// 		lector.readAsDataURL(archivo);
-// 		lector.addEventListener("load", function () {
-// 			document.getElementById("imagenPrevisualizacion").src = lector.result;
-// 		});
-// 	}
-// }
-// }
+
 var archivo = document.querySelector("#seleccionArchivos");
 archivo.addEventListener("change", function (event) {
 	console.log('Hola');

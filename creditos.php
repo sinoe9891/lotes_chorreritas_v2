@@ -34,10 +34,12 @@ include 'includes/templates/sidebar.php';
 		<section class="section eliminar-credito">
 			<div class="card">
 				<div class="card-body">
-					<?php
-					$DateAndTime = date('m-d-Y h:i:s a', time());
-					echo "Hoy es:<strong> $DateAndTime.</strong>";
-					?>
+					<div>
+						<?php
+						$DateAndTime = date('d-m-Y', time());
+						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></p></strong>';
+						?>
+					</div>
 					<table class="table table-striped" id="table1">
 						<thead>
 							<tr>
@@ -141,10 +143,10 @@ include 'includes/templates/sidebar.php';
 										<a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
 									</td>
 									<td>
-										<a href="letra.php?ID=<?php echo $solicitud['id_compra'] ?>" class="btn btn-sm btn-outline-secondary">Letra</a>
+										<a href="letra.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Letra</a>
 									</td>
 									<td>
-										<a href="edit-venta.php?ID=<?php echo $solicitud['id_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
+										<a href="new-cobro.php?ID=<?php echo $id_compra ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
 									</td>
 									<td>
 										<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>

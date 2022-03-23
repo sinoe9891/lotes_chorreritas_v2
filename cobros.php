@@ -34,23 +34,23 @@ include 'includes/templates/sidebar.php';
 		<section class="section eliminar-credito">
 			<div class="card">
 				<div class="card-body">
-					<?php
-					$DateAndTime = date('m-d-Y h:i:s a', time());
-					echo 'Hoy es:<strong> <span id="relojnumerico" onload"cargarReloj()"></span></strong>';
-					?>
+					<div>
+						<?php
+						$DateAndTime = date('d-m-Y', time());
+						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></p></strong>';
+						?>
+					</div>
 					<table class="table table-striped" id="table1">
 						<thead>
 							<tr>
 								<th>No.</th>
 								<th>Cliente</th>
-								<th>Sig. Pago</th>
 								<th>Cuota</th>
-								<th>Saldo</th>
-								<th>Total Venta</th>
-								<th>Cronograma</th>
-								<th>Letra</th>
-								<th>Cobros</th>
-								<th>Estado</th>
+								<th>Comprobante</th>
+								<th>Tipo</th>
+								<th>Fecha</th>
+								<th>Fact. Dig.</th>
+								<th>Recibo</th>
 								<th>Acciones</th>
 							</tr>
 						</thead>
@@ -147,9 +147,6 @@ include 'includes/templates/sidebar.php';
 										<a href="edit-venta.php?ID=<?php echo $solicitud['id_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
 									</td>
 									<td>
-										<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
-									</td>
-									<td>
 										<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
 									</td>
 								</tr>
@@ -183,4 +180,3 @@ include('includes/templates/footer.php');
 </body>
 
 </html>
-					

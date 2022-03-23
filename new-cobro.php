@@ -38,10 +38,12 @@ include 'includes/templates/sidebar.php';
 					<h5 class="card-title">Nuevo Cobro</h5>
 				</div>
 				<div class="card-body">
-					<?php
-					$DateAndTime = date('m-d-Y h:i:s a', time());
-					echo 'Hoy es:<strong> <span id="relojnumerico" onload"cargarReloj()"></span></strong>';
+					<div>
+						<?php
+					$DateAndTime = date('d-m-Y', time());
+					echo '<p>Hoy es: <strong>'.$DateAndTime.' <span id="relojnumerico" onload"cargarReloj()"></span></p></strong>';
 					?>
+					</div>
 					<ul class="nav nav-tabs" id="myTab" role="tablist">
 						<li class="nav-item" role="presentation">
 							<a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#datos" role="tab" aria-controls="datos" aria-selected="true">Cuota Mensual</a>
@@ -151,10 +153,10 @@ include 'includes/templates/sidebar.php';
 															}
 
 															#imagenPrevisualizacion:hover {
-																-webkit-transform: scale(1.8);
-																-moz-transform: scale(1.8);
-																-o-transform: scale(1.8);
-																transform: scale(1.8);
+																-webkit-transform: scale(2);
+																-moz-transform: scale(2);
+																-o-transform: scale(2);
+																transform: scale(2);
 																overflow: scroll;
 															}
 															#contenedorimg:hover{
