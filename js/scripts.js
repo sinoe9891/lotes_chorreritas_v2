@@ -191,12 +191,12 @@ function nuevoCliente(e) {
 	let verficarid = formatID(identidad);
 	let verficaridbeneficiario = formatID(identidad_beneficiario);
 
-	if (nombres === '' || identidad === '' || identidad_beneficiario === '' || nombre_beneficiario === '' && fechanac === '') {
+	if (nombres === '' || fechanac === '' || identidad === '' || nacionalidad === '' || genero === '' || estado_civil === '' || pais_reside === '' || direccion === '' || ciudad === '' || departamento === '' || dependientes === '' || profesion === '' || nombre_beneficiario === '' || genero_beneficiario === '' || identidad_beneficiario === '' || direccion_beneficiario === '' || ciudad_beneficiario === '' || departamento_beneficiario === '' || celular_beneficiario === '' || pais_reside_beneficiario === '') {
 		//validación Falló
 		Swal.fire({
 			icon: 'error',
 			title: 'Oops...',
-			text: 'Debe de llenar los campos obligatorios',
+			text: 'Debe de llenar los campos obligatorios de forma completa de las secciones 1, 2 y 5',
 		});
 	} else {
 		if (verficarid && verficaridbeneficiario) {
