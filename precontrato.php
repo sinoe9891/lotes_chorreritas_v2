@@ -115,7 +115,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="company-column">Dependientes</label>
-																<input type="number" name="dependientes" id="dependientes" class="form-control" value="0">
+																<input type="number" name="dependientes" id="dependientes" class="form-control" value="1">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
