@@ -85,7 +85,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="last-name-column">Género</label>
+																<label for="last-name-column">Estado Civil</label>
 																<select class="form-select" id="estado_civil" name="estado_civil">
 																	<option value="1">Soltero(a)</option>
 																	<option value="2">Casado(a)</option>
@@ -97,7 +97,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="last-name-column">Estado Civil</label>
+																<label for="last-name-column">Género</label>
 																<select class="form-select" name="genero" id="genero">
 																	<?php
 																	if ($gender == 'M') {
