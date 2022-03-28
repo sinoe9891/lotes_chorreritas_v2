@@ -105,7 +105,7 @@ function obtenerFichas() {
 function obtenerFichasCompra() {
     include 'conexion.php';
     try {
-		return $conn->query("SELECT a.id_ficha_compra, b.id, b.nombre_completo FROM ficha_compra a, ficha_directorio b WHERE b.id = a.id_registro ORDER BY b.nombre_completo DESC");
+		return $conn->query("SELECT a.id_ficha_compra, b.id, b.nombre_completo FROM ficha_compra a, ficha_directorio b WHERE b.id = a.id_registro and a.estado = 'en' ORDER BY b.nombre_completo DESC");
     } catch(Exception $e) {
 		echo "Error! : " . $e->getMessage();
         return false;

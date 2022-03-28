@@ -63,6 +63,8 @@ include 'includes/templates/sidebar.php';
 										$solicitudes = obtenerLotesDisponibles('id');
 										if ($solicitudes->num_rows > 0) {
 											echo '<h6 class="font-extrabold mb-0">' . $solicitudes->num_rows . '</h6>';
+											$solicitud = $solicitudes->fetch_array();
+											echo '<h6 class="font-extrabold mb-0">' . $solicitud['numero'] . '</h6>';
 										} else {
 											// no hay tareas
 											echo '<h3>Registros<br>de Clientes</h3>';

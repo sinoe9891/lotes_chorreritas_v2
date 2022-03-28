@@ -402,7 +402,7 @@ if ($accion === 'newCobro') {
 	$forma_pago = $_POST['forma_pago'];
 	$searchString = " ";
 	$replaceString = "";
-	$name = date('d-M-Y').'-'.$id_cuota_pagada.'-'.$id_compra.'-'. $no_cuota . '-' . $nombre_completo;
+	$name = date('d-M-Y') . '-' . $id_cuota_pagada . '-' . $id_compra . '-' . $no_cuota . '-' . $nombre_completo;
 	//Pasar a Minusculas
 	$namefile = strtolower(quitar_acentos(str_replace($searchString, $replaceString, $name)));
 
@@ -423,7 +423,8 @@ if ($accion === 'newCobro') {
 		return;
 	}
 
-	function updateCobros($id, $id_compra, $registro){
+	function updateCobros($id, $id_compra, $registro)
+	{
 		include '../conexion.php';
 		$siguiente = 'sig';
 		$pendiente = 'pen';
@@ -435,23 +436,33 @@ if ($accion === 'newCobro') {
 		$stmt->execute();
 
 		//comprobar si existe siguiente cuota o si ya esta pagada.
-		$id = $id + 1;
+		$idsumado = $id + 1;
 		$stmt = $conn->prepare("SELECT * FROM control_credito_lote WHERE id_credito_lote = ? AND id_compra = ? AND estado_cuota = ?");
-		$stmt->bind_param('sss', $id, $id_compra, $pendiente);
+		$stmt->bind_param('sss', $idsumado, $id_compra, $pendiente);
 		$stmt->execute();
 		$resultado = $stmt->get_result();
 
 		//condicion si existe siguiente cuota
 		if ($resultado->num_rows > 0) {
 			$stmt = $conn->prepare("UPDATE control_credito_lote SET estado_cuota = ? WHERE id_credito_lote = ? AND id_compra = ?");
-			$stmt->bind_param('sss', $siguiente, $id, $id_compra);
-			$stmt->execute();
-		}else{
-			$stmt = $conn->prepare("UPDATE ficha_compra SET estado = ? WHERE id_ficha_compra = ? AND id_registro = ?");
-			$stmt->bind_param('sss', $concluido, $id_compra, $registro);
+			$stmt->bind_param('sss', $siguiente, $idsumado, $id_compra);
 			$stmt->execute();
 		}
-
+		//comprobar si ya estamos en el ultimo registro de la tabla
+		$stmt = $conn->prepare("SELECT MAX(id_credito_lote) FROM control_credito_lote WHERE id_compra = ?");
+		$stmt->bind_param('s', $id_compra);
+		$stmt->execute();
+		$resultado = $stmt->get_result();
+		$row = $resultado->fetch_assoc();
+		$id_ultimo = $row['MAX(id_credito_lote)'];
+		if ($resultado->num_rows > 0) {
+			if ($id_ultimo == $id) {
+				$stmt = $conn->prepare("UPDATE ficha_compra SET estado = ? WHERE id_ficha_compra = ? AND id_registro = ?");
+				$stmt->bind_param('sss', $concluido, $id_compra, $registro);
+				$stmt->execute();
+			}
+			# code...
+		}
 		return;
 	}
 	// echo $id_cuota_pagada.'-'.$valor_cuota.'-'.$fecha_cuota.'-'.$id_banco.'-'.$tipo_comprobante.'-'.$no_cuota.'-'.$no_referencia.'-'.$forma_pago;
@@ -463,8 +474,8 @@ if ($accion === 'newCobro') {
 		$statement->bind_param('ssssssss', $id_cuota_pagada, $valor_cuota, $fecha_cuota, $id_banco, $tipo_comprobante, $no_cuota, $no_referencia, $forma_pago);
 		$statement->execute();
 		$last_id = mysqli_insert_id($conn);
-		$carpeta = '../../src/recibos/'.$id_compra.'/';
-		$ruta = 'src/recibos/'.$id_compra.'/';
+		$carpeta = '../../src/recibos/' . $id_compra . '/';
+		$ruta = 'src/recibos/' . $id_compra . '/';
 
 		updateCobros($id_cuota_pagada, $id_compra, $nombre_completo);
 
@@ -499,7 +510,7 @@ if ($accion === 'newCobro') {
 		} else {
 			$imagenes = '';
 		}
-		
+
 		if ($statement->affected_rows > 0) {
 			$respuesta = array(
 				//Esto es lo que se muestra en

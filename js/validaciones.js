@@ -61,6 +61,17 @@ function addEventListener() {
 			}
 		});
 	}
+	//Acciones de Cuota
+	let solicitudCuotaPagada = document.querySelector('.eliminar-cuota-pagada');
+	if (solicitudCuotaPagada) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-cuota-pagada';
+		solicitudCuotaPagada.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event,modelo,eliminar);
+			}
+		});
+	}
 
 	let fichaGraduado = document.querySelector('.caja-ficha');
 	if (fichaGraduado) {

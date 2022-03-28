@@ -31,7 +31,7 @@ include 'includes/templates/sidebar.php';
 				</div>
 			</div>
 		</div>
-		<section class="section eliminar-credito">
+		<section class="section eliminar-cuota-pagada">
 			<div class="card">
 				<div class="card-body">
 					<div>
@@ -64,7 +64,7 @@ include 'includes/templates/sidebar.php';
 								$precio_vara2 = 0;
 							}
 
-							$consulta = $conn->query("SELECT DISTINCT d.nombre_completo, a.cantidad_pagada, a.no_referencia, a.tipo_comprobante, a.fecha_pagada, a.url_comprobante FROM cobros a, control_credito_lote b, ficha_compra c, ficha_directorio d WHERE b.id_compra = c.id_ficha_compra and c.id_registro = d.id;");
+							$consulta = $conn->query("SELECT DISTINCT a.id_cobro, d.nombre_completo, a.cantidad_pagada, a.no_referencia, a.tipo_comprobante, a.fecha_pagada, a.url_comprobante FROM cobros a, control_credito_lote b, ficha_compra c, ficha_directorio d WHERE b.id_compra = c.id_ficha_compra and c.id_registro = d.id ORDER BY a.id_cobro DESC;");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
@@ -78,7 +78,7 @@ include 'includes/templates/sidebar.php';
 								$url_comprobante = $solicitud['url_comprobante'];
 								$fecha_pagada = date('d-m-Y', strtotime($fecha_pagada));
 							?>
-								<tr id="solicitud:<?php echo $solicitud['id_ficha_compra'] ?>">
+								<tr id="solicitud:<?php echo $solicitud['id_cobro'] ?>">
 									<td><?php echo $contador++; ?></td>
 									<td><?php echo $nombre_completo; ?></td>
 									<td><?php echo $cantidad_pagada; ?></td>
@@ -88,7 +88,7 @@ include 'includes/templates/sidebar.php';
 									<td><a href="<?php echo $url_comprobante; ?>" target="_blank">Ver</a></td>
 									<td><a href="<?php echo $url_comprobante; ?>" target="_blank">Ver</a></td>
 									<td>
-										<button type="button" class="fas fa-trash btn btn-danger btn-sm" style="<?php echo $noview . $view ?>;"  data-id="<?php echo $solicitud['id_ficha_compra'] ?>">Eliminar</button>
+										<button type="button" class="fas fa-trash btn btn-danger btn-sm"  data-id="<?php echo $solicitud['id_cobro'] ?>">Eliminar</button>
 									</td>
 								</tr>
 							<?php

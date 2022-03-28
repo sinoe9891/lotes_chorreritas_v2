@@ -118,18 +118,16 @@ include 'includes/templates/sidebar.php';
 										$fechahoy = new DateTime();
 										$interval = $fecha_pago1->diff($fechahoy);
 										$dias = $interval->format('%r%a');
-										// echo '<p>' . $dias . '</p>';
-										if ($dias == 0) {
-											$status = "Vence hoy";
+										if ($dias === '0') {
+											$status = "Vence Hoy";
 											$color = 'bg-warning';
-										}
-										if ($dias == -0) {
-											$status = "Pendiente";
-											$color = 'bg-warning';
-										} elseif ($dias > 0) {
+										} else if ($dias > '0') {
 											$status = "Vencido";
 											$color = 'bg-danger';
-										} elseif ($dias < 0) {
+										} else if ($dias === '-0') {
+											$status = "Vence Mañana";
+											$color = 'bg-warning';
+										} else if ($dias < '-0' ) {
 											$status =  "Pendiente";
 											$color = 'bg-success';
 										}
@@ -150,6 +148,7 @@ include 'includes/templates/sidebar.php';
 									</td>
 									<td>
 										<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
+										<!-- <span class="badge <?php echo $color ?>"><?php echo $dias; ?></span> -->
 									</td>
 									<td>
 										<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
