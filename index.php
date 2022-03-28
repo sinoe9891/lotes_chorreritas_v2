@@ -315,7 +315,7 @@ include 'includes/templates/sidebar.php';
 	Swal.fire({
 		icon: 'success',
 		title: '¡Nueva Actualización!',
-		text: 'Ya se puede generar cronograma de pagos y eliminar venta para liberar lotes',
+		text: 'Ya se puede hacer cobros, adjuntar comprobante, se procede a generar configuración correlativo CAI',
 		position: 'center',
 		showConfirmButton: true
 
