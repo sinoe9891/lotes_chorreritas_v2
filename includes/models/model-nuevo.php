@@ -387,3 +387,146 @@ if ($accion === 'newventa') {
 	}
 	echo json_encode($respuesta);
 }
+
+if ($accion === 'newCobro') {
+	//Variables recibidas por POST
+	$id_cuota_pagada = $_POST['id_cuota_pagada'];
+	$id_compra = $_POST['id_compra'];
+	$valor_cuota = $_POST['valor_cuota'];
+	$fecha_cuota = $_POST['fecha_cuota'];
+	$id_banco = $_POST['id_banco'];
+	$tipo_comprobante = $_POST['tipo_comprobante'];
+	$no_cuota = $_POST['no_cuota'];
+	$nombre_completo = $_POST['nombre_completo'];
+	$no_referencia = $_POST['no_referencia'];
+	$forma_pago = $_POST['forma_pago'];
+	$searchString = " ";
+	$replaceString = "";
+	$name = date('d-M-Y').'-'.$id_cuota_pagada.'-'.$id_compra.'-'. $no_cuota . '-' . $nombre_completo;
+	//Pasar a Minusculas
+	$namefile = strtolower(quitar_acentos(str_replace($searchString, $replaceString, $name)));
+
+
+	if (isset($_FILES["archivos"]["name"])) {
+		$imagenes = count($_FILES["archivos"]["name"]);
+	} else {
+		$imagenes = null;
+	}
+
+	function insertar_documento($id, $ruta)
+	{
+		include '../conexion.php';
+		//actualizar url de la cuota de pago
+		$stmt = $conn->prepare("UPDATE cobros SET url_comprobante = ? WHERE id_cobro = ?");
+		$stmt->bind_param('ss', $ruta, $id);
+		$stmt->execute();
+		return;
+	}
+
+	function updateCobros($id, $id_compra, $registro){
+		include '../conexion.php';
+		$siguiente = 'sig';
+		$pendiente = 'pen';
+		$pagada = 'pag';
+		$concluido = 'co';
+
+		$stmt = $conn->prepare("UPDATE control_credito_lote SET estado_cuota = ? WHERE id_credito_lote = ? AND id_compra = ?");
+		$stmt->bind_param('sss', $pagada, $id, $id_compra);
+		$stmt->execute();
+
+		//comprobar si existe siguiente cuota o si ya esta pagada.
+		$id = $id + 1;
+		$stmt = $conn->prepare("SELECT * FROM control_credito_lote WHERE id_credito_lote = ? AND id_compra = ? AND estado_cuota = ?");
+		$stmt->bind_param('sss', $id, $id_compra, $pendiente);
+		$stmt->execute();
+		$resultado = $stmt->get_result();
+
+		//condicion si existe siguiente cuota
+		if ($resultado->num_rows > 0) {
+			$stmt = $conn->prepare("UPDATE control_credito_lote SET estado_cuota = ? WHERE id_credito_lote = ? AND id_compra = ?");
+			$stmt->bind_param('sss', $siguiente, $id, $id_compra);
+			$stmt->execute();
+		}else{
+			$stmt = $conn->prepare("UPDATE ficha_compra SET estado = ? WHERE id_ficha_compra = ? AND id_registro = ?");
+			$stmt->bind_param('sss', $concluido, $id_compra, $registro);
+			$stmt->execute();
+		}
+
+		return;
+	}
+	// echo $id_cuota_pagada.'-'.$valor_cuota.'-'.$fecha_cuota.'-'.$id_banco.'-'.$tipo_comprobante.'-'.$no_cuota.'-'.$no_referencia.'-'.$forma_pago;
+	//Importar la conexión
+	include '../conexion.php';
+	try {
+		//Preparar la consulta de insertar bloque
+		$statement = $conn->prepare("INSERT INTO cobros (id_cuota_pagada, cantidad_pagada, fecha_pagada, id_banco, tipo_comprobante, no_cuota, no_referencia, forma_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+		$statement->bind_param('ssssssss', $id_cuota_pagada, $valor_cuota, $fecha_cuota, $id_banco, $tipo_comprobante, $no_cuota, $no_referencia, $forma_pago);
+		$statement->execute();
+		$last_id = mysqli_insert_id($conn);
+		$carpeta = '../../src/recibos/'.$id_compra.'/';
+		$ruta = 'src/recibos/'.$id_compra.'/';
+
+		updateCobros($id_cuota_pagada, $id_compra, $nombre_completo);
+
+		function crearDireccion($carpeta)
+		{
+			// Path de documentos
+			// Permisos de la carpeta
+			if (!is_dir($carpeta)) {
+				mkdir($carpeta, 0777, true);
+			}
+			chmod($carpeta, 0777);
+			return;
+		}
+
+		if ($imagenes != null) {
+			//Subir varias imagenes
+			for ($i = 0; $i < $imagenes; $i++) {
+				$ubicacionTemporal = $_FILES["archivos"]["tmp_name"][$i];
+				$nombreArchivo = $_FILES["archivos"]["name"][$i];
+				$extension = pathinfo($nombreArchivo, PATHINFO_EXTENSION);
+
+				$parts = explode(".", $_FILES['archivos']['name'][$i]);
+				$ruta_archivos = $carpeta . $namefile . "_" . $i . "." . end($parts);
+				$ruta_db = $ruta . $namefile . "_" . $i . "." . end($parts);
+
+				// Mover del temporal al directorio actual
+				crearDireccion($carpeta);
+				move_uploaded_file($ubicacionTemporal, $ruta_archivos);
+
+				insertar_documento($last_id, $ruta_db);
+			}
+		} else {
+			$imagenes = '';
+		}
+		
+		if ($statement->affected_rows > 0) {
+			$respuesta = array(
+				//Esto es lo que se muestra en
+				//JSON.parse(xhr.responseText); console.log(respuesta);
+				'respuesta' => 'correcto',
+				'name' => $name,
+				'tipo' => $accion,
+				'nombre' => $namefile,
+				'id_agregado' => $last_id
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+				'Errores' => $carpeta,
+				'Error' => $imagenes,
+				'id_agregado' => $curriculum,
+			);
+		}
+		$statement->close();
+		$conn->close();
+	} catch (Exception $e) {
+		//En caso de un error, tomar la exepción
+		$respuesta = array(
+			//Arreglo asociativo
+			'pass' => $e->getMessage(),
+			// 'pass' => $hash_password
+		);
+	}
+	echo json_encode($respuesta);
+}

@@ -64,90 +64,31 @@ include 'includes/templates/sidebar.php';
 								$precio_vara2 = 0;
 							}
 
-							$consulta = $conn->query("SELECT c.nombre_completo, b.id_ficha_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, b.estado, MIN(id_credito_lote) id_cuota FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id and a.id_compra = b.id_ficha_compra GROUP BY b.id_contrato_compra ORDER BY a.fecha_pago;");
+							$consulta = $conn->query("SELECT DISTINCT d.nombre_completo, a.cantidad_pagada, a.no_referencia, a.tipo_comprobante, a.fecha_pagada, a.url_comprobante FROM cobros a, control_credito_lote b, ficha_compra c, ficha_directorio d WHERE b.id_compra = c.id_ficha_compra and c.id_registro = d.id;");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
 								date_default_timezone_set('America/Tegucigalpa');
-								$fecha_pago = $solicitud['fecha_pago'];
-								$id_compra = $solicitud['id_ficha_compra'];
 								$nombre_completo = $solicitud['nombre_completo'];
-								$saldo_actual = $solicitud['saldo_actual'];
-								$cuota = $solicitud['cuota'];
-								$total_venta = $solicitud['total_venta'];
-								$estado = $solicitud['estado'];
-								$view = '';
-								$noview = '';
-								if ($estado == 'en') {
-									$estadoVenta = 'En Curso';
-									$color = 'bg-success';
-									$noview = "display:none";
-								} elseif ($estado == 'an') {
-									$estadoVenta = 'Anulado';
-									$color = 'bg-secondary';
-									$view = "initial";
-								} elseif ($estado == 'co') {
-									$estadoVenta = 'Concluido';
-									$color = 'bg-primary';
-									$noview = "none";
-								} elseif ($estado == 'pa') {
-									$estadoVenta = 'Inactivo';
-									$color = 'bg-info';
-									$view = "initial";
-								} elseif ($estado == 'ca') {
-									$estadoVenta = 'Cancelado';
-									$color = 'bg-danger';
-									$view = "initial";
-								} else {
-									$estadoVenta = 'Pendiente';
-									$color = 'bg-warning';
-									$view = "initial";
-								}
-
+								$cantidad_pagada = $solicitud['cantidad_pagada'];
+								$no_referencia = $solicitud['no_referencia'];
+								$tipo_comprobante = $solicitud['tipo_comprobante'];
+								$fecha_pagada = $solicitud['fecha_pagada'];
+								$url_comprobante = $solicitud['url_comprobante'];
+								$fecha_pagada = date('d-m-Y', strtotime($fecha_pagada));
 							?>
 								<tr id="solicitud:<?php echo $solicitud['id_ficha_compra'] ?>">
 									<td><?php echo $contador++; ?></td>
 									<td><?php echo $nombre_completo; ?></td>
+									<td><?php echo $cantidad_pagada; ?></td>
+									<td><?php echo $no_referencia; ?></td>
+									<td><?php echo $tipo_comprobante; ?></td>
+									<td><?php echo $fecha_pagada; ?></td>
+									<td><a href="<?php echo $url_comprobante; ?>" target="_blank">Ver</a></td>
+									<td><a href="<?php echo $url_comprobante; ?>" target="_blank">Ver</a></td>
 									<td>
-										<?php
-										$fecha_pago1 = new DateTime($fecha_pago);
-										// echo '<p>' . $fecha_pago1->format('d-m-Y') . '</p>';
-										$fechahoy = new DateTime();
-										$interval = $fecha_pago1->diff($fechahoy);
-										$dias = $interval->format('%r%a');
-										// echo '<p>' . $dias . '</p>';
-										if ($dias == 0) {
-											$status = "Vence hoy";
-											$color = 'bg-warning';
-										}
-										if ($dias == -0) {
-											$status = "Pendiente";
-											$color = 'bg-warning';
-										} elseif ($dias > 0) {
-											$status = "Vencido";
-											$color = 'bg-danger';
-										} elseif ($dias < 0) {
-											$status =  "Pendiente";
-											$color = 'bg-success';
-										}
-										?>
-										<span class="badge <?php echo $color ?> "><?php echo $fecha_pago; ?></span>
-									</td>
-									<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
-									<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
-									<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
-									<td>
-										<a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
-									</td>
-									<td>
-										<a href="letra.php?ID=<?php echo $solicitud['id_compra'] ?>" class="btn btn-sm btn-outline-secondary">Letra</a>
-									</td>
-									<td>
-										<a href="edit-venta.php?ID=<?php echo $solicitud['id_compra'] ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
-									</td>
-									<td>
-										<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
+										<button type="button" class="fas fa-trash btn btn-danger btn-sm" style="<?php echo $noview . $view ?>;"  data-id="<?php echo $solicitud['id_ficha_compra'] ?>">Eliminar</button>
 									</td>
 								</tr>
 							<?php

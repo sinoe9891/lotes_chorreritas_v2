@@ -35,6 +35,11 @@ function addEventListener() {
 	if (nuevaventa) {
 		nuevaventa.addEventListener('submit', newventa);
 	}
+	//Nuevo cobro
+	let nuevoCobro = document.querySelector('#nuevoCobro');
+	if (nuevoCobro) {
+		nuevoCobro.addEventListener('submit', newCobro);
+	}
 	//Nuevo venta
 	let editarventa = document.querySelector('#editarventa');
 	if (editarventa) {
@@ -546,6 +551,119 @@ function newventa(e) {
 						}).then(function () {
 							// urllote = '?ID=' + lote + '&bloque=' + bloque;
 							window.location = "ventas.php";
+						});;
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+
+}
+
+function newCobro(e) {
+	e.preventDefault();
+	let tipo = document.querySelector('#tipo').value,
+		id_cuota_pagada = document.querySelector('#id_cuota_pagada').value,
+		id_compra = document.querySelector('#id_compra').value,
+		valor_cuota = document.querySelector('#valor_cuota').value,
+		fecha_cuota = document.querySelector('#fecha_cuota').value,
+		id_banco = document.querySelector('#id_banco').value,
+		tipo_comprobante = document.querySelector('#tipo_comprobante').value,
+		no_cuota = document.querySelector('#no_cuota').value,
+		nombre_completo = document.querySelector('#nombre_completo').value,
+		no_referencia = document.querySelector('#no_referencia').value,
+		forma_pago = document.querySelector('#forma_pago').value,
+		fotos = document.querySelector('#seleccionArchivos').files;
+
+
+	console.log(fotos);
+	let barraestado = document.cobroForm.children[0].children[2],
+		span = barraestado.children[0], tamano = 0;
+	barraestado.classList.remove('barra_verde', 'barra_roja');
+	let enviar = false;
+
+	if (fotos.length > 0) {
+		for (var i = 0; i < fotos.length; i++) {
+			const fsize = fotos.item(i).size;
+			let file = parseFloat(((fsize / 1024) / 1024).toFixed(2));
+			tamano = tamano + file;
+			if (tamano > 10) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Archivos demasidos grandes, deben de ser menores 10MB'
+				});
+				enviar = false;
+				break;
+			} else if (tamano <= 10) {
+				enviar = true;
+			}
+		}
+		console.log(tamano.toFixed(2) + 'MB');
+	}
+
+	if (valor_cuota === '' || fecha_cuota === '' || id_banco === '' || tipo_comprobante === '' || no_cuota === '' || nombre_completo === '' || no_referencia === '' || forma_pago === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos',
+		});
+	} else {
+		//Campos son correctos - Ejecutamos AJAX
+		//Crear  FormData - Datos que se envían al servidor
+		console.log('enviar');
+		let datos = new FormData();
+		datos.append('id_cuota_pagada', id_cuota_pagada);
+		datos.append('id_compra', id_compra);
+		datos.append('valor_cuota', valor_cuota);
+		datos.append('fecha_cuota', fecha_cuota);
+		datos.append('id_banco', id_banco);
+		datos.append('tipo_comprobante', tipo_comprobante);
+		datos.append('no_cuota', no_cuota);
+		datos.append('nombre_completo', nombre_completo);
+		datos.append('no_referencia', no_referencia);
+		datos.append('forma_pago', forma_pago);
+		for (const archivo of fotos) {
+			datos.append('archivos[]', archivo);
+		}
+		console.log(fotos);
+		// datos.append('lotes', bloque);
+		datos.append('accion', tipo);
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-nuevo.php', true);
+		console.log('enviar1');
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+				console.log('Recibe respuesta');
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'newCobro') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Asignación realizada!',
+							text: 'Ahora cambia el estado del lote',
+							position: 'center',
+							showConfirmButton: true
+
+						}).then(function () {
+							// urllote = '?ID=' + lote + '&bloque=' + bloque;
+							window.location = "cobros.php";
 						});;
 					}
 				} else {
@@ -1933,7 +2051,7 @@ archivo.addEventListener("change", function (event) {
 		console.log(esto);
 		console.log(lector.result);
 		// document.getElementById("imagenPrevisualizacion").src = lector.result;
-		lector.addEventListener("load", function() {
+		lector.addEventListener("load", function () {
 			document.getElementById("imagenPrevisualizacion").value = lector.result;
 			document.getElementById("imagenPrevisualizacion").src = lector.result;
 		});

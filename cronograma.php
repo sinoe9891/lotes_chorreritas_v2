@@ -41,6 +41,7 @@ date_default_timezone_set('America/Tegucigalpa');
 								<th>Cuota</th>
 								<th>Saldo Inicial</th>
 								<th>Saldo Actual</th>
+								<th>Retraso</th>
 								<th>Estado</th>
 								<th>Acciones</th>
 							</tr>
@@ -69,7 +70,7 @@ date_default_timezone_set('America/Tegucigalpa');
 								$noview ='';
 
 							?>
-								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
+								<tr>
 									<td><?php echo $contador++; ?></td>
 									<td>
 										<?php
@@ -78,20 +79,48 @@ date_default_timezone_set('America/Tegucigalpa');
 										$fechahoy = new DateTime();
 										$interval = $fecha_pago1->diff($fechahoy);
 										$dias = $interval->format('%r%a');
-										// echo '<p>' . $dias . '</p>';
-										if ($dias == -1) {
-											$status = "Pendiente";
-											$coloractual = 'bg-warning';
-										} elseif ($dias > 0) {
-											$status = "Vencido";
-											$coloractual = 'bg-danger';
-										} elseif ($dias == 0) {
-											$status = "Vence hoy";
-											$coloractual = 'bg-warning';
-										} elseif ($dias < 0) {
-											$status =  "Pendiente";
-											$coloractual = 'bg-success';
+
+
+										if ($estado == 'pag') {
+											$status = "Pagado";
+											$coloractual = 'bg-secondary';
 										}
+
+
+										if ($estado == 'sig') {
+											 if ($dias === '0') {
+												$status = "Vence Hoy";
+												$coloractual = 'bg-warning';
+											} else if ($dias > '0') {
+												$status = "Vencido";
+												$coloractual = 'bg-danger';
+											} else if ($dias === '-0') {
+												$status = "Vence Mañana";
+												$coloractual = 'bg-warning';
+											} else if ($dias < '-0' ) {
+												$status =  "Pendiente";
+												$coloractual = 'bg-success';
+											}
+										}
+										
+										if ($estado == 'pen') {
+											if ($dias == '-1') {
+												$status = "Pendiente";
+												$coloractual = 'bg-warning';
+											} else if ($dias > '0') {
+												$status = "Vencido";
+												$coloractual = 'bg-danger';
+											} else if ($dias == '0') {
+												$status = "Vence hoy";
+												$coloractual = 'bg-warning';
+											} else if ($dias < '0' ) {
+												$status =  "Pendiente";
+												$coloractual = 'bg-success';
+											}
+										}
+
+
+
 										?>
 										<span class="badge <?php echo $coloractual ?> "><?php echo $fecha_pago; ?></span>
 									</td>
@@ -103,6 +132,9 @@ date_default_timezone_set('America/Tegucigalpa');
 									<td>
 										<span class=""><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span>
 									</td>
+									<td>
+										<span class="badge <?php echo $coloractual ?>"><?php echo $dias; ?></span>
+									</td> 
 									<td>
 										<span class="badge <?php echo $coloractual ?>"><?php echo $status; ?></span>
 									</td>
