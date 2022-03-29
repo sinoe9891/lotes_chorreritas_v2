@@ -61,6 +61,11 @@
 				} else {
 					$cobros = '';
 				}
+				if (obtenerPaginaActual() == 'facturacion' || obtenerPaginaActual() == 'new-facturacion' || obtenerPaginaActual() == 'edit-cai') {
+					$facturacion = 'active';
+				} else {
+					$facturacion = '';
+				}
 				?>
 				<div class="sidebar-menu">
 					<ul class="menu">
@@ -123,12 +128,15 @@
 								</li>
 							</ul>
 						</li>
-						<li class="sidebar-item  has-sub">
+						<li class="sidebar-item  has-sub <?php echo $facturacion ?>">
 							<a href="#" class='sidebar-link'>
 								<i class="bi bi-life-preserver"></i>
 								<span>Configuración</span>
 							</a>
-							<ul class="submenu">
+							<ul class="submenu <?php echo $facturacion ?>">
+								<li class="submenu-item <?php echo $facturacion ?>">
+									<a href="facturacion.php">Facturación</a>
+								</li>
 								<li class="submenu-item">
 									<a href="backup_database.php?pass=Stark9891">Backup DB</a>
 								</li>

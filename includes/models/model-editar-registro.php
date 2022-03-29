@@ -383,7 +383,7 @@ if ($accion === 'editarventa') {
 if ($accion === 'editarventa') {
 	$estado =  $_POST['estado'];
 	$id_ficha_compra = $_POST['id_ficha_compra'];
-	$plazo_meses = $_POST['plazo_meses']; 
+	$plazo_meses = $_POST['plazo_meses'];
 
 	if ($estado == 'en') {
 		include '../conexion.php';
@@ -399,7 +399,7 @@ if ($accion === 'editarventa') {
 			if ($i == 1) {
 				$estado_cuota = 'sig';
 				$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota));
-				$total_venta = $total_venta;		
+				$total_venta = $total_venta;
 			} else {
 				$estado_cuota = 'pen';
 				$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota . " +$i month"));
@@ -413,5 +413,109 @@ if ($accion === 'editarventa') {
 			$no_cuota = $i;
 			$insertarFechas = $conn->query("INSERT INTO control_credito_lote (id_compra, fecha_pago, fecha_vencimiento, no_cuota, monto_restante, estado_cuota) VALUES ($id_ficha_compra,'$fecha_pago1', '$fecha_vencimiento', '$no_cuota', '$total_venta', '$estado_cuota')");
 		}
+	}
+}
+
+if ($accion === 'editarCAI') {
+
+	$codigo_cai =  $_POST['codigo_cai'];
+	$fecha_emision = $_POST['fecha_emision'];
+	$fecha_limite = $_POST['fecha_limite'];
+	$cantidad_otorgada = $_POST['cantidad_otorgada'];
+	$rango_inicial = $_POST['rango_inicial'];
+	$rango_final = $_POST['rango_final'];
+	$empresa_cai = $_POST['empresa_cai'];
+	$id_cai = $_POST['id_cai'];
+	$estado = $_POST['estado'];
+
+
+
+	include '../conexion.php';
+	if ($estado == 'act') {
+		function genrarFacturas($cantidad_otorgada, $rango_inicial, $rango_final, $id_cai)
+		{
+			include '../conexion.php';
+			$str = str_replace("-", "", $rango_inicial);
+			$str1 = str_replace("-", "", $rango_final);
+
+			for ($i = 0; $i < $cantidad_otorgada; ++$i) {
+				$len = 16;
+				// echo $rango_inicial . '<br>';
+				$str = str_replace("-", "", $rango_inicial);
+				$str = $str + $i;
+
+				$new_str = str_pad($str, $len, "0", STR_PAD_LEFT);
+				$uno = substr($new_str, 0, 3);
+				$dos = substr($new_str, 3, 3);
+				$tres = substr($new_str, 6, 2);
+				$cuatro = substr($new_str, 8, 8);
+				$numero = $uno . '-' . $dos . '-' . $tres . '-' . $cuatro;
+				// echo $numero . '<br>';
+				$string1 = strval($numero);
+				// echo $string1 . '<br>';
+				$estado_factura = 'disponible';
+				$stmtcompra = $conn->prepare("INSERT INTO facturas (id_cai, no_factura, estado) VALUES (?, ?, ?)");
+				$stmtcompra->bind_param("sss", $id_cai, $string1, $estado_factura);
+				$stmtcompra->execute();
+			}
+			return;
+		}
+		try {
+			$stmt = $conn->prepare("UPDATE info_cai SET cai = ?, fecha_emision = ?, fecha_limite = ?, cantidad_otorgada = ?, rango_inicial = ?, rango_final = ?, id_empresa = ?, estado_cai = ? WHERE id_cai = ?");
+			$stmt->bind_param("ssssssssi", $codigo_cai, $fecha_emision, $fecha_limite, $cantidad_otorgada, $rango_inicial, $rango_final, $empresa_cai, $estado, $id_cai);
+			$stmt->execute();
+			genrarFacturas($cantidad_otorgada, $rango_inicial, $rango_final, $id_cai);
+			if ($stmt->affected_rows > 0) {
+				$respuesta = array(
+					'respuesta' => 'correcto',
+					'tipo' => $accion
+				);
+			} else {
+				$respuesta = array(
+					'respuesta' => 'error',
+					'tipo' => $accion
+				);
+			}
+			$stmt->close();
+			// $stmt_counter->close();
+			$conn->close();
+		} catch (Exception $e) {
+			//En caso de un error, tomar la exepción
+			$respuesta = array(
+				//Arreglo asociativo
+				'pass' => $e->getMessage(),
+				// 'pass' => $hash_password
+			);
+		}
+		echo json_encode($respuesta);
+	}if ($estado == 'ina') {
+		// $estado = $_POST['ina'];
+		try {
+			$stmt = $conn->prepare("UPDATE info_cai SET cai = ?, fecha_emision = ?, fecha_limite = ?, cantidad_otorgada = ?, rango_inicial = ?, rango_final = ?, id_empresa = ?, estado_cai = ? WHERE id_cai = ?");
+			$stmt->bind_param("ssssssssi", $codigo_cai, $fecha_emision, $fecha_limite, $cantidad_otorgada, $rango_inicial, $rango_final, $empresa_cai, $estado, $id_cai);
+			$stmt->execute();
+			if ($stmt->affected_rows > 0) {
+				$respuesta = array(
+					'respuesta' => 'correcto',
+					'tipo' => $accion
+				);
+			} else {
+				$respuesta = array(
+					'respuesta' => 'error',
+					'tipo' => $accion
+				);
+			}
+			$stmt->close();
+			// $stmt_counter->close();
+			$conn->close();
+		} catch (Exception $e) {
+			//En caso de un error, tomar la exepción
+			$respuesta = array(
+				//Arreglo asociativo
+				'pass' => $e->getMessage(),
+				// 'pass' => $hash_password
+			);
+		}
+		echo json_encode($respuesta);
 	}
 }

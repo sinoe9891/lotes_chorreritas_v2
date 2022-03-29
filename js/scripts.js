@@ -35,6 +35,11 @@ function addEventListener() {
 	if (nuevaventa) {
 		nuevaventa.addEventListener('submit', newventa);
 	}
+	//Nuevo CAI
+	let nuevaFact = document.querySelector('#nuevoCAI');
+	if (nuevaFact) {
+		nuevaFact.addEventListener('submit', newCAI);
+	}
 	//Nuevo cobro
 	let nuevoCobro = document.querySelector('#nuevoCobro');
 	if (nuevoCobro) {
@@ -44,6 +49,10 @@ function addEventListener() {
 	let editarventa = document.querySelector('#editarventa');
 	if (editarventa) {
 		editarventa.addEventListener('submit', editventa);
+	}
+	let editarFact = document.querySelector('#editarCAI');
+	if (editarFact) {
+		editarFact.addEventListener('submit', editCAI);
 	}
 	let editarBloque = document.querySelector('#editarRegistroBloque');
 	if (editarBloque) {
@@ -118,6 +127,14 @@ function formatID(identidad) {
 
 	const regExp = new RegExp(/[0-9]{4,4}-[0-9]{4,4}-[0-9]{5,5}/) // --- sin comillas
 	const resultado = regExp.test(identidad);
+	return resultado
+	// console.log(resultado);
+}
+
+function formatCAI(codigo_cai) {
+
+	const regExp = new RegExp(/[0-9]{3,3}-[0-9]{3,3}-[0-9]{2,2}-[0-9]{8,8}/) // --- sin comillas
+	const resultado = regExp.test(codigo_cai);
 	return resultado
 	// console.log(resultado);
 }
@@ -567,6 +584,89 @@ function newventa(e) {
 	}
 
 }
+function newCAI(e) {
+	e.preventDefault();
+	let codigo_cai = document.querySelector('#codigo_cai').value,
+		fecha_emision = document.querySelector('#fecha_emision').value,
+		fecha_limite = document.querySelector('#fecha_limite').value,
+		cantidad_otorgada = document.querySelector('#cantidad_otorgada').value,
+		rango_inicial = document.querySelector('#rango_inicial').value,
+		rango_final = document.querySelector('#rango_final').value,
+		empresa_cai = document.querySelector('#empresa_cai').value,
+		tipo = document.querySelector('#tipo').value;
+
+	let verificarCAIini = formatCAI(rango_inicial);
+	let verificarCAIfin = formatCAI(rango_final);
+	if (codigo_cai === '' || fecha_emision === '' || fecha_limite === '' || cantidad_otorgada === '' || rango_inicial === '' || rango_final === '' || empresa_cai === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos',
+		});
+	} else if (codigo_cai != '' || fecha_emision != '' || fecha_limite != '' || cantidad_otorgada != '' || rango_inicial != '' || rango_final != '' || empresa_cai != '') {
+		if (verificarCAIini && verificarCAIfin) {
+			//Campos son correctos - Ejecutamos AJAX
+			//Crear  FormData - Datos que se envían al servidor
+			console.log('enviar');
+			let datos = new FormData();
+			datos.append('codigo_cai', codigo_cai);
+			datos.append('fecha_emision', fecha_emision);
+			datos.append('fecha_limite', fecha_limite);
+			datos.append('cantidad_otorgada', cantidad_otorgada);
+			datos.append('rango_inicial', rango_inicial);
+			datos.append('rango_final', rango_final);
+			datos.append('empresa_cai', empresa_cai);
+			datos.append('accion', tipo);
+			//Crear  el llamado a Ajax
+			let xhr = new XMLHttpRequest();
+			//Abrir la Conexión
+			xhr.open('POST', 'includes/models/model-nuevo.php', true);
+			console.log('enviar1');
+			//Retorno de Datos
+			xhr.onload = function () {
+				if (this.status === 200) {
+					console.log('Recibe respuesta');
+					//esta es la respuesta la que tenemos en el model
+					// let respuesta = xhr.responseText;
+					let respuesta = JSON.parse(xhr.responseText);
+					console.log(respuesta);
+					if (respuesta.respuesta === 'correcto') {
+						//si es un nuevo usuario 
+						if (respuesta.tipo == 'nuevoCAI') {
+							Swal.fire({
+								icon: 'success',
+								title: '¡Asignación realizada!',
+								text: 'Ahora cambia el estado del lote',
+								position: 'center',
+								showConfirmButton: true
+
+							}).then(function () {
+								// urllote = '?ID=' + lote + '&bloque=' + bloque;
+								window.location = "facturacion.php";
+							});;
+						}
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Hubo un error en la solicitud'
+						})
+					}
+				}
+			}
+			// Enviar la petición
+			xhr.send(datos);
+		} else {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Correlativo Incial o Final Invalido'
+			});
+		}
+	}
+
+}
 
 function newCobro(e) {
 	e.preventDefault();
@@ -681,6 +781,87 @@ function newCobro(e) {
 
 }
 
+function editCAI(e) {
+	e.preventDefault();
+	let codigo_cai = document.querySelector('#codigo_cai').value,
+		fecha_emision = document.querySelector('#fecha_emision').value,
+		fecha_limite = document.querySelector('#fecha_limite').value,
+		cantidad_otorgada = document.querySelector('#cantidad_otorgada').value,
+		rango_inicial = document.querySelector('#rango_inicial').value,
+		rango_final = document.querySelector('#rango_final').value,
+		empresa_cai = document.querySelector('#empresa_cai').value,
+		estado = document.querySelector('#estado').value,
+		id_cai = document.querySelector('#id_cai').value,
+		tipo = document.querySelector('#tipo').value;
+
+	let verificarCAIini = formatCAI(rango_inicial);
+	let verificarCAIfin = formatCAI(rango_final);
+
+	if (codigo_cai === '' || fecha_emision === '' || fecha_limite === '' || cantidad_otorgada === '' || rango_inicial === '' || rango_final === '' || empresa_cai === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos',
+		});
+	} else if (codigo_cai != '' || fecha_emision != '' || fecha_limite != '' || cantidad_otorgada != '' || rango_inicial != '' || rango_final != '' || empresa_cai != '') {
+		if (verificarCAIini && verificarCAIfin) {
+			//Campos son correctos - Ejecutamos AJAX
+			//Crear  FormData - Datos que se envían al servidor
+			console.log('enviar');
+			let datos = new FormData();
+			datos.append('codigo_cai', codigo_cai);
+			datos.append('fecha_emision', fecha_emision);
+			datos.append('fecha_limite', fecha_limite);
+			datos.append('cantidad_otorgada', cantidad_otorgada);
+			datos.append('rango_inicial', rango_inicial);
+			datos.append('rango_final', rango_final);
+			datos.append('empresa_cai', empresa_cai);
+			datos.append('estado', estado);
+			datos.append('id_cai', id_cai);
+			datos.append('accion', tipo);
+			//Crear  el llamado a Ajax
+			let xhr = new XMLHttpRequest();
+			//Abrir la Conexión
+			xhr.open('POST', 'includes/models/model-editar-registro.php', true);
+			console.log('enviar1');
+			//Retorno de Datos
+			xhr.onload = function () {
+				if (this.status === 200) {
+					console.log('Recibe respuesta');
+					//esta es la respuesta la que tenemos en el model
+					// let respuesta = xhr.responseText;
+					let respuesta = JSON.parse(xhr.responseText);
+					console.log(respuesta);
+					if (respuesta.respuesta === 'correcto') {
+						//si es un nuevo usuario 
+						if (respuesta.tipo == 'editarCAI') {
+							Swal.fire({
+								icon: 'success',
+								title: '¡Actualización!',
+								text: 'Se ha realizado el cambio',
+								position: 'center',
+								showConfirmButton: true
+
+							}).then(function () {
+								// urllote = '?ID=' + lote + '&bloque=' + bloque;
+								window.location = "facturacion.php";
+							});;
+						}
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Hubo un error en la solicitud'
+						})
+					}
+				}
+			}
+			// Enviar la petición
+			xhr.send(datos);
+		}
+	}
+}
 function editventa(e) {
 	e.preventDefault();
 	let fechaSolicitud = document.querySelector('#fechaSolicitud').value,

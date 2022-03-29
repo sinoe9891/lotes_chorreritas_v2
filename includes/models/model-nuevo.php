@@ -541,3 +541,45 @@ if ($accion === 'newCobro') {
 	}
 	echo json_encode($respuesta);
 }
+if ($accion === 'nuevoCAI') {
+	$codigo_cai = $_POST['codigo_cai'];
+	$fecha_emision = $_POST['fecha_emision'];
+	$fecha_limite = $_POST['fecha_limite'];
+	$cantidad_otorgada = $_POST['cantidad_otorgada'];
+	$rango_inicial = $_POST['rango_inicial'];
+	$rango_final = $_POST['rango_final'];
+	$empresa_cai = $_POST['empresa_cai'];
+	//Importar la conexión
+	include '../conexion.php';
+	try {
+		//Preparar la consulta de insertar bloque
+		// 		id_bloque	
+		// bloque	
+		// id_proyecto	
+
+		$statement = $conn->prepare("INSERT INTO info_cai (cai, fecha_emision, fecha_limite, cantidad_otorgada, rango_inicial, rango_final, id_empresa) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		$statement->bind_param('sssssss', $codigo_cai, $fecha_emision, $fecha_limite, $cantidad_otorgada, $rango_inicial, $rango_final, $empresa_cai);
+		$statement->execute();
+		if ($statement->affected_rows > 0) {
+			$respuesta = array(
+				'respuesta' => 'correcto',
+				'tipo' => $accion,
+				'id_agregado' => $statement->insert_id
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+			);
+		}
+		$statement->close();
+		$conn->close();
+	} catch (Exception $e) {
+		//En caso de un error, tomar la exepción
+		$respuesta = array(
+			//Arreglo asociativo
+			'pass' => $e->getMessage(),
+			// 'pass' => $hash_password
+		);
+	}
+	echo json_encode($respuesta);
+}

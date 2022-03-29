@@ -211,3 +211,36 @@ if ($accion === 'eliminar-cuota-pagada') {
 
 	echo json_encode($respuesta);
 }
+
+if ($accion === 'eliminar-cai') {
+	// importar la conexion
+	include '../conexion.php';
+	try {
+		// Realizar la consulta a la base de datos
+		$stmt = $conn->prepare("DELETE FROM info_cai WHERE id_cai = ? ");
+		$stmt->bind_param('s', $id);
+		$stmt->execute();
+
+		$stmt1 = $conn->prepare("DELETE FROM facturas WHERE id_cai = ? ");
+		$stmt1->bind_param('s', $id);
+		$stmt1->execute();
+		if ($stmt->affected_rows > 0) {
+			$respuesta = array(
+				'respuesta' => 'correcto'
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error'
+			);
+		}
+		$stmt->close();
+		$conn->close();
+	} catch (Exception $e) {
+		// En caso de un error, tomar la exepcion
+		$respuesta = array(
+			'error' => $e->getMessage()
+		);
+	}
+
+	echo json_encode($respuesta);
+}
