@@ -39,6 +39,7 @@ date_default_timezone_set('America/Tegucigalpa');
 								<th>No.</th>
 								<th>Fecha de Pago</th>
 								<th>Cuota</th>
+								<th>Cuota Pagada</th>
 								<th>Saldo Inicial</th>
 								<th>Saldo Actual</th>
 								<th>Retraso</th>
@@ -66,6 +67,9 @@ date_default_timezone_set('America/Tegucigalpa');
 								$cuota = $solicitud['cuota'];
 								$total_venta = $solicitud['total_venta'];
 								$estado = $solicitud['estado_cuota'];
+								$monto_restante = $solicitud['monto_restante'];
+								$monto_pagado = $solicitud['monto_pagado'];
+
 								$view = '';
 								$noview ='';
 
@@ -125,12 +129,14 @@ date_default_timezone_set('America/Tegucigalpa');
 										<span class="badge <?php echo $coloractual ?> "><?php echo $fecha_pago; ?></span>
 									</td>
 									<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
+									<td><span class="badge bg-primary"><?php echo 'L.' . number_format($monto_pagado, 2, '.', ','); ?></span></td>
 									<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
 									<?php
 										$saldo_actual = $saldo_actual - $cuota;
+										$monto_restante = $monto_restante - $monto_pagado;
 									?>
 									<td>
-										<span class=""><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span>
+										<span class=""><?php echo 'L.' . number_format($monto_restante, 2, '.', ','); ?></span>
 									</td>
 									<td>
 										<span class="badge <?php echo $coloractual ?>"><?php echo $dias; ?></span>
@@ -171,3 +177,4 @@ include('includes/templates/footer.php');
 </body>
 
 </html>
+

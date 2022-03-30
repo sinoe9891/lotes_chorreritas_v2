@@ -455,11 +455,25 @@ if ($accion === 'newCobro') {
 		$resultado = $stmtsaldo->get_result();
 		$saldo = $resultado->fetch_assoc();
 		$saldo_actual = $saldo['saldo_actual'];
+
 		$saldo_actual = $saldo_actual - $valor_cuota;
+		// echo $saldo_actual;
+		$idsiguiente = $id + 1;
+		$stmt = $conn->prepare("UPDATE control_credito_lote SET monto_restante = ? WHERE id_credito_lote = ? AND id_compra = ?");
+		$stmt->bind_param('sss', $saldo_actual, $idsiguiente, $id_compra);
+		$stmt->execute();
+		// echo $saldo_actual;
 		//restar de ka tabla ficha_compra el valor de la cuota en el campo saldo_actual de la tabla ficha_compra
 		$stmt = $conn->prepare("UPDATE ficha_compra SET saldo_actual = ? WHERE id_ficha_compra = ?");
 		$stmt->bind_param('ss', $saldo_actual, $id_compra);
 		$stmt->execute();
+
+
+		$stmt = $conn->prepare("UPDATE control_credito_lote SET monto_pagado = ? WHERE id_credito_lote = ? AND id_compra = ?");
+		$stmt->bind_param('sss', $valor_cuota, $id, $id_compra);
+		$stmt->execute();
+
+		
 
 		//comprobar si ya estamos en el ultimo registro de la tabla
 		$stmt = $conn->prepare("SELECT MAX(id_credito_lote) FROM control_credito_lote WHERE id_compra = ?");
