@@ -426,6 +426,7 @@ if ($accion === 'newCobro') {
 	function updateCobros($id, $id_compra, $registro)
 	{
 		include '../conexion.php';
+		$valor_cuota = $_POST['valor_cuota'];
 		$siguiente = 'sig';
 		$pendiente = 'pen';
 		$pagada = 'pag';
@@ -448,6 +449,18 @@ if ($accion === 'newCobro') {
 			$stmt->bind_param('sss', $siguiente, $idsumado, $id_compra);
 			$stmt->execute();
 		}
+		$stmtsaldo = $conn->prepare("SELECT saldo_actual FROM ficha_compra WHERE id_ficha_compra = ?");
+		$stmtsaldo->bind_param('s', $id_compra);
+		$stmtsaldo->execute();
+		$resultado = $stmtsaldo->get_result();
+		$saldo = $resultado->fetch_assoc();
+		$saldo_actual = $saldo['saldo_actual'];
+		$saldo_actual = $saldo_actual - $valor_cuota;
+		//restar de ka tabla ficha_compra el valor de la cuota en el campo saldo_actual de la tabla ficha_compra
+		$stmt = $conn->prepare("UPDATE ficha_compra SET saldo_actual = ? WHERE id_ficha_compra = ?");
+		$stmt->bind_param('ss', $saldo_actual, $id_compra);
+		$stmt->execute();
+
 		//comprobar si ya estamos en el ultimo registro de la tabla
 		$stmt = $conn->prepare("SELECT MAX(id_credito_lote) FROM control_credito_lote WHERE id_compra = ?");
 		$stmt->bind_param('s', $id_compra);
@@ -463,6 +476,7 @@ if ($accion === 'newCobro') {
 			}
 			# code...
 		}
+		
 		return;
 	}
 	// echo $id_cuota_pagada.'-'.$valor_cuota.'-'.$fecha_cuota.'-'.$id_banco.'-'.$tipo_comprobante.'-'.$no_cuota.'-'.$no_referencia.'-'.$forma_pago;

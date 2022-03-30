@@ -60,7 +60,6 @@ function exportarTablas()
 		$fileHandler = fopen('respaldos/'.$backup_file_name, 'w+');
 		$number_of_lines = fwrite($fileHandler, $backupSQL);
 		fclose($fileHandler);
-
 		// header('Content-Description: File Transfer');
 		// header('Content-Type: application/octet-stream');
 		// header('Content-Disposition: attachment; filename=' . basename($backup_file_name));
