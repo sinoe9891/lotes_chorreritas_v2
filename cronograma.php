@@ -127,10 +127,10 @@ if (isset($_GET['ID'])) {
 								?>
 									<tr>
 										<td><?php echo $contador++; ?></td>
-										<td><span class="badge <?php echo $coloractual ?> "><?php echo $fecha_pago1; ?></span></td>
-										<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
-										<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cantidad_pagada, 2, '.', ','); ?></span></td>
-										<td><span class="badge bg-info"><?php echo 'L.' . number_format($monto_restante, 2, '.', ','); ?></span></td>
+										<td><span class="badge bg-secondary"><?php echo $fecha_pago1; ?></span></td>
+										<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
+										<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($cantidad_pagada, 2, '.', ','); ?></span></td>
+										<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($monto_restante, 2, '.', ','); ?></span></td>
 										<td><span class="badge bg-secondary">0</span></td>
 										<td>
 											<span class="badge bg-secondary">Pagado</span>
