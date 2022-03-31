@@ -49,7 +49,6 @@ date_default_timezone_set('America/Tegucigalpa');
 						</thead>
 						<tbody>
 							<?php
-							// SELECT a.fecha_pago, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante FROM cobros a, ficha_compra b, control_credito_lote c WHERE b.id_ficha_compra = 1;
 							$consultaProyecto = $conn->query("SELECT * FROM ficha_compra a, proyectos_ajustes b WHERE a.id_proyecto = b.id_proyecto");
 							$ajusteProyecto = $consultaProyecto->fetch_assoc();
 							if ($ajusteProyecto > 0) {
@@ -58,8 +57,7 @@ date_default_timezone_set('America/Tegucigalpa');
 								$precio_vara2 = 0;
 							}
 							$idcompra = $_GET['ID'];
-							// $consulta = $conn->query("SELECT * FROM control_credito_lote a, ficha_compra b WHERE a.id_compra = $idcompra and b.id_ficha_compra = $idcompra");
-							$consulta = $conn->query("SELECT a.fecha_pago, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante FROM cobros a, ficha_compra b, control_credito_lote c WHERE b.id_ficha_compra = $idcompra");
+							$consulta = $conn->query("SELECT * FROM control_credito_lote a, ficha_compra b WHERE a.id_compra = $idcompra and b.id_ficha_compra = $idcompra");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
@@ -70,12 +68,12 @@ date_default_timezone_set('America/Tegucigalpa');
 								$total_venta = $solicitud['total_venta'];
 								$estado = $solicitud['estado_cuota'];
 								$monto_restante = $solicitud['monto_restante'];
-								$monto_pagado = $solicitud['cantidad_pagada'];
+								$monto_pagado = $solicitud['monto_pagado'];
 
 								$view = '';
 								$noview ='';
+
 							?>
-								
 								<tr>
 									<td><?php echo $contador++; ?></td>
 									<td>
@@ -132,14 +130,13 @@ date_default_timezone_set('America/Tegucigalpa');
 									</td>
 									<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
 									<td><span class="badge bg-primary"><?php echo 'L.' . number_format($monto_pagado, 2, '.', ','); ?></span></td>
-									<td><span class="badge bg-info"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
+									<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
 									<?php
 										$saldo_actual = $saldo_actual - $cuota;
 										$monto_restante = $monto_restante - $monto_pagado;
-										$total_venta = $total_venta - $monto_pagado;
 									?>
 									<td>
-										<span class=""><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span>
+										<span class=""><?php echo 'L.' . number_format($monto_restante, 2, '.', ','); ?></span>
 									</td>
 									<td>
 										<span class="badge <?php echo $coloractual ?>"><?php echo $dias; ?></span>
@@ -153,34 +150,6 @@ date_default_timezone_set('America/Tegucigalpa');
 								</tr>
 							<?php
 							}
-
-							for ($i = 0; $i <= $plazo_meses; ++$i) {
-								// cambiar estado de la primera cuota por siguiente
-								if ($i == 0) {
-									$estado_cuota = 'sig';
-									$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota));
-									$total_venta = $total_venta;
-								} else {
-									$estado_cuota = 'pen';
-									$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota . " +$i month"));
-									$total_venta = $total_venta - $cuota;
-								}
-								// $fecha_pago = date("d-m-Y", strtotime($fecha_cuota . " +$i month")) . "<br>";
-								// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
-								$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago1 . " +1 month"));
-								//restar la cuota de $total_venta
-								// $total_venta = $total_venta - $cuota;
-								$no_cuota = $i+1;
-
-
-								?>
-
-
-
-								<?php
-								
-							}
-
 							?>
 						</tbody>
 					</table>

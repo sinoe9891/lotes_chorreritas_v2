@@ -69,21 +69,20 @@ include 'includes/templates/sidebar.php';
 							// $saldo_actual = $ajusteProyecto['saldo_actual'];
 
 							// $consulta = $conn->query("SELECT a.monto_pagado, c.nombre_completo, b.id_ficha_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, b.estado, MIN(id_credito_lote) id_cuota FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id and a.id_compra = b.id_ficha_compra GROUP BY b.id_contrato_compra ORDER BY a.fecha_pago;");
-							$consulta = $conn->query("SELECT c.nombre_completo, MIN(id_contrato) as contrato, b.id_cuota_pagada, a.fecha_primer_cuota, a.cuota, a.saldo_actual, a.total_venta FROM ficha_compra a, cobros b, ficha_directorio c WHERE a.id_registro = c.id and a.id_ficha_compra = b.id_contrato GROUP BY b.id_contrato ORDER BY a.fecha_primer_cuota;");
+							$consulta = $conn->query("SELECT c.nombre_completo, MIN(id_contrato) as contrato, b.id_cuota_pagada, a.fecha_primer_cuota, a.cuota, a.saldo_actual, a.total_venta, a.estado, a.id_ficha_compra FROM ficha_compra a, cobros b, ficha_directorio c WHERE a.id_registro = c.id and a.id_ficha_compra = b.id_contrato GROUP BY b.id_contrato ORDER BY a.fecha_primer_cuota;");
 							if ($consulta->num_rows > 0) {
 								$numero = 1;
 								$contador = 1;
 								$total = 0;
 								while ($solicitud = $consulta->fetch_array()) {
 									date_default_timezone_set('America/Tegucigalpa');
-									$fecha_pago = $solicitud['fecha_pago'];
+									// $fecha_pago = $solicitud['fecha_pago'];
 									$fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
 									$id_compra = $solicitud['id_ficha_compra'];
 									$nombre_completo = $solicitud['nombre_completo'];
 									$saldo_actual = $solicitud['saldo_actual'];
 									$cuota = $solicitud['cuota'];
 									$total_venta = $solicitud['total_venta'];
-									$monto_pagado = $solicitud['monto_pagado'];
 									$estado = $solicitud['estado'];
 									$view = '';
 									$noview = '';
@@ -138,7 +137,7 @@ include 'includes/templates/sidebar.php';
 												$color = 'bg-success';
 											}
 											?>
-											<span class="badge <?php echo $color ?> "><?php echo $fecha_pago; ?></span>
+											<span class="badge <?php echo $color ?> "><?php echo $fecha_primer_cuota; ?></span>
 										</td>
 										<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
 										<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
@@ -163,7 +162,7 @@ include 'includes/templates/sidebar.php';
 									<?php
 								}
 							} else {
-								$consulta = $conn->query("SELECT c.nombre_completo, MIN(id_ficha_compra) as id_compra, a.fecha_primer_cuota, a.cuota, a.saldo_actual, a.total_venta FROM ficha_compra a, ficha_directorio c WHERE a.id_registro = c.id and a.estado = 'en' GROUP BY a.id_ficha_compra ORDER BY a.fecha_primer_cuota;");
+								$consulta = $conn->query("SELECT c.nombre_completo, MIN(id_ficha_compra) as id_compra, a.fecha_primer_cuota, a.cuota, a.saldo_actual, a.total_venta, a.estado FROM ficha_compra a, ficha_directorio c WHERE a.id_registro = c.id and a.estado = 'en' GROUP BY a.id_ficha_compra ORDER BY a.fecha_primer_cuota;");
 								if ($consulta->num_rows > 0) {
 
 
@@ -176,10 +175,10 @@ include 'includes/templates/sidebar.php';
 										$fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
 										$id_compra = $solicitud['id_compra'];
 										$nombre_completo = $solicitud['nombre_completo'];
-										$saldo_actual = $solicitud['saldo_actual'];
 										$cuota = $solicitud['cuota'];
 										$total_venta = $solicitud['total_venta'];
-										$monto_pagado = $solicitud['monto_pagado'];
+										$saldo_actual = $solicitud['saldo_actual'];
+										// $monto_pagado = $solicitud['monto_pagado'];
 										$estado = $solicitud['estado'];
 										$view = '';
 										$noview = '';
@@ -240,7 +239,7 @@ include 'includes/templates/sidebar.php';
 											<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
 											<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
 											<td>
-												<a href="cuotas_ver.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
+												<a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
 												<!-- <a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a> -->
 											</td>
 											<td>
