@@ -228,7 +228,7 @@ if (isset($_GET['ID'])) {
 									<th>Cuota Pagada</th>
 									<th>Cuota a pagar</th>
 									<th>Saldo Inicial</th>
-									<th>Saldo Actual</th>
+									<th>Saldo Pendiente</th>
 									<th>Retraso</th>
 								</tr>
 							</thead>
