@@ -68,24 +68,24 @@ date_default_timezone_set('America/Tegucigalpa');
 																<label for="first-name-column">Nombre Completo</label>
 																<input type="hidden" id="fechaSolicitud" name="fechaSolicitud" value="<?php echo date('Y-m-d'); ?>">
 																<input type="hidden" id="horaSolicitud" name="horaSolicitud" value="<?php echo date('H:i:s'); ?>">
-																<input type="text" class="form-control" id="nombre_completo" name="nombre_completo" placeholder="Nombre completo" required>
+																<input type="text" class="form-control" id="nombre_completo" name="nombre_completo" placeholder="Nombre completo">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="country-floating">Nacionalidad</label>
-																<input type="text" class="form-control" id="nacionalidad" name="nacionalidad" value="" placeholder="Ej. hondureña en mínuscula" required>
+																<input type="text" class="form-control" id="nacionalidad" name="nacionalidad" value="" placeholder="Ej. hondureña en mínuscula">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="city-column">Identidad</label>
-																<input type="text" class="form-control" id="identidad" name="identidad" value="" placeholder="0000-0000-00000" max="15" min="15" required>
+																<input type="text" class="form-control" id="identidad" name="identidad" value="" placeholder="0000-0000-00000" max="15" min="15">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="last-name-column">Género</label>
+																<label for="last-name-column">Estado Civil</label>
 																<select class="form-select" id="estado_civil" name="estado_civil">
 																	<option value="1">Soltero(a)</option>
 																	<option value="2">Casado(a)</option>
@@ -97,7 +97,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
-																<label for="last-name-column">Estado Civil</label>
+																<label for="last-name-column">Género</label>
 																<select class="form-select" name="genero" id="genero">
 																	<?php
 																	if ($gender == 'M') {
@@ -115,13 +115,13 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="company-column">Dependientes</label>
-																<input type="number" name="dependientes" id="dependientes" class="form-control" value="0" required>
+																<input type="number" name="dependientes" id="dependientes" class="form-control" value="1">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="email-id-column">Profesión u Oficio</label>
-																<input type="text" name="profesion" id="profesion" class="form-control" value="" placeholder="Ej. Comerciante, Ingeniero, Ama de Casa" required>
+																<input type="text" name="profesion" id="profesion" class="form-control" value="" placeholder="Ej. Comerciante, Ingeniero, Ama de Casa">
 															</div>
 														</div>
 													</div>
@@ -137,31 +137,31 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="first-name-column">Fecha de Nacimiento</label>
-																<input type="date" class="form-control" name="fechanac" id="fechanac" value="" required>
+																<input type="date" class="form-control" name="fechanac" id="fechanac" value="">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="last-name-column">País Residencia</label>
-																<input type="text" class="form-control" name="pais_reside" id="pais_reside" value="" placeholder="Ej. Honduras, USA" required>
+																<input type="text" class="form-control" name="pais_reside" id="pais_reside" value="" placeholder="Ej. Honduras, USA">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="city-column">Lugar de residencia actual</label>
-																<input type="text" class="form-control" name="direccion" id="direccion" value="" placeholder="Ej. Col. Los Robles, Bloque #, Casa #, …" required>
+																<input type="text" class="form-control" name="direccion" id="direccion" value="" placeholder="Ej. Col. Los Robles, Bloque #, Casa #, …">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="country-floating">Ciudad</label>
-																<input type="text" class="form-control" name="ciudad" id="ciudad" value="" placeholder="Ej. Tegucigalpa, San Pedro Sula" required>
+																<input type="text" class="form-control" name="ciudad" id="ciudad" value="" placeholder="Ej. Tegucigalpa, San Pedro Sula">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="company-column">Departamento/Estado</label>
-																<input type="text" class="form-control" name="departamento" id="departamento" value="" placeholder="Ej. Francisco Morazán …" required>
+																<input type="text" class="form-control" name="departamento" id="departamento" value="" placeholder="Ej. Francisco Morazán …">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
@@ -173,7 +173,7 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="company-column">Celular</label>
-																<input type="tel" class="form-control" name="celular" id="celular" value="" placeholder="94500123" required>
+																<input type="tel" class="form-control" name="celular" id="celular" value="" placeholder="94500123">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
@@ -293,14 +293,14 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="first-name-column">Nombre Completo</label>
-																<input type="text" class="form-control" id="nombre_beneficiario" name="nombre_beneficiario" placeholder="Nombre completo" required>
+																<input type="text" class="form-control" id="nombre_beneficiario" name="nombre_beneficiario" placeholder="Nombre completo">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="last-name-column">Identidad</label>
 
-																<input type="text" class="form-control" id="identidad_beneficiario" name="identidad_beneficiario" value="" placeholder="0801-1989-07380" required>
+																<input type="text" class="form-control" id="identidad_beneficiario" name="identidad_beneficiario" value="" placeholder="0801-1989-07380">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
@@ -315,31 +315,31 @@ date_default_timezone_set('America/Tegucigalpa');
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="last-name-column">País Residencia</label>
-																<input type="text" class="form-control" name="pais_reside_beneficiario" id="pais_reside_beneficiario" value="" placeholder="Ej. Honduras, USA" required>
+																<input type="text" class="form-control" name="pais_reside_beneficiario" id="pais_reside_beneficiario" value="" placeholder="Ej. Honduras, USA">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="country-floating">Dirección</label>
-																<input type="text" class="form-control" name="direccion_beneficiario" id="direccion_beneficiario" value="" placeholder="Ej. Los Robles, Tegucigalpa, Honduras, …" required>
+																<input type="text" class="form-control" name="direccion_beneficiario" id="direccion_beneficiario" value="" placeholder="Ej. Los Robles, Tegucigalpa, Honduras, …">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="company-column">Ciudad donde vive</label>
-																<input type="text" class="form-control" name="ciudad_beneficiario" id="ciudad_beneficiario" value="" placeholder="Ej. Los Robles, Tegucigalpa …" required>
+																<input type="text" class="form-control" name="ciudad_beneficiario" id="ciudad_beneficiario" value="" placeholder="Ej. Los Robles, Tegucigalpa …">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="email-id-column">Departamento donde vive</label>
-																<input type="text" class="form-control" name="departamento_beneficiario" id="departamento_beneficiario" value="" placeholder="Ej. Francisco Morazán …" required>
+																<input type="text" class="form-control" name="departamento_beneficiario" id="departamento_beneficiario" value="" placeholder="Ej. Francisco Morazán …">
 															</div>
 														</div>
 														<div class="col-md-6 col-12">
 															<div class="form-group">
 																<label for="email-id-column">Celular</label>
-																<input type="tel" class="form-control" name="celular_beneficiario" id="celular_beneficiario" value="" placeholder="94500123" required>
+																<input type="tel" class="form-control" name="celular_beneficiario" id="celular_beneficiario" value="" placeholder="94500123">
 															</div>
 														</div>
 													</div>

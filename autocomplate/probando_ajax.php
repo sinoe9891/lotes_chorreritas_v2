@@ -3,8 +3,8 @@
 <head>
 	<title>Probando</title>
 	<script src="jquery-3.4.1.min.js"></script>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script> -->
 </head>
 <body>
 
@@ -14,7 +14,7 @@
 		<div class="row text-center">
 			<div class="col"><input type="button" class="btn btn-primary" value="CLIENTES" onclick="saludame(1);"></div>
 			<div class="col">
-				<input type="button" class="btn btn-primary" value="EMPLEADOS" onclick="saludame(2);"><br><br>
+				<input type="button" class="btn btn-primary" value="EMPLEADOS" onclick="saludame(4);"><br><br>
 				
 				<input type="text" id="cuadro_buscar" class="form-control" onkeypress="mi_busqueda();">
 
@@ -26,7 +26,9 @@
 		<h2 class="text-center">LISTAS DETALLADAS</h2>
 		<div class="row justify-content-md-center">		
 			<div class="col-md-8">
-				<div id="mostrar_mensaje"></div>
+				<div id="mostrar_mensaje">
+
+				</div>
 			</div>
 		</div>
 	</div>

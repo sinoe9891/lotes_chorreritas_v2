@@ -387,3 +387,192 @@ if ($accion === 'newventa') {
 	}
 	echo json_encode($respuesta);
 }
+
+if ($accion === 'newCobro') {
+	//Variables recibidas por POST
+	// $id_cuota_pagada = $_POST['id_cuota_pagada'];
+	$id_compra = $_POST['id_compra'];
+	$valor_cuota = $_POST['valor_cuota'];
+	$fecha_cuota = $_POST['fecha_cuota'];
+	$fecha_vencimiento = $_POST['fecha_vencimiento'];
+	$fecha_pagada = $_POST['fecha_pagada'];
+	$id_banco = $_POST['id_banco'];
+	$tipo_comprobante = $_POST['tipo_comprobante'];
+	$no_cuota = $_POST['no_cuota'];
+	$nombre_completo = $_POST['nombre_completo'];
+	$no_referencia = $_POST['no_referencia'];
+	$forma_pago = $_POST['forma_pago'];
+	$monto_restante = $_POST['monto_restante'];
+	$searchString = " ";
+	$replaceString = "";
+	$name = date('d-M-Y') . '-' . $id_compra . '-' . $no_cuota . '-' . $nombre_completo;
+	//Pasar a Minusculas
+	$namefile = strtolower(quitar_acentos(str_replace($searchString, $replaceString, $name)));
+
+
+	$monto_restante = $monto_restante - $valor_cuota;
+	$stmt = $conn->prepare("UPDATE ficha_compra SET saldo_actual = ? WHERE id_ficha_compra = ?");
+	$stmt->bind_param('ss', $monto_restante, $id_compra);
+	$stmt->execute();
+	// echo $stmt->error;
+
+
+	//comprobar si ya estamos en el ultimo registro de la tabla
+	$stmt = $conn->prepare("SELECT id_ficha_compra, saldo_actual, total_venta, id_registro FROM ficha_compra WHERE id_ficha_compra = ?");
+	$stmt->bind_param('s', $id_compra);
+	$stmt->execute();
+	$resultado = $stmt->get_result();
+	$row = $resultado->fetch_assoc();
+	$id_ficha_compra = $row['id_ficha_compra'];
+	$saldo_actual = $row['saldo_actual'];
+	$total_venta = $row['total_venta'];
+	$id_registro = $row['id_registro'];
+	$concluido = 'co';
+
+	if ($resultado->num_rows > 0) {
+		if ($saldo_actual == 0) {
+			$stmt = $conn->prepare("UPDATE ficha_compra SET estado = ? WHERE id_ficha_compra = ? AND id_registro = ?");
+			$stmt->bind_param('sss', $concluido, $id_compra, $id_registro);
+			$stmt->execute();
+		}
+	}
+
+	if (isset($_FILES["archivos"]["name"])) {
+		$imagenes = count($_FILES["archivos"]["name"]);
+	} else {
+		$imagenes = null;
+	}
+
+	function insertar_documento($id, $ruta)
+	{
+		include '../conexion.php';
+		//actualizar url de la cuota de pago
+		$stmt = $conn->prepare("UPDATE cobros SET url_comprobante = ? WHERE id_cobro = ?");
+		$stmt->bind_param('ss', $ruta, $id);
+		$stmt->execute();
+		return;
+	}
+
+
+	// echo $id_cuota_pagada.'-'.$valor_cuota.'-'.$fecha_cuota.'-'.$id_banco.'-'.$tipo_comprobante.'-'.$no_cuota.'-'.$no_referencia.'-'.$forma_pago;
+	//Importar la conexión
+	// include '../conexion.php';
+	try {
+		//Preparar la consulta de insertar bloque
+		$statement = $conn->prepare("INSERT INTO cobros (id_cuota_pagada, id_contrato, cantidad_pagada, monto_restante, fecha_pagada, fecha_cuota, fecha_vencimiento, id_banco, tipo_comprobante, no_referencia, forma_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		//Asignar los valores de los parámetros
+		$statement->bind_param('sssssssssss', $no_cuota, $id_compra, $valor_cuota, $monto_restante, $fecha_pagada, $fecha_cuota, $fecha_vencimiento, $id_banco, $tipo_comprobante, $no_referencia, $forma_pago);
+		$statement->execute();
+		$last_id = mysqli_insert_id($conn);
+		$carpeta = '../../src/recibos/' . $id_compra . '/';
+		$ruta = 'src/recibos/' . $id_compra . '/';
+
+		function crearDireccion($carpeta)
+		{
+			// Path de documentos
+			// Permisos de la carpeta
+			if (!is_dir($carpeta)) {
+				mkdir($carpeta, 0777, true);
+			}
+			chmod($carpeta, 0777);
+			return;
+		}
+
+		if ($imagenes != null) {
+			//Subir varias imagenes
+			for ($i = 0; $i < $imagenes; $i++) {
+				$ubicacionTemporal = $_FILES["archivos"]["tmp_name"][$i];
+				$nombreArchivo = $_FILES["archivos"]["name"][$i];
+				$extension = pathinfo($nombreArchivo, PATHINFO_EXTENSION);
+
+				$parts = explode(".", $_FILES['archivos']['name'][$i]);
+				$ruta_archivos = $carpeta . $namefile . "_" . $i . "." . end($parts);
+				$ruta_db = $ruta . $namefile . "_" . $i . "." . end($parts);
+
+				// Mover del temporal al directorio actual
+				crearDireccion($carpeta);
+				move_uploaded_file($ubicacionTemporal, $ruta_archivos);
+
+				insertar_documento($last_id, $ruta_db);
+			}
+		} else {
+			$imagenes = '';
+		}
+		
+		if ($statement->affected_rows > 0) {
+			$respuesta = array(
+				//Esto es lo que se muestra en
+				//JSON.parse(xhr.responseText); console.log(respuesta);
+				'respuesta' => 'correcto',
+				'name' => $name,
+				'tipo' => $accion,
+				'nombre' => $namefile,
+				'id_agregado' => $last_id
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+				'Errores' => $carpeta,
+				'Error' => $imagenes,
+				// 'id_agregado' => $curriculum,
+			);
+			echo $statement->error;
+		}
+		$statement->close();
+		$conn->close();
+	} catch (Exception $e) {
+		//En caso de un error, tomar la exepción
+		$respuesta = array(
+			//Arreglo asociativo
+			'pass' => $e->getMessage(),
+			// 'pass' => $hash_password
+		);
+	}
+	echo json_encode($respuesta);
+}
+
+
+
+
+if ($accion === 'nuevoCAI') {
+	$codigo_cai = $_POST['codigo_cai'];
+	$fecha_emision = $_POST['fecha_emision'];
+	$fecha_limite = $_POST['fecha_limite'];
+	$cantidad_otorgada = $_POST['cantidad_otorgada'];
+	$rango_inicial = $_POST['rango_inicial'];
+	$rango_final = $_POST['rango_final'];
+	$empresa_cai = $_POST['empresa_cai'];
+	//Importar la conexión
+	include '../conexion.php';
+	try {
+		//Preparar la consulta de insertar bloque
+		// 		id_bloque	
+		// bloque	
+		// id_proyecto	
+
+		$statement = $conn->prepare("INSERT INTO info_cai (cai, fecha_emision, fecha_limite, cantidad_otorgada, rango_inicial, rango_final, id_empresa) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		$statement->bind_param('sssssss', $codigo_cai, $fecha_emision, $fecha_limite, $cantidad_otorgada, $rango_inicial, $rango_final, $empresa_cai);
+		$statement->execute();
+		if ($statement->affected_rows > 0) {
+			$respuesta = array(
+				'respuesta' => 'correcto',
+				'tipo' => $accion,
+				'id_agregado' => $statement->insert_id
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+			);
+		}
+		$statement->close();
+		$conn->close();
+	} catch (Exception $e) {
+		//En caso de un error, tomar la exepción
+		$respuesta = array(
+			//Arreglo asociativo
+			'pass' => $e->getMessage(),
+			// 'pass' => $hash_password
+		);
+	}
+	echo json_encode($respuesta);
+}

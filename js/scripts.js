@@ -35,10 +35,24 @@ function addEventListener() {
 	if (nuevaventa) {
 		nuevaventa.addEventListener('submit', newventa);
 	}
+	//Nuevo CAI
+	let nuevaFact = document.querySelector('#nuevoCAI');
+	if (nuevaFact) {
+		nuevaFact.addEventListener('submit', newCAI);
+	}
+	//Nuevo cobro
+	let nuevoCobro = document.querySelector('#nuevoCobro');
+	if (nuevoCobro) {
+		nuevoCobro.addEventListener('submit', newCobro);
+	}
 	//Nuevo venta
 	let editarventa = document.querySelector('#editarventa');
 	if (editarventa) {
 		editarventa.addEventListener('submit', editventa);
+	}
+	let editarFact = document.querySelector('#editarCAI');
+	if (editarFact) {
+		editarFact.addEventListener('submit', editCAI);
 	}
 	let editarBloque = document.querySelector('#editarRegistroBloque');
 	if (editarBloque) {
@@ -117,6 +131,14 @@ function formatID(identidad) {
 	// console.log(resultado);
 }
 
+function formatCAI(codigo_cai) {
+
+	const regExp = new RegExp(/[0-9]{3,3}-[0-9]{3,3}-[0-9]{2,2}-[0-9]{8,8}/) // --- sin comillas
+	const resultado = regExp.test(codigo_cai);
+	return resultado
+	// console.log(resultado);
+}
+
 //Funcion para ver en que pagina estoy
 function filename() {
 	var rutaAbsoluta = self.location.href;
@@ -191,12 +213,12 @@ function nuevoCliente(e) {
 	let verficarid = formatID(identidad);
 	let verficaridbeneficiario = formatID(identidad_beneficiario);
 
-	if (nombres === '' || identidad === '' || identidad_beneficiario === '' || nombre_beneficiario === '' && fechanac === '') {
+	if (nombres === '' || fechanac === '' || identidad === '' || nacionalidad === '' || genero === '' || estado_civil === '' || pais_reside === '' || direccion === '' || ciudad === '' || departamento === '' || dependientes === '' || profesion === '' || nombre_beneficiario === '' || genero_beneficiario === '' || identidad_beneficiario === '' || direccion_beneficiario === '' || ciudad_beneficiario === '' || departamento_beneficiario === '' || celular_beneficiario === '' || pais_reside_beneficiario === '') {
 		//validación Falló
 		Swal.fire({
 			icon: 'error',
 			title: 'Oops...',
-			text: 'Debe de llenar los campos obligatorios',
+			text: 'Debe de llenar los campos obligatorios de forma completa de las secciones 1, 2 y 5',
 		});
 	} else {
 		if (verficarid && verficaridbeneficiario) {
@@ -480,7 +502,7 @@ function newventa(e) {
 		tipo = document.querySelector('#tipo').value,
 		bloque = document.querySelectorAll('.tabla-bloque');
 
-	if (bloque.length == 0){
+	if (bloque.length == 0) {
 		Swal.fire({
 			icon: 'error',
 			title: 'Oops...',
@@ -562,7 +584,289 @@ function newventa(e) {
 	}
 
 }
+function newCAI(e) {
+	e.preventDefault();
+	let codigo_cai = document.querySelector('#codigo_cai').value,
+		fecha_emision = document.querySelector('#fecha_emision').value,
+		fecha_limite = document.querySelector('#fecha_limite').value,
+		cantidad_otorgada = document.querySelector('#cantidad_otorgada').value,
+		rango_inicial = document.querySelector('#rango_inicial').value,
+		rango_final = document.querySelector('#rango_final').value,
+		empresa_cai = document.querySelector('#empresa_cai').value,
+		tipo = document.querySelector('#tipo').value;
 
+	let verificarCAIini = formatCAI(rango_inicial);
+	let verificarCAIfin = formatCAI(rango_final);
+	if (codigo_cai === '' || fecha_emision === '' || fecha_limite === '' || cantidad_otorgada === '' || rango_inicial === '' || rango_final === '' || empresa_cai === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos',
+		});
+	} else if (codigo_cai != '' || fecha_emision != '' || fecha_limite != '' || cantidad_otorgada != '' || rango_inicial != '' || rango_final != '' || empresa_cai != '') {
+		if (verificarCAIini && verificarCAIfin) {
+			//Campos son correctos - Ejecutamos AJAX
+			//Crear  FormData - Datos que se envían al servidor
+			console.log('enviar');
+			let datos = new FormData();
+			datos.append('codigo_cai', codigo_cai);
+			datos.append('fecha_emision', fecha_emision);
+			datos.append('fecha_limite', fecha_limite);
+			datos.append('cantidad_otorgada', cantidad_otorgada);
+			datos.append('rango_inicial', rango_inicial);
+			datos.append('rango_final', rango_final);
+			datos.append('empresa_cai', empresa_cai);
+			datos.append('accion', tipo);
+			//Crear  el llamado a Ajax
+			let xhr = new XMLHttpRequest();
+			//Abrir la Conexión
+			xhr.open('POST', 'includes/models/model-nuevo.php', true);
+			console.log('enviar1');
+			//Retorno de Datos
+			xhr.onload = function () {
+				if (this.status === 200) {
+					console.log('Recibe respuesta');
+					//esta es la respuesta la que tenemos en el model
+					// let respuesta = xhr.responseText;
+					let respuesta = JSON.parse(xhr.responseText);
+					console.log(respuesta);
+					if (respuesta.respuesta === 'correcto') {
+						//si es un nuevo usuario 
+						if (respuesta.tipo == 'nuevoCAI') {
+							Swal.fire({
+								icon: 'success',
+								title: '¡Asignación realizada!',
+								text: 'Ahora cambia el estado del lote',
+								position: 'center',
+								showConfirmButton: true
+
+							}).then(function () {
+								// urllote = '?ID=' + lote + '&bloque=' + bloque;
+								window.location = "facturacion.php";
+							});;
+						}
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Hubo un error en la solicitud'
+						})
+					}
+				}
+			}
+			// Enviar la petición
+			xhr.send(datos);
+		} else {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Correlativo Incial o Final Invalido'
+			});
+		}
+	}
+
+}
+
+function newCobro(e) {
+	e.preventDefault();
+	let tipo = document.querySelector('#tipo').value,
+		id_compra = document.querySelector('#id_compra').value,
+		valor_cuota = document.querySelector('#valor_cuota').value,
+		fecha_cuota = document.querySelector('#fecha_cuota').value,
+		fecha_pagada = document.querySelector('#fecha_pagada').value,
+		fecha_vencimiento = document.querySelector('#fecha_vencimiento').value,
+
+		id_banco = document.querySelector('#id_banco').value,
+		tipo_comprobante = document.querySelector('#tipo_comprobante').value,
+		no_cuota = document.querySelector('#no_cuota').value,
+		nombre_completo = document.querySelector('#nombre_completo').value,
+		no_referencia = document.querySelector('#no_referencia').value,
+		forma_pago = document.querySelector('#forma_pago').value,
+		monto_restante = document.querySelector('#monto_restante').value,
+		fotos = document.querySelector('#seleccionArchivos').files;
+
+
+	console.log(fotos);
+	let barraestado = document.cobroForm.children[0].children[2],
+		span = barraestado.children[0], tamano = 0;
+	barraestado.classList.remove('barra_verde', 'barra_roja');
+	let enviar = false;
+
+	if (fotos.length > 0) {
+		for (var i = 0; i < fotos.length; i++) {
+			const fsize = fotos.item(i).size;
+			let file = parseFloat(((fsize / 1024) / 1024).toFixed(2));
+			tamano = tamano + file;
+			if (tamano > 10) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Archivos demasidos grandes, deben de ser menores 10MB'
+				});
+				enviar = false;
+				break;
+			} else if (tamano <= 10) {
+				enviar = true;
+			}
+		}
+		console.log(tamano.toFixed(2) + 'MB');
+	}
+
+	if (valor_cuota === '' || fecha_cuota === '' || id_banco === '' || tipo_comprobante === '' || no_cuota === '' || nombre_completo === '' || no_referencia === '' || forma_pago === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos',
+		});
+	} else {
+		//Campos son correctos - Ejecutamos AJAX
+		//Crear  FormData - Datos que se envían al servidor
+		console.log('enviar');
+		let datos = new FormData();
+		datos.append('id_compra', id_compra);
+		datos.append('valor_cuota', valor_cuota);
+		datos.append('fecha_cuota', fecha_cuota);
+		datos.append('fecha_vencimiento', fecha_vencimiento);
+		datos.append('fecha_pagada', fecha_pagada);
+		datos.append('id_banco', id_banco);
+		datos.append('tipo_comprobante', tipo_comprobante);
+		datos.append('no_cuota', no_cuota);
+		datos.append('nombre_completo', nombre_completo);
+		datos.append('no_referencia', no_referencia);
+		datos.append('forma_pago', forma_pago);
+		datos.append('monto_restante', monto_restante);
+		for (const archivo of fotos) {
+			datos.append('archivos[]', archivo);
+		}
+		console.log(fotos);
+		// datos.append('lotes', bloque);
+		datos.append('accion', tipo);
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-nuevo.php', true);
+		console.log('enviar1');
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+				console.log('Recibe respuesta');
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'newCobro') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Asignación realizada!',
+							text: 'Ahora cambia el estado del lote',
+							position: 'center',
+							showConfirmButton: true
+
+						}).then(function () {
+							// urllote = '?ID=' + lote + '&bloque=' + bloque;
+							window.location = "cobros.php";
+						});;
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+
+}
+
+function editCAI(e) {
+	e.preventDefault();
+	let codigo_cai = document.querySelector('#codigo_cai').value,
+		fecha_emision = document.querySelector('#fecha_emision').value,
+		fecha_limite = document.querySelector('#fecha_limite').value,
+		cantidad_otorgada = document.querySelector('#cantidad_otorgada').value,
+		rango_inicial = document.querySelector('#rango_inicial').value,
+		rango_final = document.querySelector('#rango_final').value,
+		empresa_cai = document.querySelector('#empresa_cai').value,
+		estado = document.querySelector('#estado').value,
+		id_cai = document.querySelector('#id_cai').value,
+		tipo = document.querySelector('#tipo').value;
+
+	let verificarCAIini = formatCAI(rango_inicial);
+	let verificarCAIfin = formatCAI(rango_final);
+
+	if (codigo_cai === '' || fecha_emision === '' || fecha_limite === '' || cantidad_otorgada === '' || rango_inicial === '' || rango_final === '' || empresa_cai === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos',
+		});
+	} else if (codigo_cai != '' || fecha_emision != '' || fecha_limite != '' || cantidad_otorgada != '' || rango_inicial != '' || rango_final != '' || empresa_cai != '') {
+		if (verificarCAIini && verificarCAIfin) {
+			//Campos son correctos - Ejecutamos AJAX
+			//Crear  FormData - Datos que se envían al servidor
+			console.log('enviar');
+			let datos = new FormData();
+			datos.append('codigo_cai', codigo_cai);
+			datos.append('fecha_emision', fecha_emision);
+			datos.append('fecha_limite', fecha_limite);
+			datos.append('cantidad_otorgada', cantidad_otorgada);
+			datos.append('rango_inicial', rango_inicial);
+			datos.append('rango_final', rango_final);
+			datos.append('empresa_cai', empresa_cai);
+			datos.append('estado', estado);
+			datos.append('id_cai', id_cai);
+			datos.append('accion', tipo);
+			//Crear  el llamado a Ajax
+			let xhr = new XMLHttpRequest();
+			//Abrir la Conexión
+			xhr.open('POST', 'includes/models/model-editar-registro.php', true);
+			console.log('enviar1');
+			//Retorno de Datos
+			xhr.onload = function () {
+				if (this.status === 200) {
+					console.log('Recibe respuesta');
+					//esta es la respuesta la que tenemos en el model
+					// let respuesta = xhr.responseText;
+					let respuesta = JSON.parse(xhr.responseText);
+					console.log(respuesta);
+					if (respuesta.respuesta === 'correcto') {
+						//si es un nuevo usuario 
+						if (respuesta.tipo == 'editarCAI') {
+							Swal.fire({
+								icon: 'success',
+								title: '¡Actualización!',
+								text: 'Se ha realizado el cambio',
+								position: 'center',
+								showConfirmButton: true
+
+							}).then(function () {
+								// urllote = '?ID=' + lote + '&bloque=' + bloque;
+								window.location = "facturacion.php";
+							});;
+						}
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: 'Oops...',
+							text: 'Hubo un error en la solicitud'
+						})
+					}
+				}
+			}
+			// Enviar la petición
+			xhr.send(datos);
+		}
+	}
+}
 function editventa(e) {
 	e.preventDefault();
 	let fechaSolicitud = document.querySelector('#fechaSolicitud').value,
@@ -1870,3 +2174,73 @@ function calculatehoursindays() {
 	document.getElementById('horasDias').value = hoursinDays;
 
 }
+
+
+//Reloj
+function cargarReloj() {
+
+	// Haciendo uso del objeto Date() obtenemos la hora, minuto y segundo 
+	var fechahora = new Date();
+	var hora = fechahora.getHours();
+	var minuto = fechahora.getMinutes();
+	var segundo = fechahora.getSeconds();
+
+	// Variable meridiano con el valor 'AM' 
+	var meridiano = "PM";
+
+
+	// Si la hora es igual a 0, declaramos la hora con el valor 12 
+	if (hora == 0) {
+
+		hora = 12;
+
+	}
+
+	// Si la hora es mayor a 12, restamos la hora - 12 y mostramos la variable meridiano con el valor 'PM' 
+	if (hora < 12) {
+
+		hora = hora - 12;
+		// Variable meridiano con el valor 'PM' 
+		meridiano = "AM";
+
+	}
+
+	// Formateamos los ceros '0' del reloj 
+	hora = (hora < 10) ? "0" + hora : hora;
+	minuto = (minuto < 10) ? "0" + minuto : minuto;
+	segundo = (segundo < 10) ? "0" + segundo : segundo;
+
+	// Enviamos la hora a la vista HTML 
+	var tiempo = hora + ":" + minuto + ":" + segundo + " " + meridiano;
+	document.getElementById("relojnumerico").innerText = tiempo;
+	document.getElementById("relojnumerico").textContent = tiempo;
+
+	// Cargamos el reloj a los 500 milisegundos 
+	setTimeout(cargarReloj, 500);
+
+}
+
+// Ejecutamos la función 'CargarReloj' 
+cargarReloj();
+
+
+var archivo = document.querySelector("#seleccionArchivos");
+archivo.addEventListener("change", function (event) {
+	console.log('Hola');
+	var imagen = archivo.files[0];
+	if (imagen) {
+		console.log(imagen);
+		var lector = new FileReader();
+		console.log(lector);
+		// lector.readAsText(imagen);
+		let esto = lector.readAsDataURL(imagen);
+		console.log(esto);
+		console.log(lector.result);
+		// document.getElementById("imagenPrevisualizacion").src = lector.result;
+		lector.addEventListener("load", function () {
+			document.getElementById("imagenPrevisualizacion").value = lector.result;
+			document.getElementById("imagenPrevisualizacion").src = lector.result;
+		});
+	}
+}
+);

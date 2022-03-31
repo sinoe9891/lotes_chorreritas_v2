@@ -41,7 +41,7 @@ include 'includes/templates/sidebar.php';
 								<th>Contrato</th>
 								<th>Fecha</th>
 								<th>Tip.V.</th>
-								<th>Total</th>
+								<th>Total Venta</th>
 								<th>Estado</th>
 								<th>Contrato</th>
 								<th>Acciones</th>

@@ -119,3 +119,121 @@ if ($accion === 'eliminar-venta') {
 
 	echo json_encode($respuesta);
 }
+
+
+if ($accion === 'eliminar-credito') {
+	// importar la conexion
+	include '../conexion.php';
+	try {
+		// Realizar la consulta a la base de datos
+		$stmt = $conn->prepare("DELETE FROM control_credito_lote WHERE id_compra = ? ");
+		$stmt->bind_param('s', $id);
+		$stmt->execute();
+		if ($stmt->affected_rows > 0) {
+			$respuesta = array(
+				'respuesta' => 'correcto'
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error'
+			);
+		}
+		$stmt->close();
+		$conn->close();
+	} catch (Exception $e) {
+		// En caso de un error, tomar la exepcion
+		$respuesta = array(
+			'error' => $e->getMessage()
+		);
+	}
+
+	echo json_encode($respuesta);
+}
+
+
+
+
+
+if ($accion === 'eliminar-cuota-pagada') {
+	// importar la conexion
+	include '../conexion.php';
+	try {
+		// Realizar la consulta a la base de datos
+		$consulta1 = $conn->query("SELECT id_cuota_pagada, cantidad_pagada, id_contrato FROM cobros WHERE id_cobro = $id");
+		//while el id_cuota_pagada
+		while ($row = $consulta1->fetch_assoc()) {
+			$id_cuota_pagada = $row['id_cuota_pagada'];
+			$id_contrato = $row['id_contrato'];
+			$cantidad_pagada = $row['cantidad_pagada'];
+			echo $cantidad_pagada;
+			//actualizar todos los datos de la tabla control_credito_lote por medio de una consulta con el $id_cuota_pagada
+			//actualizar saldo actual sumando cantidad_pagada
+			$consulta2 = $conn->query("UPDATE ficha_compra SET saldo_actual = saldo_actual + $cantidad_pagada WHERE id_ficha_compra = $id_contrato");
+			//imprimir $consulta2
+			
+
+			//eliminar todos los datos de la tabla cobros por medio de una consulta con el $id
+			$stmt = $conn->prepare("DELETE FROM cobros WHERE id_cobro = ?");
+			$stmt->bind_param('s', $id);
+			$stmt->execute();
+		
+		}
+		if ($consulta1->num_rows > 0) {
+			$respuesta = array(
+				'respuesta' => 'correcto',
+				'id' => $id,
+				'numero' => $consulta1->num_rows,
+				'estado' => $estado
+
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+				'id' => $id,
+				'numero' => $consulta1->num_rows,
+				'estado' => $estado
+			);
+		}
+		$stmt->close();
+		$conn->close();
+	} catch (Exception $e) {
+		// En caso de un error, tomar la exepcion
+		$respuesta = array(
+			'error' => $e->getMessage()
+		);
+	}
+	echo json_encode($respuesta);
+}
+
+if ($accion === 'eliminar-cai') {
+	// importar la conexion
+	include '../conexion.php';
+	try {
+		// Realizar la consulta a la base de datos
+		$stmt = $conn->prepare("DELETE FROM info_cai WHERE id_cai = ? ");
+		$stmt->bind_param('s', $id);
+		$stmt->execute();
+
+		$stmt1 = $conn->prepare("DELETE FROM facturas WHERE id_cai = ? ");
+		$stmt1->bind_param('s', $id);
+		$stmt1->execute();
+		if ($stmt->affected_rows > 0) {
+			$respuesta = array(
+				'respuesta' => 'correcto'
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error'
+			);
+		}
+		$stmt->close();
+		$conn->close();
+	} catch (Exception $e) {
+		// En caso de un error, tomar la exepcion
+		$respuesta = array(
+			'error' => $e->getMessage()
+		);
+	}
+
+	echo json_encode($respuesta);
+}

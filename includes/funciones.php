@@ -68,6 +68,16 @@ function obtenerInfoVenta($id = null) {
         return false;
     }
 }
+function obtenerInfoCAI($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM info_cai WHERE id_cai = {$id}");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
 function obtenerInfoLoteComprado($id = null) {
     include 'conexion.php';
     try {
@@ -96,6 +106,25 @@ function obtenerFichas() {
     include 'conexion.php';
     try {
 		return $conn->query("SELECT * FROM ficha_directorio WHERE estado_registro = 0 ORDER BY id DESC");
+    } catch(Exception $e) {
+		echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+
+function obtenerFichasCompra() {
+    include 'conexion.php';
+    try {
+		return $conn->query("SELECT a.id_ficha_compra, b.id, b.nombre_completo, a.id_contrato_compra FROM ficha_compra a, ficha_directorio b WHERE b.id = a.id_registro and a.estado = 'en' ORDER BY b.nombre_completo DESC");
+    } catch(Exception $e) {
+		echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+function obtenerEmpresa() {
+    include 'conexion.php';
+    try {
+		return $conn->query("SELECT * FROM info_empresa ORDER BY nombre DESC");
     } catch(Exception $e) {
 		echo "Error! : " . $e->getMessage();
         return false;

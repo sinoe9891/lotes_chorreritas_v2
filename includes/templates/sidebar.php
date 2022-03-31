@@ -1,4 +1,4 @@
-<body onload="minimizar()">
+<body onload="minimizar();cargarReloj()">
 	<div id="app">
 		<div id="sidebar" class="active">
 			<div class="sidebar-wrapper active">
@@ -56,6 +56,16 @@
 				} else {
 					$creditos = '';
 				}
+				if (obtenerPaginaActual() == 'cobros' || obtenerPaginaActual() == 'new-cobro') {
+					$cobros = 'active';
+				} else {
+					$cobros = '';
+				}
+				if (obtenerPaginaActual() == 'facturacion' || obtenerPaginaActual() == 'new-facturacion' || obtenerPaginaActual() == 'edit-cai') {
+					$facturacion = 'active';
+				} else {
+					$facturacion = '';
+				}
 				?>
 				<div class="sidebar-menu">
 					<ul class="menu">
@@ -78,12 +88,12 @@
 								</li>
 							</ul>
 						</li>
-						<li class="sidebar-item  has-sub <?php echo $clientes . $ventas ?>">
+						<li class="sidebar-item  has-sub <?php echo $clientes . $ventas . $cobros ?>">
 							<a href="#" class='sidebar-link'>
 								<i class="fa fa-table"></i>
 								<span>Facturación</span>
 							</a>
-							<ul class="submenu <?php echo $clientes . $ventas . $creditos ?>">
+							<ul class="submenu <?php echo $clientes . $ventas . $creditos . $cobros ?>">
 								<li class="submenu-item <?php echo $clientes ?>">
 									<a href="clientes.php">Clientes</a>
 								</li>
@@ -93,8 +103,8 @@
 								<li class="submenu-item <?php echo $creditos ?>">
 									<a href="creditos.php">Créditos</a>
 								</li>
-								<li class="submenu-item ">
-									<a href="#">Cobros</a>
+								<li class="submenu-item <?php echo $cobros ?>">
+									<a href="cobros.php">Cobros</a>
 								</li>
 								<li class="submenu-item ">
 									<a href="#">Cotizaciones</a>
@@ -118,12 +128,15 @@
 								</li>
 							</ul>
 						</li>
-						<li class="sidebar-item  has-sub">
+						<li class="sidebar-item  has-sub <?php echo $facturacion ?>">
 							<a href="#" class='sidebar-link'>
 								<i class="bi bi-life-preserver"></i>
 								<span>Configuración</span>
 							</a>
-							<ul class="submenu">
+							<ul class="submenu <?php echo $facturacion ?>">
+								<li class="submenu-item <?php echo $facturacion ?>">
+									<a href="facturacion.php">Facturación</a>
+								</li>
 								<li class="submenu-item">
 									<a href="backup_database.php?pass=Stark9891">Backup DB</a>
 								</li>

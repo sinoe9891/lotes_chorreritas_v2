@@ -50,6 +50,39 @@ function addEventListener() {
 			}
 		});
 	}
+	//Acciones de solicitudes
+	let solicitudCredito = document.querySelector('.eliminar-credito');
+	if (solicitudCredito) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-credito';
+		solicitudCredito.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event,modelo,eliminar);
+			}
+		});
+	}
+	//Acciones de Cuota
+	let solicitudCuotaPagada = document.querySelector('.eliminar-cuota-pagada');
+	if (solicitudCuotaPagada) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-cuota-pagada';
+		solicitudCuotaPagada.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event,modelo,eliminar);
+			}
+		});
+	}
+	//Acciones de Cuota
+	let solicitudCai = document.querySelector('.eliminar-cai');
+	if (solicitudCai) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-cai';
+		solicitudCai.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event,modelo,eliminar);
+			}
+		});
+	}
 
 	let fichaGraduado = document.querySelector('.caja-ficha');
 	if (fichaGraduado) {
