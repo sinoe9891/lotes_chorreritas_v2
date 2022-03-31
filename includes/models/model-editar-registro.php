@@ -72,12 +72,25 @@ if ($accion === 'solicitud') {
 	//Importar la conexión
 	include '../conexion.php';
 	try {
-		$stmt = $conn->prepare("UPDATE ficha_directorio a, conyugue b, beneficiario c, financiera d, referencias e SET a.nombre_completo= ?, a.fecha_nacimiento= ?, a.nacionalidad= ?, a.identidad= ?, a.genero= ?, a.estado_civil= ?, a.direccion= ?, a.ciudad= ?, a.departamento= ?, a.telefono= ?, a.celular= ?, a.dependientes= ?, a.correo= ?, a.profesion= ?, a.observaciones=?, a.lugar_empleo= ?, a.direccion_empleo= ?, a.cargo= ?, a.tiempo_laborando= ?, a.telefono_empleo = ?, a.pais_reside = ?, b.nombre_conyugue= ?, b.identidad_conyugue= ?, b.fechnac_conyugue= ?, b.celular_conyugue= ?, b.empresa_labora_conyugue= ?, b.telefono_empleo_conyugue= ?, b.cargo_conyugue= ?, b.tiempo_laborando_conyugue= ?, c.nombre_beneficiario = ?, c.identidad_beneficiario = ?, c.genero_beneficiario = ?, c.pais_reside_beneficiario= ? ,c.direccion_beneficiario = ?, c.ciudad_beneficiario = ?, c.departamento_beneficiario = ?, c.celular_beneficiario= ?, d.sueldos=?, d.remesas=?, d.otros_ingresos=?, d.prestamos=?, d.alquiler=?, d.otros_egresos=?, e.nombre_referencia = ?, e.direccion_referencia = ?, e.celular_referencia = ?, e.telefono_referencia= ?, e.empresa_labora_referencia=?, e.telefono_empleo_referencia=?  WHERE a.id = ? and b.id_registro = ? and c.id_registro = ? and d.id_registro = ? and e.id_referencia = ? and e.id_registro = ?");
-		$stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssssssssssssssss', $nombres, $fechanac, $nacionalidad, $identidad, $genero, $estado_civil, $direccion, $ciudad, $departamento, $telefono, $celular, $dependientes, $email, $profesion, $observaciones, $empresa_labora, $direccion_empleo, $cargo, $tiempo_laborando, $telefono_empleo, $pais_reside, $nombre_conyugue, $identidad_conyugue, $fechnac_conyugue,  $celular_conyugue, $empresa_labora_conyugue, $telefono_empleo_conyugue, $cargo_conyugue, $tiempo_laborando_conyugue, $nombre_beneficiario, $identidad_beneficiario, $genero_beneficiario, $pais_reside_beneficiario, $direccion_beneficiario, $ciudad_beneficiario, $departamento_beneficiario, $celular_beneficiario, $sueldos, $remesas, $otros_ingresos, $prestamos, $alquiler, $otros_egresos, $nombre_referencia_1, $direccion_referencia_1, $celular_referencia_1, $telefono_referencia_1, $empresa_labora_referencia_1, $telefono_empleo_referencia_1, $id_user, $id_user, $id_user, $id_user, $id_referencia_1, $id_user);
+		$stmt = $conn->prepare("UPDATE ficha_directorio a, conyugue b, beneficiario c, financiera d, referencias e SET a.nombre_completo= ?, a.fecha_nacimiento= ?, a.nacionalidad= ?, 
+a.identidad= ?, a.genero= ?, a.estado_civil= ?, a.direccion= ?, a.ciudad= ?, a.departamento= ?, a.telefono= ?, a.celular= ?, a.dependientes= ?, a.correo= ?, a.profesion= ?, a.observaciones=?, 
+a.lugar_empleo= ?, a.direccion_empleo= ?, a.cargo= ?, a.tiempo_laborando= ?, a.telefono_empleo = ?, a.pais_reside = ?, b.nombre_conyugue= ?, b.identidad_conyugue= ?, b.fechnac_conyugue= ?, 
+b.celular_conyugue= ?, b.empresa_labora_conyugue= ?, b.telefono_empleo_conyugue= ?, b.cargo_conyugue= ?, b.tiempo_laborando_conyugue= ?, c.nombre_beneficiario = ?, c.identidad_beneficiario = ?, 
+c.genero_beneficiario = ?, c.pais_reside_beneficiario= ? ,c.direccion_beneficiario = ?, c.ciudad_beneficiario = ?, c.departamento_beneficiario = ?, c.celular_beneficiario= ?, d.sueldos=?, 
+d.remesas=?, d.otros_ingresos=?, d.prestamos=?, d.alquiler=?, d.otros_egresos=?, e.nombre_referencia = ?, e.direccion_referencia = ?, e.celular_referencia = ?, e.telefono_referencia= ?, 
+e.empresa_labora_referencia=?, e.telefono_empleo_referencia=?  WHERE a.id = ? and b.id_registro = ? and c.id_registro = ? and d.id_registro = ? and e.id_referencia = ? and e.id_registro = ?");
+		$stmt->bind_param('sssssssssssssssssssssssssssssssssssssssssssssssssssssss', $nombres, $fechanac, $nacionalidad, $identidad, $genero, $estado_civil, $direccion, $ciudad, 
+$departamento, $telefono, $celular, $dependientes, $email, $profesion, $observaciones, $empresa_labora, $direccion_empleo, $cargo, $tiempo_laborando, $telefono_empleo, $pais_reside, 
+$nombre_conyugue, $identidad_conyugue, $fechnac_conyugue,  $celular_conyugue, $empresa_labora_conyugue, $telefono_empleo_conyugue, $cargo_conyugue, $tiempo_laborando_conyugue, 
+$nombre_beneficiario, $identidad_beneficiario, $genero_beneficiario, $pais_reside_beneficiario, $direccion_beneficiario, $ciudad_beneficiario, $departamento_beneficiario, $celular_beneficiario, 
+$sueldos, $remesas, $otros_ingresos, $prestamos, $alquiler, $otros_egresos, $nombre_referencia_1, $direccion_referencia_1, $celular_referencia_1, $telefono_referencia_1, 
+$empresa_labora_referencia_1, $telefono_empleo_referencia_1, $id_user, $id_user, $id_user, $id_user, $id_referencia_1, $id_user);
 		$stmt->execute();
 
-		$stmt1 = $conn->prepare("UPDATE referencias SET nombre_referencia = ?, direccion_referencia = ?, celular_referencia = ?, telefono_referencia= ?, empresa_labora_referencia=?, telefono_empleo_referencia=? WHERE id_referencia = ? and id_registro = ?");
-		$stmt1->bind_param('ssssssss', $nombre_referencia_2, $direccion_referencia_2, $celular_referencia_2, $telefono_referencia_2, $empresa_labora_referencia_2, $telefono_empleo_referencia_2, $id_referencia_2, $id_user);
+		$stmt1 = $conn->prepare("UPDATE referencias SET nombre_referencia = ?, direccion_referencia = ?, celular_referencia = ?, telefono_referencia= ?, empresa_labora_referencia=?, 
+telefono_empleo_referencia=? WHERE id_referencia = ? and id_registro = ?");
+		$stmt1->bind_param('ssssssss', $nombre_referencia_2, $direccion_referencia_2, $celular_referencia_2, $telefono_referencia_2, $empresa_labora_referencia_2, 
+$telefono_empleo_referencia_2, $id_referencia_2, $id_user);
 		$stmt1->execute();
 
 		if ($stmt->affected_rows > 0 || $stmt1->affected_rows > 0 || $stmt1->affected_rows == 0 || $stmt->affected_rows == 0) {
@@ -293,8 +306,10 @@ if ($accion === 'editarventa') {
 	include '../conexion.php';
 	try {
 		//Preparar la consulta de insertar bloque
-		$statement = $conn->prepare("UPDATE ficha_compra SET fechaSolicitud = ?, horaSolicitud = ?, id_registro = ?, fecha_venta = ?, prima = ?, plazo_anios = ?, dia_pago = ?, fecha_primer_cuota = ?, plazo_meses = ?, tipo = ?, id_proyecto = ?, estado = ?, vendedor = ?, cuenta_bancaria = ? WHERE id_ficha_compra = ?");
-		$statement->bind_param('sssssssssssssss', $fechaSolicitud, $horaSolicitud, $id_registro, $fecha_venta, $prima, $plazo_anios, $dia_pago, $fecha_primer_cuota, $plazo_meses, $tipo_venta, $proyecto, $estado, $vendedor, $cuenta_bancaria, $id_ficha_compra);
+		$statement = $conn->prepare("UPDATE ficha_compra SET fechaSolicitud = ?, horaSolicitud = ?, id_registro = ?, fecha_venta = ?, prima = ?, plazo_anios = ?, dia_pago = ?, 
+fecha_primer_cuota = ?, plazo_meses = ?, tipo = ?, id_proyecto = ?, estado = ?, vendedor = ?, cuenta_bancaria = ? WHERE id_ficha_compra = ?");
+		$statement->bind_param('sssssssssssssss', $fechaSolicitud, $horaSolicitud, $id_registro, $fecha_venta, $prima, $plazo_anios, $dia_pago, $fecha_primer_cuota, $plazo_meses, 
+$tipo_venta, $proyecto, $estado, $vendedor, $cuenta_bancaria, $id_ficha_compra);
 		$statement->execute();
 
 
@@ -387,7 +402,8 @@ if ($accion === 'editarventa') {
 
 	if ($estado == 'en') {
 		include '../conexion.php';
-		$consultaFechaCuota = $conn->query("SELECT a.fecha_primer_cuota, a.plazo_meses, a.total_venta, a.cuota, a.saldo_actual FROM ficha_compra a WHERE a.id_ficha_compra = $id_ficha_compra");
+		$consultaFechaCuota = $conn->query("SELECT a.fecha_primer_cuota, a.plazo_meses, a.total_venta, a.cuota, a.saldo_actual FROM ficha_compra a WHERE a.id_ficha_compra = 
+$id_ficha_compra");
 		$ajusteProyecto = $consultaFechaCuota->fetch_assoc();
 		$fecha_cuota = $ajusteProyecto['fecha_primer_cuota'];
 		$total_venta = $ajusteProyecto['saldo_actual'];
@@ -412,7 +428,8 @@ if ($accion === 'editarventa') {
 		// 	//restar la cuota de $total_venta
 		// 	// $total_venta = $total_venta - $cuota;
 		// 	$no_cuota = $i+1;
-		// 	$insertarFechas = $conn->query("INSERT INTO control_credito_lote (id_compra, fecha_pago, fecha_vencimiento, no_cuota, monto_restante, estado_cuota) VALUES ($id_ficha_compra,'$fecha_pago1', '$fecha_vencimiento', '$no_cuota', '$total_venta', '$estado_cuota')");
+		// 	$insertarFechas = $conn->query("INSERT INTO control_credito_lote (id_compra, fecha_pago, fecha_vencimiento, no_cuota, monto_restante, estado_cuota) VALUES 
+($id_ficha_compra,'$fecha_pago1', '$fecha_vencimiento', '$no_cuota', '$total_venta', '$estado_cuota')");
 		// }
 	}
 }
@@ -462,7 +479,8 @@ if ($accion === 'editarCAI') {
 			return;
 		}
 		try {
-			$stmt = $conn->prepare("UPDATE info_cai SET cai = ?, fecha_emision = ?, fecha_limite = ?, cantidad_otorgada = ?, rango_inicial = ?, rango_final = ?, id_empresa = ?, estado_cai = ? WHERE id_cai = ?");
+			$stmt = $conn->prepare("UPDATE info_cai SET cai = ?, fecha_emision = ?, fecha_limite = ?, cantidad_otorgada = ?, rango_inicial = ?, rango_final = ?, id_empresa = ?, 
+estado_cai = ? WHERE id_cai = ?");
 			$stmt->bind_param("ssssssssi", $codigo_cai, $fecha_emision, $fecha_limite, $cantidad_otorgada, $rango_inicial, $rango_final, $empresa_cai, $estado, $id_cai);
 			$stmt->execute();
 			genrarFacturas($cantidad_otorgada, $rango_inicial, $rango_final, $id_cai);
@@ -492,7 +510,8 @@ if ($accion === 'editarCAI') {
 	}if ($estado == 'ina') {
 		// $estado = $_POST['ina'];
 		try {
-			$stmt = $conn->prepare("UPDATE info_cai SET cai = ?, fecha_emision = ?, fecha_limite = ?, cantidad_otorgada = ?, rango_inicial = ?, rango_final = ?, id_empresa = ?, estado_cai = ? WHERE id_cai = ?");
+			$stmt = $conn->prepare("UPDATE info_cai SET cai = ?, fecha_emision = ?, fecha_limite = ?, cantidad_otorgada = ?, rango_inicial = ?, rango_final = ?, id_empresa = ?, 
+estado_cai = ? WHERE id_cai = ?");
 			$stmt->bind_param("ssssssssi", $codigo_cai, $fecha_emision, $fecha_limite, $cantidad_otorgada, $rango_inicial, $rango_final, $empresa_cai, $estado, $id_cai);
 			$stmt->execute();
 			if ($stmt->affected_rows > 0) {
@@ -520,3 +539,4 @@ if ($accion === 'editarCAI') {
 		echo json_encode($respuesta);
 	}
 }
+
