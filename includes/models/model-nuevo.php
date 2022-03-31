@@ -409,14 +409,33 @@ if ($accion === 'newCobro') {
 	//Pasar a Minusculas
 	$namefile = strtolower(quitar_acentos(str_replace($searchString, $replaceString, $name)));
 
-	
 
 	$monto_restante = $monto_restante - $valor_cuota;
 	$stmt = $conn->prepare("UPDATE ficha_compra SET saldo_actual = ? WHERE id_ficha_compra = ?");
 	$stmt->bind_param('ss', $monto_restante, $id_compra);
 	$stmt->execute();
-	echo $stmt->error;
+	// echo $stmt->error;
 
+
+	//comprobar si ya estamos en el ultimo registro de la tabla
+	$stmt = $conn->prepare("SELECT id_ficha_compra, saldo_actual, total_venta, id_registro FROM ficha_compra WHERE id_ficha_compra = ?");
+	$stmt->bind_param('s', $id_compra);
+	$stmt->execute();
+	$resultado = $stmt->get_result();
+	$row = $resultado->fetch_assoc();
+	$id_ficha_compra = $row['id_ficha_compra'];
+	$saldo_actual = $row['saldo_actual'];
+	$total_venta = $row['total_venta'];
+	$id_registro = $row['id_registro'];
+	$concluido = 'co';
+
+	if ($resultado->num_rows > 0) {
+		if ($saldo_actual == 0) {
+			$stmt = $conn->prepare("UPDATE ficha_compra SET estado = ? WHERE id_ficha_compra = ? AND id_registro = ?");
+			$stmt->bind_param('sss', $concluido, $id_compra, $id_registro);
+			$stmt->execute();
+		}
+	}
 
 	if (isset($_FILES["archivos"]["name"])) {
 		$imagenes = count($_FILES["archivos"]["name"]);

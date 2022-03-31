@@ -24,9 +24,7 @@ if ($_POST['mi_busqueda'] != "") {
 		$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago . " +1 month"));
 		if ($monto_restante < $cuota) {
 			$cuota = $monto_restante;
-		} else {
-			$monto_restante = $monto_restante;
-		}
+		} 
 		echo
 		'	<div class="form-group">
 					<label for="first-name-column">Fecha de de Pago</label>
