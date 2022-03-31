@@ -207,7 +207,7 @@ include('includes/templates/footer.php');
 
 		$.ajax({
 			data: parametros,
-			url: 'includes/models/model-autocomplete1.php',
+			url: 'includes/models/model-autocomplete.php',
 			type: 'POST',
 
 			beforesend: function() {
