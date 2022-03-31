@@ -671,7 +671,6 @@ function newCAI(e) {
 function newCobro(e) {
 	e.preventDefault();
 	let tipo = document.querySelector('#tipo').value,
-		id_cuota_pagada = document.querySelector('#id_cuota_pagada').value,
 		id_compra = document.querySelector('#id_compra').value,
 		valor_cuota = document.querySelector('#valor_cuota').value,
 		fecha_cuota = document.querySelector('#fecha_cuota').value,
@@ -722,7 +721,6 @@ function newCobro(e) {
 		//Crear  FormData - Datos que se envían al servidor
 		console.log('enviar');
 		let datos = new FormData();
-		datos.append('id_cuota_pagada', id_cuota_pagada);
 		datos.append('id_compra', id_compra);
 		datos.append('valor_cuota', valor_cuota);
 		datos.append('fecha_cuota', fecha_cuota);
