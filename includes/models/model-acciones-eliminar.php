@@ -159,45 +159,39 @@ if ($accion === 'eliminar-cuota-pagada') {
 	include '../conexion.php';
 	try {
 		// Realizar la consulta a la base de datos
-		$consulta1 = $conn->query("SELECT id_cuota_pagada FROM cobros WHERE id_cobro = $id");
+		$consulta1 = $conn->query("SELECT id_cuota_pagada, cantidad_pagada, id_contrato FROM cobros WHERE id_cobro = $id");
 		//while el id_cuota_pagada
 		while ($row = $consulta1->fetch_assoc()) {
 			$id_cuota_pagada = $row['id_cuota_pagada'];
+			$id_contrato = $row['id_contrato'];
+			$cantidad_pagada = $row['cantidad_pagada'];
+			echo $cantidad_pagada;
 			//actualizar todos los datos de la tabla control_credito_lote por medio de una consulta con el $id_cuota_pagada
-			$stmt1 = $conn->prepare("UPDATE control_credito_lote SET estado_cuota = 'pen' WHERE id_credito_lote = ?");
-			$stmt1->bind_param('s', $id_cuota_pagada);
-			$stmt1->execute();
-			if ($stmt1->affected_rows > 0) {
-				$respuesta = array(
-					'respuesta' => 'correcto',
-					'id' => $id,
-					'id_cuota_pagada' => $id_cuota_pagada
-				);
-			} else {
-				$respuesta = array(
-					'respuesta' => 'error',
-					'id' => $id,
-					'id_cuota_pagada' => $id_cuota_pagada
-				);
-			}
-			// }
+			//actualizar saldo actual sumando cantidad_pagada
+			$consulta2 = $conn->query("UPDATE ficha_compra SET saldo_actual = saldo_actual + $cantidad_pagada WHERE id_ficha_compra = $id_contrato");
+			//imprimir $consulta2
+			
+
+			//eliminar todos los datos de la tabla cobros por medio de una consulta con el $id
+			$stmt = $conn->prepare("DELETE FROM cobros WHERE id_cobro = ?");
+			$stmt->bind_param('s', $id);
+			$stmt->execute();
+		
 		}
-
-		$stmt = $conn->prepare("DELETE FROM cobros WHERE id_cobro = ? ");
-		$stmt->bind_param('s', $id);
-		$stmt->execute();
-
-		if ($stmt->affected_rows > 0) {
+		if ($consulta1->num_rows > 0) {
 			$respuesta = array(
 				'respuesta' => 'correcto',
 				'id' => $id,
-				// 'numero' => $consulta->num_rows,
-				// 'id_cuota' =>  $id_cuota_pagada,
+				'numero' => $consulta1->num_rows,
 				'estado' => $estado
+
 			);
 		} else {
 			$respuesta = array(
-				'respuesta' => 'error'
+				'respuesta' => 'error',
+				'id' => $id,
+				'numero' => $consulta1->num_rows,
+				'estado' => $estado
 			);
 		}
 		$stmt->close();
@@ -208,7 +202,6 @@ if ($accion === 'eliminar-cuota-pagada') {
 			'error' => $e->getMessage()
 		);
 	}
-
 	echo json_encode($respuesta);
 }
 

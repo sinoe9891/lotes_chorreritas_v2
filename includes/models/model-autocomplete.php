@@ -20,7 +20,7 @@ if (isset($_POST['mi_busqueda'])) {
 				</div>
 				<div class="form-group">
 					<label for="company-column">Cuota Mensual (L.)</label>
-					<input type="number" class="form-control" name="valor_cuota" id="valor_cuota" value="' . $consulta['cuota'] . '" placeholder="00.00" readonly>
+					<input type="number" class="form-control" name="valor_cuota" id="valor_cuota" step="0.01" value="' . $consulta['cuota'] . '" placeholder="' . $consulta['cuota'] . '">
 				</div>
 			';
 	}

@@ -64,7 +64,7 @@ include 'includes/templates/sidebar.php';
 								$precio_vara2 = 0;
 							}
 
-							$consulta = $conn->query("SELECT DISTINCT a.id_cobro, d.nombre_completo, a.cantidad_pagada, a.no_referencia, a.tipo_comprobante, a.fecha_pagada, a.url_comprobante FROM cobros a, control_credito_lote b, ficha_compra c, ficha_directorio d WHERE b.id_compra = c.id_ficha_compra and c.id_registro = d.id ORDER BY a.id_cobro DESC;");
+							$consulta = $conn->query("SELECT DISTINCT a.id_cobro, d.nombre_completo, a.cantidad_pagada, a.no_referencia, a.tipo_comprobante, a.fecha_pagada, a.url_comprobante FROM cobros a, ficha_compra c, ficha_directorio d WHERE a.id_contrato = c.id_ficha_compra and c.id_registro = d.id ORDER BY a.id_cobro DESC;");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;

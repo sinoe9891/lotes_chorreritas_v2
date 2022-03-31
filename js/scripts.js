@@ -671,16 +671,19 @@ function newCAI(e) {
 function newCobro(e) {
 	e.preventDefault();
 	let tipo = document.querySelector('#tipo').value,
-		id_cuota_pagada = document.querySelector('#id_cuota_pagada').value,
 		id_compra = document.querySelector('#id_compra').value,
 		valor_cuota = document.querySelector('#valor_cuota').value,
 		fecha_cuota = document.querySelector('#fecha_cuota').value,
+		fecha_pagada = document.querySelector('#fecha_pagada').value,
+		fecha_vencimiento = document.querySelector('#fecha_vencimiento').value,
+
 		id_banco = document.querySelector('#id_banco').value,
 		tipo_comprobante = document.querySelector('#tipo_comprobante').value,
 		no_cuota = document.querySelector('#no_cuota').value,
 		nombre_completo = document.querySelector('#nombre_completo').value,
 		no_referencia = document.querySelector('#no_referencia').value,
 		forma_pago = document.querySelector('#forma_pago').value,
+		monto_restante = document.querySelector('#monto_restante').value,
 		fotos = document.querySelector('#seleccionArchivos').files;
 
 
@@ -722,16 +725,18 @@ function newCobro(e) {
 		//Crear  FormData - Datos que se envían al servidor
 		console.log('enviar');
 		let datos = new FormData();
-		datos.append('id_cuota_pagada', id_cuota_pagada);
 		datos.append('id_compra', id_compra);
 		datos.append('valor_cuota', valor_cuota);
 		datos.append('fecha_cuota', fecha_cuota);
+		datos.append('fecha_vencimiento', fecha_vencimiento);
+		datos.append('fecha_pagada', fecha_pagada);
 		datos.append('id_banco', id_banco);
 		datos.append('tipo_comprobante', tipo_comprobante);
 		datos.append('no_cuota', no_cuota);
 		datos.append('nombre_completo', nombre_completo);
 		datos.append('no_referencia', no_referencia);
 		datos.append('forma_pago', forma_pago);
+		datos.append('monto_restante', monto_restante);
 		for (const archivo of fotos) {
 			datos.append('archivos[]', archivo);
 		}

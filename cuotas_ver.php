@@ -1,5 +1,10 @@
 <?php
-	include 'includes/conexion.php';
+include 'includes/conexion.php';
+//ID POR MEDIO DE GET\
+if (isset($_GET['ID'])) {
+	$id = $_GET['ID'];
+}
+
 ?>
 <style>
 	table {
@@ -25,69 +30,211 @@
 
 	<h2>Pagos Control</h2>
 	<?php
-		date_default_timezone_set('America/Tegucigalpa');
-		$DateAndTime = date('m-d-Y h:i:s a', time());
-		echo "Hoy es: $DateAndTime.";
+	date_default_timezone_set('America/Tegucigalpa');
+	$DateAndTime = date('m-d-Y h:i:s a', time());
+	echo "Hoy es: $DateAndTime.";
 	?>
 	<table>
-		<tr>
-			<th>No. Cuota</th>
-			<th>Cliente</th>
-			<th>Fecha Pago</th>
-			<th>Siguiente Pago</th>
-			<th>Restante</th>
-			<th>Total Venta</th>
-			<th>Estado</th>
-		</tr>
+
 		<?php
 		//consulta
-		$estadoCuenta = $conn->query("SELECT * FROM ficha_compra WHERE id_ficha_compra = '1'");
+		$estadoCuenta = $conn->query("SELECT * FROM ficha_compra WHERE id_ficha_compra = $id");
 		$contador = 1;
 		while ($cuotaresult = $estadoCuenta->fetch_array()) {
-		$cuota = $cuotaresult['cuota'];
-		echo $cuota;
+			$cuota = $cuotaresult['cuota'];
+			// echo $cuota;
 		}
 
 
-		
+		$idcompra = $id;
 		// $estadoCuenta = $conn->query("SELECT * FROM control_credito_lote a, ficha_compra b WHERE a.id_compra = 15 and b.id_ficha_compra = a.id_compra");
 		// $estadoCuenta = $conn->query("SELECT c.nombre_completo, a.id_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, MIN(id_credito_lote) ID FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id GROUP BY a.id_compra ORDER BY a.id_compra;");
-		$estadoCuenta = $conn->query("SELECT c.nombre_completo, b.id_ficha_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, a.estado_cuota, MIN(id_credito_lote) id_cuota FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id and a.id_compra = b.id_ficha_compra GROUP BY b.id_contrato_compra ORDER BY a.id_compra;");
+		$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $idcompra;");
 		$contador = 1;
-		while ($solicitud = $estadoCuenta->fetch_array()) {
-			$fecha_pago = $solicitud['fecha_pago'];
-			$nombre_completo = $solicitud['nombre_completo'];
-			$saldo_actual = $solicitud['saldo_actual'];
-			$cuota = $solicitud['cuota'];
-			$total_venta = $solicitud['total_venta'];
+		$numero = $estadoCuenta->num_rows;
+		echo $numero;
+		if ($estadoCuenta->num_rows > 0) {
 		?>
 			<tr>
-				<td><?php echo $contador++; ?></td>
-				<td><?php echo $nombre_completo; ?></td>
-				<td><?php echo $fecha_pago; ?></td>
-				<td><?php echo $cuota; ?></td>
-				<td><?php echo $saldo_actual; ?></td>
-				<td><?php echo $total_venta; ?></td>
-				<td>
-					<?php
-					$fecha_pago1 = new DateTime($fecha_pago);
-					echo '<p>' . $fecha_pago1->format('d-m-Y') . '</p>';
-					$fechahoy = new DateTime();
-					$interval = $fecha_pago1->diff($fechahoy);
-					$dias = $interval->format('%r%a');
-					echo '<p>' . $dias . '</p>';
-					if ($dias > 0) {
-						echo "<p>Vencido</p>";
-					} elseif ($dias == 0) {
-						echo "Vence hoy";
-					} elseif ($dias < 0) {
-						echo "Pendiente";
-					}
-					?>
-				</td>
+				<th>No.</th>
+				<th>Fecha de Pago</th>
+				<th>Cuota a pagar</th>
+				<th>Cuota Pagada</th>
+				<th>Saldo Pendiente</th>
+				<!-- <th>Fecha de Vencimiento</th> -->
+				<th>Retraso</th>
 			</tr>
+			<?php
+			while ($solicitud = $estadoCuenta->fetch_array()) {
+				$fecha_pago = $solicitud['fecha_cuota'];
+				$fecha_pago = new DateTime($fecha_pago);
+				$fecha_pago = $fecha_pago->format('d-m-Y');
+				$cuota = $solicitud['cuota'];
+				$cantidad_pagada = $solicitud['cantidad_pagada'];
+				$total_venta = $solicitud['total_venta'];
+				$plazo_meses = $solicitud['plazo_meses'];
+				$monto_restante = $solicitud['monto_restante'];
+				if ($monto_restante == 0) {
+					$cuota = $cantidad_pagada;
+				}
+				// echo $total_venta;
+				// $monto_restante = $total_venta - $cantidad_pagada;
 
-		<?php
-		}
-		?>
+			?>
+				<tr>
+					<td><?php echo $contador++; ?></td>
+					<td><?php echo $fecha_pago; ?></td>
+					<td><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></td>
+					<td><?php echo 'L.' . number_format($cantidad_pagada, 2, '.', ','); ?></td>
+					<td><?php echo 'L.' . number_format($monto_restante, 2, '.', ','); ?></td>
+					<td>
+						<p>Pagado</p>
+					<?php
+
+				}
+					?>
+					</td>
+				</tr>
+				<tr>
+					<?php
+					$cantidad_pagada = 0;
+					$bandera = false;
+					// echo $fecha_pago . "<br>";
+					$fecha_pago = date("d-m-Y", strtotime($fecha_pago . " +1 month"));
+					// $fecha_pago2 = date("d-m-Y", strtotime($fecha_pago . "+2 month")) . "<br>";
+					// echo $fecha_pago2;
+					$plazo_meses = $plazo_meses - $numero;
+					if ($monto_restante != 0) {
+						for ($i = 1; $i <= $plazo_meses; ++$i) {
+
+							$fecha_pago2 = date("d-m-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
+							// // insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
+							$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago . " +$i month"));
+							//restar la cuota de $total_venta\
+							if ($monto_restante > $cuota) {
+								$total_venta = $monto_restante - $cuota;
+								$no_cuota = $i + 1;
+								$monto_restante = $total_venta - $cantidad_pagada;
+							}
+
+							//ultima cuota sea igual al monto_restante
+							if ($monto_restante < $cuota && $monto_restante >= 0) {
+								$cuota = $monto_restante;
+								$monto_restante = 0;
+								$bandera = true;
+							}
+
+							# code...
+
+					?>
+							<td><?php echo $contador++; ?></td>
+							<td><?php echo $fecha_pago2; ?></td>
+							<td><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></td>
+							<td><?php echo 'L.' . number_format($cantidad_pagada, 2, '.', ','); ?></td>
+							<td><?php echo 'L.' . number_format($monto_restante, 2, '.', ','); ?></td>
+							<td>
+								<?php
+								$fecha_vencimiento = new DateTime($fecha_vencimiento);
+								// echo '<p>' . $fecha_vencimiento->format('d-m-Y') . '</p>';
+								$fechahoy = new DateTime();
+								$interval = $fecha_vencimiento->diff($fechahoy);
+								$dias = $interval->format('%r%a');
+								// echo '<p>' . $dias . '</p>';
+								if ($dias > 0) {
+									echo "<p>Vencido</p>";
+								} elseif ($dias == '0') {
+									echo "Vence hoy";
+								} elseif ($dias < '0') {
+									echo "Pendiente";
+								}
+
+								?>
+							</td>
+				</tr>
+				<?php
+							if ($bandera) {
+								// $cuota = $monto_restante;
+								break;
+							}
+						}
+					}
+				} else {
+					$estadoCuenta = $conn->query("SELECT a.nombre_completo, b.fecha_primer_cuota, b.total_venta, b.saldo_actual, b.cuota, b.total_venta, b.plazo_meses FROM ficha_directorio a, ficha_compra b WHERE b.id_ficha_compra = $idcompra and b.id_registro = a.id;");
+					$contador = 1;
+					$numero = $estadoCuenta->num_rows;
+					echo $numero;
+					?>
+			<tr>
+				<th>No.</th>
+				<th>Nombre</th>
+				<th>Fecha de Pago</th>
+				<th>Cuota a pagar</th>
+				<th>Cuota Pagada</th>
+				<th>Saldo Pendiente</th>
+				<!-- <th>Fecha de Vencimiento</th> -->
+				<th>Retraso</th>
+			</tr>
+			<?php
+					while ($solicitud = $estadoCuenta->fetch_array()) {
+						$fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
+						$nombre_completo = $solicitud['nombre_completo'];
+						$plazo_meses = $solicitud['plazo_meses'];
+						$saldo_actual = $solicitud['saldo_actual'];
+						$cuota = $solicitud['cuota'];
+						$total_venta = $solicitud['total_venta'];
+						for ($i = 0; $i <= $plazo_meses; ++$i) {
+							// cambiar estado de la primera cuota por siguiente
+							if ($i == 0) {
+								$estado_cuota = 'sig';
+								$fecha_pago1 = date("Y-m-d", strtotime($fecha_primer_cuota));
+								$total_venta = $total_venta;
+							} else {
+								$estado_cuota = 'pen';
+								$fecha_pago1 = date("Y-m-d", strtotime($fecha_primer_cuota . " +$i month"));
+								$total_venta = $total_venta - $cuota;
+							}
+							// $fecha_pago = date("d-m-Y", strtotime($fecha_cuota . " +$i month")) . "<br>";
+							// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
+							$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago1 . " +1 month"));
+							//restar la cuota de $total_venta
+							// $total_venta = $total_venta - $cuota;
+							$no_cuota = $i + 1;
+
+
+				?>
+				<tr>
+					<td><?php echo $contador++; ?></td>
+					<td><?php echo $nombre_completo; ?></td>
+					<td><?php echo $fecha_pago1; ?></td>
+					<td><?php echo $fecha_vencimiento; ?></td>
+					<td><?php echo $cuota; ?></td>
+					<!-- <td><?php echo $saldo_actual; ?></td> -->
+					<td><?php echo $total_venta; ?></td>
+					<td>
+						<?php
+							$fecha_pago1 = new DateTime($fecha_pago1);
+							echo '<p>' . $fecha_pago1->format('d-m-Y') . '</p>';
+							$fechahoy = new DateTime();
+							$interval = $fecha_pago1->diff($fechahoy);
+							$dias = $interval->format('%r%a');
+							echo '<p>' . $dias . '</p>';
+							if ($dias > 0) {
+								echo "<p>Vencido</p>";
+							} elseif ($dias == 0) {
+								echo "Vence hoy";
+							} elseif ($dias < 0) {
+								echo "Pendiente";
+							}
+						?>
+					</td>
+				</tr>
+
+	<?php
+						}
+					}
+				}
+	?>
+
+
+
 </body>

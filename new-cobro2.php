@@ -62,16 +62,14 @@ include 'includes/templates/sidebar.php';
 														<input type="hidden" id="fecha_pago" name="fecha_pago" value="<?php echo date('Y-m-d'); ?>">
 														<input type="hidden" id="hora_pago" name="horaSolicitud" value="<?php echo date('H:i:s'); ?>">
 														<select class="choices form-select" id="nombre_completo" name="nombre_completo" onchange="mi_busqueda();">
-															<option name="lote" value="">Buscar Contrato</option>
+															<option name="lote" value="">Buscar Cliente</option>
 															<?php
 															$nombres = obtenerFichasCompra();
 															if ($nombres->num_rows > 0) {
 																while ($row = $nombres->fetch_assoc()) {
-																	$id = $row['id_ficha_compra'];
-																	$id_contrato_compra = $row['id_contrato_compra'];
-																	// $id = $row['id'];
+																	$id = $row['id'];
 																	$nombre_completo = $row['nombre_completo'];
-																	echo '<option name="nombre_completo" value="' . $id . '">' . $id_contrato_compra . '</option>';
+																	echo '<option name="nombre_completo" value="' . $id . '">' . $nombre_completo . '</option>';
 																}
 															}
 															?>
@@ -209,7 +207,7 @@ include('includes/templates/footer.php');
 
 		$.ajax({
 			data: parametros,
-			url: 'includes/models/model-autocomplete1.php',
+			url: 'includes/models/model-autocomplete.php',
 			type: 'POST',
 
 			beforesend: function() {

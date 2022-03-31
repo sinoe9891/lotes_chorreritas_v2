@@ -395,25 +395,25 @@ if ($accion === 'editarventa') {
 		$estado_cuota = 'pen';
 		$plazo_meses = $plazo_meses-1;
 		//falta la variable plazo_meses
-		for ($i = 0; $i <= $plazo_meses; ++$i) {
-			// cambiar estado de la primera cuota por siguiente
-			if ($i == 0) {
-				$estado_cuota = 'sig';
-				$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota));
-				$total_venta = $total_venta;
-			} else {
-				$estado_cuota = 'pen';
-				$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota . " +$i month"));
-				$total_venta = $total_venta - $cuota;
-			}
-			// $fecha_pago = date("d-m-Y", strtotime($fecha_cuota . " +$i month")) . "<br>";
-			// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
-			$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago1 . " +1 month"));
-			//restar la cuota de $total_venta
-			// $total_venta = $total_venta - $cuota;
-			$no_cuota = $i+1;
-			$insertarFechas = $conn->query("INSERT INTO control_credito_lote (id_compra, fecha_pago, fecha_vencimiento, no_cuota, monto_restante, estado_cuota) VALUES ($id_ficha_compra,'$fecha_pago1', '$fecha_vencimiento', '$no_cuota', '$total_venta', '$estado_cuota')");
-		}
+		// for ($i = 0; $i <= $plazo_meses; ++$i) {
+		// 	// cambiar estado de la primera cuota por siguiente
+		// 	if ($i == 0) {
+		// 		$estado_cuota = 'sig';
+		// 		$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota));
+		// 		$total_venta = $total_venta;
+		// 	} else {
+		// 		$estado_cuota = 'pen';
+		// 		$fecha_pago1 = date("Y-m-d", strtotime($fecha_cuota . " +$i month"));
+		// 		$total_venta = $total_venta - $cuota;
+		// 	}
+		// 	// $fecha_pago = date("d-m-Y", strtotime($fecha_cuota . " +$i month")) . "<br>";
+		// 	// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
+		// 	$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago1 . " +1 month"));
+		// 	//restar la cuota de $total_venta
+		// 	// $total_venta = $total_venta - $cuota;
+		// 	$no_cuota = $i+1;
+		// 	$insertarFechas = $conn->query("INSERT INTO control_credito_lote (id_compra, fecha_pago, fecha_vencimiento, no_cuota, monto_restante, estado_cuota) VALUES ($id_ficha_compra,'$fecha_pago1', '$fecha_vencimiento', '$no_cuota', '$total_venta', '$estado_cuota')");
+		// }
 	}
 }
 
