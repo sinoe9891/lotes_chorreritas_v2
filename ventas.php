@@ -116,6 +116,7 @@ include 'includes/templates/sidebar.php';
 									<td> <span class="badge <?php echo $color ?> "> <?php echo $estadoVenta ?></span></td>
 									<td>Contrato</td>
 									<td>
+										<a href="cronograma.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Cronograma</span></a>
 										<a href="edit-venta.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 										<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
 										<i class="fas fa-trash"></i>
