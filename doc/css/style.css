@@ -1,0 +1,112 @@
+body {
+    /* background-image: url(./img/fondo.jpg); */
+    /* background-image-resize: 6; */
+    text-align: justify;
+    font-family: "Calibri, sans-serif";
+}
+
+.nombre {
+    /* padding: 420px 0 0 0; */
+    font-size: 25px;
+    /* border: 1px solid red; */
+}
+
+.parrafo {
+    font-size: 15px;
+	/* line-height: 1.5px; */
+}
+
+.mensaje {
+    padding-top: 70px;
+}
+
+.fechaCreacion {
+    padding-top: 40px;
+}
+
+.main {
+	margin-top:-120px;
+    width: 100%;
+    position: relative;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    width: 90%;
+}
+
+/* Factura */
+.main_factura {
+	/* margin-top:-120px;
+    width: 100%; */
+    /* position: relative; */
+	/* border:1px solid green; */
+}
+
+.container_factura {
+    margin:0;
+	text-align: center;
+    /* width: 100%; */
+	/* border:1px solid red; */
+}
+.container_factura p{
+	font-size:12px;
+	/* line-height:0.5px; */
+	margin-bottom: 1;
+	margin-top: 1.5;
+}
+
+.container_factura h5{
+	font-size:12px;
+	/* line-height:0.5px; */
+	margin-bottom: 0;
+	margin-top: 0;
+}
+
+hr{
+	margin: 7 0;
+	border-style: dashed !important;
+}
+.factura{
+	font-size:10px;
+}
+.center{
+	width: 100%;
+	border:0.2px dashed black;
+	text-align: center;
+}
+th{
+	text-align: right;
+}
+td{
+	text-align: left;
+}
+
+.center{
+	width: 100%;
+	text-align: center;
+}
+
+.container_factura p.info{
+	font-size:14px !important;
+	text-align: center;
+}
+.saldos{
+	width: 100%;
+}
+.saldos th{
+	text-align: left;
+}
+.saldos td{
+	text-align: right;
+}
+
+.container_factura p.exo{
+	font-size:12px !important;
+	text-align: left;
+}
+.container_factura p.exoneracion{
+	font-size:9px !important;
+	text-align: left;
+}

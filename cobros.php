@@ -76,19 +76,20 @@ include 'includes/templates/sidebar.php';
 								$tipo_comprobante = $solicitud['tipo_comprobante'];
 								$fecha_pagada = $solicitud['fecha_pagada'];
 								$url_comprobante = $solicitud['url_comprobante'];
+								$id_cobro = $solicitud['id_cobro'];
 								$fecha_pagada = date('d-m-Y', strtotime($fecha_pagada));
 							?>
-								<tr id="solicitud:<?php echo $solicitud['id_cobro'] ?>">
+								<tr id="solicitud:<?php echo $id_cobro ?>">
 									<td><?php echo $contador++; ?></td>
 									<td><?php echo $nombre_completo; ?></td>
 									<td><?php echo $cantidad_pagada; ?></td>
 									<td><?php echo $no_referencia; ?></td>
 									<td><?php echo $tipo_comprobante; ?></td>
 									<td><?php echo $fecha_pagada; ?></td>
-									<td><a href="<?php echo $url_comprobante; ?>" target="_blank">Ver</a></td>
+									<td><a href="doc/factura.php?ID=<?php echo $id_cobro; ?>" target="_blank">Ver</a></td>
 									<td><a href="<?php echo $url_comprobante; ?>" target="_blank">Ver</a></td>
 									<td>
-										<button type="button" class="fas fa-trash btn btn-danger btn-sm"  data-id="<?php echo $solicitud['id_cobro'] ?>">Eliminar</button>
+										<button type="button" class="fas fa-trash btn btn-danger btn-sm"  data-id="<?php echo $id_cobro ?>">Eliminar</button>
 									</td>
 								</tr>
 							<?php
