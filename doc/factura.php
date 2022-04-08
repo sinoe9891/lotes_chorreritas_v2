@@ -35,7 +35,23 @@ if (isset($_GET['ID'])) {
 	$cuatro2 = substr($new_str2, 15, 5);
 	if ($solicitudes->num_rows > 0) {
 		while ($row = $solicitudes->fetch_assoc()) {
+			$id_cobro = $row['id_cobro'];
+			$cantidad_pagada = $row['cantidad_pagada'];
+			$cuota = $row['cuota'];
+			$fecha_pagada = $row['fecha_pagada'];
+			$fecha_vencimiento = $row['fecha_vencimiento'];
+			$saldo_actual = $row['saldo_actual'];
+			$monto_restante = $row['monto_restante'];
+			$total_venta = $row['total_venta'];
+			$id_contrato_compra = $row['id_contrato_compra'];
+			$id_registro = $row['id_registro'];
+			$nombre_completo = $row['nombre_completo'];
 
+			if (($cuota + $monto_restante) == $total_venta) {
+				$actual = $total_venta;
+			}else{
+				$actual = $monto_restante;
+			}
 
 			$html .= '<div class="main_factura" >
 			<div class="main-container">
@@ -43,13 +59,13 @@ if (isset($_GET['ID'])) {
 			<h5>' . $nombre . '</h5>
 			<p>' . $direccion . '</p>
 			<p>RTN: ' . $rtn . '</p>
-			<p>' . $telefono . '</p>
+			<p>Tel. ' . $telefono . '</p>
 			<hr style="border-style: dashed">
 			<p>FACTURA <span class="factura">000-001-01-00001001<span></p>
 			<hr>
 			<p>CAI</p>
 			<p>' . $cai . '</p>
-			<p>Rango autorizado: ' . $rango_autorizado . '</p>
+			<!--<p>Rango autorizado: ' . $rango_autorizado . '</p>-->
 			<hr>
 			<p>Fecha de autorización: ' . $fecha_emision . '</p>
 			<p>Fecha límite de emisión: ' . $fecha_limite . '</p>
@@ -59,37 +75,38 @@ if (isset($_GET['ID'])) {
 			<hr>
 			<p>' . $correo . '</p>
 			<hr>
+			<p>Fecha: ' .  date('d/m/Y') . '</p>
 			<p>Hora: ' .  date('h:i:s a', time()) . '</p>
 			<hr>
 			<div class="center">
 				<table class="center">
 					<tr>
-						<th>Por L.</th>
-						<td>1,700.00</td>
+						<th>Por L. </th>
+						<td>' . $cantidad_pagada . '</td>
 					</tr>
 					<tr>
 						<th>Fecha</th>
-						<td>'  . date('d/m/Y', time()) . '</td>
+						<td>' . date('d/m/Y', strtotime($fecha_pagada)) . '</td>
 					</tr>
 					<tr>
 						<th>Contrato</th>
-						<td>LOT2203-01-31</td>
+						<td>' . $id_contrato_compra . '</td>
 					</tr>
 				</table>
 			</div>
 			<hr>
 			<p>Cliente:</p>
-			<p class="info">Devin Gerardo Gonzales Hernandez</p>
+			<p class="info">' . $nombre_completo . '</p>
 			<hr>
 			<div >
 				<table class="saldos">
 					<tr>
 						<th>Saldo anterior L.</th>
-						<td>54,000.95</td>
+						<td>' . $actual . '</td>
 					</tr>
 					<tr>
 						<th>Interes a la fecha </th>
-						<td>945.17</td>
+						<td>0.00</td>
 					</tr>
 					<tr>
 						<th>Mora L. </th>
@@ -104,7 +121,7 @@ if (isset($_GET['ID'])) {
 						<td>0.00</td>
 					</tr>
 					<tr>
-						<th>Valor grabado L</th>
+						<th>Valor gravado L</th>
 						<td>0.00</td>
 					</tr>
 					<tr>
@@ -123,11 +140,11 @@ if (isset($_GET['ID'])) {
 				<table class="saldos">
 					<tr>
 						<th>Pago intereses L.</th>
-						<td>54,000.95</td>
+						<td>0.00</td>
 					</tr>
 					<tr>
 						<th>Pago Ints. Mora.L.</th>
-						<td>945.17</td>
+						<td>0.00</td>
 					</tr>
 					<tr>
 						<th>Abono a capital L.</th>
@@ -152,7 +169,8 @@ if (isset($_GET['ID'])) {
 			<table class="saldos">
 				<tr>
 					<th>Vencimiento</th>
-					<td>'  . date('d/m/Y', time()) . '</td>
+					dar formanto a $fecha_vencimiento
+					<td>' .  date('d/m/Y', strtotime($fecha_vencimiento)). '</td>
 				</tr>
 			</table>
 			<hr>
@@ -177,7 +195,7 @@ if (isset($_GET['ID'])) {
 				// ob_end_clean();
 				$mpdf->WriteHTML($stylesheet, 1);
 				$mpdf->WriteHTML($html);
-				$mpdf->Output("Contrato " . $bloque . '-' . $numero . ' ' . ucwords(strtolower($nombre)) . ".pdf", "I");
+				$mpdf->Output("Contrato " . $id_contrato_compra . '-' . $id_cobro . ' ' . $id_registro . ".pdf", "I");
 				// $mpdf->Output("galeria/Contrato " . ucwords(strtolower($nombre)) . ".pdf", "F");
 				// $mpdf->Output("Contrato ".$bloque .'-'. $numero .' '. ucwords(strtolower($nombre)) . ".pdf", "D");
 			} catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception 

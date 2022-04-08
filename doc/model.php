@@ -14,7 +14,7 @@ function getAll($id = null) {
 function getCobro($id = null) {
     include '../includes/conexion.php'; 
     try {
-        return $conn->query("SELECT * FROM cobros WHERE id_cobro = {$id}");
+        return $conn->query("SELECT * FROM cobros a, ficha_compra b, ficha_directorio c WHERE id_cobro = {$id} and a.id_contrato = b.id_ficha_compra and b.id_registro = c.id;");
 
     } catch(Exception $e) {
         echo "Error! : " . $e->getMessage();

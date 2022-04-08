@@ -157,19 +157,25 @@ if (isset($_GET['ID'])) {
 												$fecha_pago2 = date("d-M-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
 												// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
 												$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago . " +$i month"));
-												//restar la cuota de $total_venta\
-												if ($monto_restante > $cuota) {
-													$total_venta = $monto_restante - $cuota;
-													$no_cuota = $i + 1;
-													$monto_restante = $total_venta - $cantidad_pagada;
-												}
-
 												//ultima cuota sea igual al monto_restante
 												if ($monto_restante < $cuota && $monto_restante >= 0) {
 													$cuota = $monto_restante;
 													$monto_restante = 0;
 													$bandera = true;
 												}
+												
+												//restar la cuota de $total_venta\
+												if ($monto_restante > $cuota) {
+													$total_venta = $monto_restante - $cuota;
+													$no_cuota = $i + 1;
+													$monto_restante = $total_venta - $cantidad_pagada;
+												}
+												$fecha_vencimiento = new DateTime($fecha_vencimiento);
+													// echo '<p>' . $fecha_vencimiento->format('d-m-Y') . '</p>';
+													$fechahoy = new DateTime();
+													$interval = $fecha_vencimiento->diff($fechahoy);
+													$dias = $interval->format('%r%a');
+													
 
 												# code...
 
@@ -184,12 +190,7 @@ if (isset($_GET['ID'])) {
 												</td>
 												<td>
 													<?php
-													$fecha_vencimiento = new DateTime($fecha_vencimiento);
-													// echo '<p>' . $fecha_vencimiento->format('d-m-Y') . '</p>';
-													$fechahoy = new DateTime();
-													$interval = $fecha_vencimiento->diff($fechahoy);
-													$dias = $interval->format('%r%a');
-													// echo '<p>' . $dias . '</p>';
+													echo '<p>' . $dias . '</p>';
 													if ($dias == '-1') {
 														$status = "Pendiente";
 														$coloractual = 'bg-warning';

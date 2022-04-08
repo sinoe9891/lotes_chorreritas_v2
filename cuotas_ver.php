@@ -60,7 +60,7 @@ if (isset($_GET['ID'])) {
 				<th>Fecha de Pago</th>
 				<th>Cuota a pagar</th>
 				<th>Cuota Pagada</th>
-				<th>Saldo Pendiente</th>
+				<th>Monto Restante</th>
 				<!-- <th>Fecha de Vencimiento</th> -->
 				<th>Retraso</th>
 			</tr>
@@ -108,14 +108,8 @@ if (isset($_GET['ID'])) {
 						for ($i = 1; $i <= $plazo_meses; ++$i) {
 
 							$fecha_pago2 = date("d-m-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
-							// // insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
+							// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
 							$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago . " +$i month"));
-							//restar la cuota de $total_venta\
-							if ($monto_restante > $cuota) {
-								$total_venta = $monto_restante - $cuota;
-								$no_cuota = $i + 1;
-								$monto_restante = $total_venta - $cantidad_pagada;
-							}
 
 							//ultima cuota sea igual al monto_restante
 							if ($monto_restante < $cuota && $monto_restante >= 0) {
@@ -123,6 +117,17 @@ if (isset($_GET['ID'])) {
 								$monto_restante = 0;
 								$bandera = true;
 							}
+							
+							if ($monto_restante > $cuota) {
+								$no_cuota = $i + 1;
+								echo  "<br>" . $total_venta . "<br>";
+								echo  "Monto Restante: " . $monto_restante . "<br>";
+								echo  "Cuota: " . $cuota . "<br>";
+								$total_venta = $monto_restante - $cuota;
+								$monto_restante = $total_venta - $cantidad_pagada;
+							}
+
+							
 
 							# code...
 
@@ -139,7 +144,7 @@ if (isset($_GET['ID'])) {
 								$fechahoy = new DateTime();
 								$interval = $fecha_vencimiento->diff($fechahoy);
 								$dias = $interval->format('%r%a');
-								// echo '<p>' . $dias . '</p>';
+								echo '<p>' . $dias . '</p>';
 								if ($dias > 0) {
 									echo "<p>Vencido</p>";
 								} elseif ($dias == '0') {
@@ -151,7 +156,7 @@ if (isset($_GET['ID'])) {
 								?>
 							</td>
 				</tr>
-				<?php
+		<?php
 							if ($bandera) {
 								// $cuota = $monto_restante;
 								break;
@@ -163,18 +168,18 @@ if (isset($_GET['ID'])) {
 					$contador = 1;
 					$numero = $estadoCuenta->num_rows;
 					echo $numero;
-					?>
-			<tr>
-				<th>No.</th>
-				<th>Nombre</th>
-				<th>Fecha de Pago</th>
-				<th>Cuota a pagar</th>
-				<th>Cuota Pagada</th>
-				<th>Saldo Pendiente</th>
-				<!-- <th>Fecha de Vencimiento</th> -->
-				<th>Retraso</th>
-			</tr>
-			<?php
+		?>
+		<tr>
+			<th>No.</th>
+			<th>Nombre</th>
+			<th>Fecha de Pago</th>
+			<th>Cuota a pagar</th>
+			<th>Cuota Pagada</th>
+			<th>Saldo Pendiente</th>
+			<!-- <th>Fecha de Vencimiento</th> -->
+			<th>Retraso</th>
+		</tr>
+		<?php
 					while ($solicitud = $estadoCuenta->fetch_array()) {
 						$fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
 						$nombre_completo = $solicitud['nombre_completo'];
@@ -201,7 +206,7 @@ if (isset($_GET['ID'])) {
 							$no_cuota = $i + 1;
 
 
-				?>
+		?>
 				<tr>
 					<td><?php echo $contador++; ?></td>
 					<td><?php echo $nombre_completo; ?></td>
