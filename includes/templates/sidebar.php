@@ -66,6 +66,11 @@
 				} else {
 					$facturacion = '';
 				}
+				if (obtenerPaginaActual() == 'facturas' || obtenerPaginaActual() == 'new-facturas' || obtenerPaginaActual() == 'edit-facturas') {
+					$facturas = 'active';
+				} else {
+					$facturas = '';
+				}
 				?>
 				<div class="sidebar-menu">
 					<ul class="menu">
@@ -136,6 +141,9 @@
 							<ul class="submenu <?php echo $facturacion ?>">
 								<li class="submenu-item <?php echo $facturacion ?>">
 									<a href="facturacion.php">Facturación</a>
+								</li>
+								<li class="submenu-item <?php echo $facturas ?>">
+									<a href="facturas.php">Facturas Emitidas</a>
 								</li>
 								<li class="submenu-item">
 									<a href="backup_database.php?pass=Stark9891">Backup DB</a>

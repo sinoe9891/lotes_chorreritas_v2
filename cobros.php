@@ -64,9 +64,8 @@ include 'includes/templates/sidebar.php';
 								$precio_vara2 = 0;
 							}
 
-							$consulta = $conn->query("SELECT DISTINCT a.id_cobro, d.nombre_completo, a.cantidad_pagada, a.no_referencia, a.tipo_comprobante, a.fecha_pagada, a.url_comprobante FROM cobros a, ficha_compra c, ficha_directorio d WHERE a.id_contrato = c.id_ficha_compra and c.id_registro = d.id ORDER BY a.id_cobro DESC;");
-							$numero = 1;
-							$contador = 1;
+							$consulta = $conn->query("SELECT DISTINCT a.id_cobro, d.nombre_completo, a.cantidad_pagada, a.no_referencia, a.tipo_comprobante, a.fecha_pagada, a.url_comprobante, c.id_contrato_compra, c.id_registro FROM cobros a, ficha_compra c, ficha_directorio d WHERE a.id_contrato = c.id_ficha_compra and c.id_registro = d.id ORDER BY a.id_cobro DESC;");
+							$numero = 1;							$contador = 1;
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
 								date_default_timezone_set('America/Tegucigalpa');
@@ -77,6 +76,8 @@ include 'includes/templates/sidebar.php';
 								$fecha_pagada = $solicitud['fecha_pagada'];
 								$url_comprobante = $solicitud['url_comprobante'];
 								$id_cobro = $solicitud['id_cobro'];
+								$id_contrato_compra = $solicitud['id_contrato_compra'];
+								$id_registro = $solicitud['id_registro'];
 								$fecha_pagada = date('d-m-Y', strtotime($fecha_pagada));
 							?>
 								<tr id="solicitud:<?php echo $id_cobro ?>">
@@ -86,10 +87,35 @@ include 'includes/templates/sidebar.php';
 									<td><?php echo $no_referencia; ?></td>
 									<td><?php echo $tipo_comprobante; ?></td>
 									<td><?php echo $fecha_pagada; ?></td>
-									<td><a href="doc/factura.php?ID=<?php echo $id_cobro; ?>" target="_blank">Ver</a></td>
-									<td><a href="<?php echo $url_comprobante; ?>" target="_blank">Ver</a></td>
 									<td>
-										<button type="button" class="fas fa-trash btn btn-danger btn-sm"  data-id="<?php echo $id_cobro ?>">Eliminar</button>
+
+										<?php
+										$path = 'doc/facturas/';
+										$nombrefactura = "Factura-" . $id_contrato_compra . '-' . $id_cobro . '-' . $id_registro . ".pdf";
+										$nombre_fichero = $path . $nombrefactura;
+										//condicion si existe archivo en la carpeta factura
+										if (file_exists($nombre_fichero)) {
+											// echo "El fichero $nombre_fichero existe";
+											echo '<a href="' . $nombre_fichero . '" target="_blank">Ver</a>';
+										} else {
+											// echo "El fichero No existe<br> ";
+											echo '<a href="doc/factura.php?ID=' . $id_cobro . '" target="_blank">Generar Factura</a>';
+										}
+
+										?>
+
+									</td>
+									<td>
+										<?php
+										if ($url_comprobante === '') {
+											echo 'No hay Comprobante Digital';
+										} else {
+											echo '<a href="' . $url_comprobante . '" target="_blank">Ver</a>';
+										}
+										?>
+									</td>
+									<td>
+										<button type="button" class="fas fa-trash btn btn-danger btn-sm" data-id="<?php echo $id_cobro ?>">Eliminar</button>
 									</td>
 								</tr>
 							<?php

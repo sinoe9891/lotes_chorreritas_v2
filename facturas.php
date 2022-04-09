@@ -18,7 +18,7 @@ include 'includes/templates/sidebar.php';
 		<div class="page-title">
 			<div class="row">
 				<div class="col-12 col-md-6 order-md-1 order-last">
-					<h3>Facturación</h3>
+					<h3>Facturas</h3>
 
 				</div>
 				<div class="col-12 col-md-6 order-md-2 order-first">
@@ -44,12 +44,13 @@ include 'includes/templates/sidebar.php';
 						<thead>
 							<tr>
 								<th>No.</th>
-								<th>CAI</th>
-								<th>Fecha Límite</th>
-								<th>Rango Inicial</th>
-								<th>Cantidad</th>
-								<th>Empresa</th>
+								<th>Factura</th>
+								<th>Fecha Pago</th>
+								<th>Monto Pagado</th>
+								<th>Contrato</th>
+								<th>Saldo Pendiente</th>
 								<th>Estado</th>
+								<th>Usuario</th>
 								<th>Acciones</th>
 							</tr>
 						</thead>
@@ -63,50 +64,42 @@ include 'includes/templates/sidebar.php';
 							// 	$precio_vara2 = 0;
 							// }
 
-							$consulta = $conn->query("SELECT * FROM info_cai");
+							$consulta = $conn->query("SELECT * FROM facturas a, ficha_compra b WHERE (a.estado_factura = 'emitida' OR a.estado_factura = 'anulada') AND b.id_contrato_compra = a.contrato;");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
 								date_default_timezone_set('America/Tegucigalpa');
-								$id_cai = $solicitud['id_cai'];
-								$cai = $solicitud['cai'];
-								$fecha_limite = $solicitud['fecha_limite'];
-								$rango_inicial = $solicitud['rango_inicial'];
-								$cantidad_otorgada = $solicitud['cantidad_otorgada'];
-								$id_empresa = $solicitud['id_empresa'];
-								$estado_cai = $solicitud['estado_cai'];
+								$id_factura = $solicitud['id_factura'];
+								$no_factura = $solicitud['no_factura'];
+								$fecha_pago = $solicitud['fecha_pago'];
+								$monto_pagado = $solicitud['monto_pagado'];
+								$contrato = $solicitud['contrato'];
+								$saldo_actual = $solicitud['saldo_actual'];
+								$estado = $solicitud['estado_factura'];
 								$view = '';
 								$noview = '';
-								if ($estado_cai == 'act') {
+								if ($estado == 'disponible') {
 									$status = 'Activo';
 									$color = 'bg-success';
 									$noview = "display:none";
-								} elseif ($estado_cai == 'sus') {
-									$status = 'Suspendido';
-									$color = 'bg-secondary';
+								} elseif ($estado == 'anulada') {
+									$status = 'Anulada';
+									$color = 'bg-danger';
 									$view = "initial";
-								} elseif ($estado_cai == 'fin') {
-									$status = 'Concluido';
-									$color = 'bg-primary';
-									$noview = "none";
-								} elseif ($estado_cai == 'com') {
-									$status = 'Completado';
-									$color = 'bg-info';
-									$view = "initial";
-								} elseif ($estado_cai == 'ina') {
-									$status = 'Inactivo';
+								} elseif ($estado == 'emitida') {
+									$status = 'Emitida';
 									$color = 'bg-secondary';
 									$view = "initial";
 								}
 							?>
 								<tr id="solicitud:<?php echo $solicitud['id_cai'] ?>">
 									<td><?php echo $contador++; ?></td>
-									<td><?php echo $cai; ?></td>
-									<td><?php echo $fecha_limite; ?></td>
-									<td><?php echo $rango_inicial; ?></td>
-									<td><?php echo $cantidad_otorgada; ?></td>
-									<td><?php echo $id_empresa; ?></td>
+									<td><?php echo $no_factura; ?></td>
+									<td><?php echo $fecha_pago; ?></td>
+									<td><?php echo $monto_pagado; ?></td>
+									<td><?php echo $contrato; ?></td>
+									<td><?php echo $saldo_actual; ?></td>
 									<td>
 										<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
 									</td>

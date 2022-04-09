@@ -195,8 +195,9 @@ if (isset($_GET['ID'])) {
 				// ob_end_clean();
 				$mpdf->WriteHTML($stylesheet, 1);
 				$mpdf->WriteHTML($html);
-				$mpdf->Output("Contrato " . $id_contrato_compra . '-' . $id_cobro . ' ' . $id_registro . ".pdf", "I");
-				// $mpdf->Output("galeria/Contrato " . ucwords(strtolower($nombre)) . ".pdf", "F");
+				$mpdf->Output("Contrato " . $id_contrato_compra . '-' . $id_cobro . '-' . $id_registro . ".pdf", "I");
+				$nombrefactura = "Factura-" . $id_contrato_compra . '-' . $id_cobro . '-' . $id_registro . ".pdf";
+				$mpdf->Output("facturas/" . ucwords(strtolower($nombrefactura)), "F");
 				// $mpdf->Output("Contrato ".$bloque .'-'. $numero .' '. ucwords(strtolower($nombre)) . ".pdf", "D");
 			} catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception 
 				//       name used for catch
