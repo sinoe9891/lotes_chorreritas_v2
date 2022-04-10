@@ -47,8 +47,6 @@ if (isset($_GET['ID'])) {
 
 
 		$idcompra = $id;
-		// $estadoCuenta = $conn->query("SELECT * FROM control_credito_lote a, ficha_compra b WHERE a.id_compra = 15 and b.id_ficha_compra = a.id_compra");
-		// $estadoCuenta = $conn->query("SELECT c.nombre_completo, a.id_compra, a.fecha_pago, b.cuota, b.saldo_actual, b.total_venta, MIN(id_credito_lote) ID FROM control_credito_lote a, ficha_compra b, ficha_directorio c WHERE a.estado_cuota = 'sig' and b.id_registro = c.id GROUP BY a.id_compra ORDER BY a.id_compra;");
 		$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $idcompra;");
 		$contador = 1;
 		$numero = $estadoCuenta->num_rows;
@@ -66,6 +64,7 @@ if (isset($_GET['ID'])) {
 			</tr>
 			<?php
 			while ($solicitud = $estadoCuenta->fetch_array()) {
+				date_default_timezone_set('America/Tegucigalpa');
 				$fecha_pago = $solicitud['fecha_cuota'];
 				$fecha_pago = new DateTime($fecha_pago);
 				$fecha_pago = $fecha_pago->format('d-m-Y');
@@ -110,19 +109,16 @@ if (isset($_GET['ID'])) {
 							$fecha_pago2 = date("d-m-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
 							// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
 							$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago . " +$i month"));
-
 							//ultima cuota sea igual al monto_restante
 							if ($monto_restante < $cuota && $monto_restante >= 0) {
 								$cuota = $monto_restante;
 								$monto_restante = 0;
 								$bandera = true;
 							}
-							
+
+							//restar la cuota de $total_venta\
 							if ($monto_restante > $cuota) {
 								$no_cuota = $i + 1;
-								echo  "<br>" . $total_venta . "<br>";
-								echo  "Monto Restante: " . $monto_restante . "<br>";
-								echo  "Cuota: " . $cuota . "<br>";
 								$total_venta = $monto_restante - $cuota;
 								$monto_restante = $total_venta - $cantidad_pagada;
 							}
@@ -139,11 +135,7 @@ if (isset($_GET['ID'])) {
 							<td><?php echo 'L.' . number_format($monto_restante, 2, '.', ','); ?></td>
 							<td>
 								<?php
-								$fecha_vencimiento = new DateTime($fecha_vencimiento);
-								// echo '<p>' . $fecha_vencimiento->format('d-m-Y') . '</p>';
-								$fechahoy = new DateTime();
-								$interval = $fecha_vencimiento->diff($fechahoy);
-								$dias = $interval->format('%r%a');
+								
 								echo '<p>' . $dias . '</p>';
 								if ($dias > 0) {
 									echo "<p>Vencido</p>";

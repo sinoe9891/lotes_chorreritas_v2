@@ -45,7 +45,7 @@ if (isset($_GET['ID'])) {
 							$cuota = $cuotaresult['cuota'];
 							// echo $cuota;
 						}
-						$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id;");
+						$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra;");
 						$contador = 1;
 						$numero = $estadoCuenta->num_rows;
 						// echo $numero;
@@ -152,7 +152,7 @@ if (isset($_GET['ID'])) {
 										$plazo_meses = $plazo_meses - $numero;
 										// echo $plazo_meses;
 										if ($monto_restante != 0) {
-											for ($i = 0; $i <= $plazo_meses; ++$i) {
+											for ($i = 1; $i <= $plazo_meses; ++$i) {
 
 												$fecha_pago2 = date("d-M-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
 												// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
@@ -163,19 +163,20 @@ if (isset($_GET['ID'])) {
 													$monto_restante = 0;
 													$bandera = true;
 												}
-												
+ 
 												//restar la cuota de $total_venta\
 												if ($monto_restante > $cuota) {
-													$total_venta = $monto_restante - $cuota;
 													$no_cuota = $i + 1;
+													$total_venta = $monto_restante - $cuota;
 													$monto_restante = $total_venta - $cantidad_pagada;
 												}
+
 												$fecha_vencimiento = new DateTime($fecha_vencimiento);
-													// echo '<p>' . $fecha_vencimiento->format('d-m-Y') . '</p>';
-													$fechahoy = new DateTime();
-													$interval = $fecha_vencimiento->diff($fechahoy);
-													$dias = $interval->format('%r%a');
-													
+												// echo '<p>' . $fecha_vencimiento->format('d-m-Y') . '</p>';
+												$fechahoy = new DateTime();
+												$interval = $fecha_vencimiento->diff($fechahoy);
+												$dias = $interval->format('%r%a');
+
 
 												# code...
 
@@ -190,7 +191,7 @@ if (isset($_GET['ID'])) {
 												</td>
 												<td>
 													<?php
-													echo '<p>' . $dias . '</p>';
+													// echo '<p>' . $dias . '</p>';
 													if ($dias == '-1') {
 														$status = "Pendiente";
 														$coloractual = 'bg-warning';
@@ -245,8 +246,8 @@ if (isset($_GET['ID'])) {
 											$saldo_actual = $solicitud['saldo_actual'];
 											$cuota = $solicitud['cuota'];
 											$total_venta = $solicitud['total_venta'];
-											
-											for ($i = 0; $i <= $plazo_meses; ++$i) {
+
+											for ($i = 1; $i <= $plazo_meses; ++$i) {
 												// cambiar estado de la primera cuota por siguiente
 												if ($i == 0) {
 
@@ -287,9 +288,9 @@ if (isset($_GET['ID'])) {
 													$status =  "Pendiente";
 													$coloractual = 'bg-success';
 												}
-	
-	
-	
+
+
+
 												if ($dias == '-1') {
 													$status = "Pendiente";
 													$coloractual = 'bg-warning';
@@ -310,13 +311,7 @@ if (isset($_GET['ID'])) {
 											<td><span class="badge bg-primary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
 											<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
 											<td>
-												<?php
-												
-									
-
-												?>
 												<span class="badge <?php echo $coloractual ?>"><?php echo $status; ?></span>
-
 											</td>
 										</tr>
 

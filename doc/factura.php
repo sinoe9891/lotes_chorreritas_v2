@@ -82,7 +82,7 @@ if (isset($_GET['ID'])) {
 				<table class="center">
 					<tr>
 						<th>Por L. </th>
-						<td>' . $cantidad_pagada . '</td>
+						<td>'.number_format($cantidad_pagada, 2, '.', ',').'</td>
 					</tr>
 					<tr>
 						<th>Fecha</th>
@@ -102,7 +102,7 @@ if (isset($_GET['ID'])) {
 				<table class="saldos">
 					<tr>
 						<th>Saldo anterior L.</th>
-						<td>' . $actual . '</td>
+						<td>'.number_format(($actual+$cantidad_pagada), 2, '.', ',').'</td>
 					</tr>
 					<tr>
 						<th>Interes a la fecha </th>
@@ -156,7 +156,7 @@ if (isset($_GET['ID'])) {
 					</tr>
 					<tr>
 						<th>Nuevo saldo L.</th>
-						<td>0.00</td>
+						<td>'.number_format($monto_restante, 2, '.', ',').'</td>
 					</tr>
 				</table>
 			</div>
@@ -198,6 +198,8 @@ if (isset($_GET['ID'])) {
 				$mpdf->Output("Contrato " . $id_contrato_compra . '-' . $id_cobro . '-' . $id_registro . ".pdf", "I");
 				$nombrefactura = "Factura-" . $id_contrato_compra . '-' . $id_cobro . '-' . $id_registro . ".pdf";
 				$mpdf->Output("facturas/" . ucwords(strtolower($nombrefactura)), "F");
+				//si no existe el directorio factura se debe crear el directorio
+
 				// $mpdf->Output("Contrato ".$bloque .'-'. $numero .' '. ucwords(strtolower($nombre)) . ".pdf", "D");
 			} catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception 
 				//       name used for catch

@@ -511,7 +511,7 @@ if ($accion === 'editarCAI') {
 				$string1 = strval($numero);
 				// echo $string1 . '<br>';
 				$estado_factura = 'disponible';
-				$stmtcompra = $conn->prepare("INSERT INTO facturas (id_cai, no_factura, estado) VALUES (?, ?, ?)");
+				$stmtcompra = $conn->prepare("INSERT INTO facturas (id_cai, no_factura, estado_factura) VALUES (?, ?, ?)");
 				$stmtcompra->bind_param("sss", $id_cai, $string1, $estado_factura);
 				$stmtcompra->execute();
 			}

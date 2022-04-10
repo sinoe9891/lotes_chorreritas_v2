@@ -124,6 +124,10 @@ include 'includes/templates/sidebar.php';
 												</div>
 												<div class="col-md-6 col-12">
 													<div class="form-group">
+														<label for="first-name-column">Fecha en la que se pagó</label>
+														<input type="date" class="form-control" name="fecha_pago" id="fecha_pago" value="<?php echo date("Y-m-d"); ?>">
+													</div>
+													<div class="form-group">
 														<label for="company-column">Subir Comprobante</label>
 														<input type="file" accept="image/*" class="form-control" name="comprobante_fisico" id="seleccionArchivos" value="" onchage="javascript:leer()">
 													</div>
@@ -209,7 +213,7 @@ include('includes/templates/footer.php');
 
 		$.ajax({
 			data: parametros,
-			url: 'includes/models/model-autocomplete1.php',
+			url: 'includes/models/model-autocomplete.php',
 			type: 'POST',
 
 			beforesend: function() {
