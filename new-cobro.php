@@ -61,6 +61,7 @@ include 'includes/templates/sidebar.php';
 														<label for="first-name-column">Nombre Completo</label>
 														<input type="hidden" id="fecha_pago" name="fecha_pago" value="<?php echo date('Y-m-d'); ?>">
 														<input type="hidden" id="hora_pago" name="horaSolicitud" value="<?php echo date('H:i:s'); ?>">
+														<input type="hidden" id="usuario" name="usuario" value="<?php echo $_SESSION["nombre_usuario"]; ?>">
 														<select class="choices form-select" id="nombre_completo" name="nombre_completo" onchange="mi_busqueda();">
 															<option name="lote" value="">Buscar Contrato</option>
 															<?php
@@ -68,6 +69,7 @@ include 'includes/templates/sidebar.php';
 															if ($nombres->num_rows > 0) {
 																while ($row = $nombres->fetch_assoc()) {
 																	$id = $row['id_ficha_compra'];
+																	$registro = $row['id'];
 																	$id_contrato_compra = $row['id_contrato_compra'];
 																	// $id = $row['id'];
 																	$nombre_completo = $row['nombre_completo'];
@@ -77,7 +79,7 @@ include 'includes/templates/sidebar.php';
 															?>
 
 														</select>
-														<!-- <input type="text" id="cuadro_buscar" class="form-control" onkeypress="mi_busqueda();"> -->
+														
 													</div>
 													<div class="form-group">
 														<label for="last-name-column">Deposito en Banco</label>

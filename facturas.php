@@ -64,7 +64,7 @@ include 'includes/templates/sidebar.php';
 							// 	$precio_vara2 = 0;
 							// }
 
-							$consulta = $conn->query("SELECT * FROM facturas a, ficha_compra b WHERE (a.estado_factura = 'emitida' OR a.estado_factura = 'anulada') AND b.id_contrato_compra = a.contrato;");
+							$consulta = $conn->query("SELECT * FROM facturas a, ficha_compra b WHERE (a.estado_factura = 'emitida' OR a.estado_factura = 'anulada') AND a.contrato = b.id_ficha_compra;");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
@@ -76,6 +76,7 @@ include 'includes/templates/sidebar.php';
 								$monto_pagado = $solicitud['monto_pagado'];
 								$contrato = $solicitud['contrato'];
 								$saldo_actual = $solicitud['saldo_actual'];
+								$usuario = $solicitud['usuario'];
 								$estado = $solicitud['estado_factura'];
 								$view = '';
 								$noview = '';
@@ -103,9 +104,9 @@ include 'includes/templates/sidebar.php';
 									<td>
 										<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
 									</td>
+									<td><?php echo $usuario; ?></td>
 									<td>
-										<a href="edit-cai.php?ID=<?php echo $id_cai ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
-										<button type="button" class="fas fa-trash btn btn-danger btn-sm" style="<?php echo $noview . $view ?>;" data-id="<?php echo $solicitud['id_cai'] ?>">Eliminar</button>
+										<a href="edit-factura.php?ID=<?php echo $id_cai ?>" target="_self"><span class="badge bg-primary">Anular</span></a>
 									</td>
 								</tr>
 							<?php

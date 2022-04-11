@@ -152,7 +152,7 @@ if (isset($_GET['ID'])) {
 										$plazo_meses = $plazo_meses - $numero;
 										// echo $plazo_meses;
 										if ($monto_restante != 0) {
-											for ($i = 1; $i <= $plazo_meses; ++$i) {
+											for ($i = 0; $i <= $plazo_meses; ++$i) {
 
 												$fecha_pago2 = date("d-M-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
 												// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
@@ -218,7 +218,7 @@ if (isset($_GET['ID'])) {
 											}
 										}
 									} else {
-										$estadoCuenta = $conn->query("SELECT a.nombre_completo, b.fecha_primer_cuota, b.total_venta, b.saldo_actual, b.cuota, b.total_venta, b.plazo_meses FROM ficha_directorio a, ficha_compra b WHERE b.id_ficha_compra = $id and b.id_registro = a.id;");
+										$estadoCuenta = $conn->query("SELECT a.nombre_completo, b.fecha_primer_cuota, b.total_venta, b.saldo_actual, b.cuota, b.total_venta, b.plazo_meses, b.prima FROM ficha_directorio a, ficha_compra b WHERE b.id_ficha_compra = $id and b.id_registro = a.id;");
 										$contador = 1;
 										$numero = $estadoCuenta->num_rows;
 										// echo $numero;
@@ -244,10 +244,11 @@ if (isset($_GET['ID'])) {
 											$nombre_completo = $solicitud['nombre_completo'];
 											$plazo_meses = $solicitud['plazo_meses'];
 											$saldo_actual = $solicitud['saldo_actual'];
+											$prima = $solicitud['prima'];
 											$cuota = $solicitud['cuota'];
 											$total_venta = $solicitud['total_venta'];
-
-											for ($i = 1; $i <= $plazo_meses; ++$i) {
+											$total_venta = ($total_venta - $prima);
+											for ($i = 0; $i <= $plazo_meses; ++$i) {
 												// cambiar estado de la primera cuota por siguiente
 												if ($i == 0) {
 
@@ -258,14 +259,10 @@ if (isset($_GET['ID'])) {
 													$fecha_pago1 = date("Y-m-d", strtotime($fecha_primer_cuota . " +$i month"));
 													$total_venta = $total_venta - $cuota;
 												}
-												// $fecha_pago = date("d-m-Y", strtotime($fecha_cuota . " +$i month")) . "<br>";
 												// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
 												$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago1 . " +$i month"));
 												//restar la cuota de $total_venta
 												$saldo_actual = $total_venta - $cuota;
-												// $no_cuota = $i + 1;
-
-
 								?>
 										<tr>
 											<td><?php echo $contador++; ?></td>

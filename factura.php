@@ -70,7 +70,8 @@ include 'includes/conexion.php';
 			// echo $numero . '<br>';
 			$string1 = strval($numero);
 			echo $string1 . '<br>';
-			$insertarFechas = $conn->query("INSERT INTO facturas (no_factura) VALUES ('$string1')");
+			$estado = 'disponible';
+			$insertarFechas = $conn->query("INSERT INTO facturas (no_factura, estado_factura) VALUES ('$string1', '$estado')");
 		}
 		?>
 

@@ -672,10 +672,13 @@ function newCobro(e) {
 	e.preventDefault();
 	let tipo = document.querySelector('#tipo').value,
 		id_compra = document.querySelector('#id_compra').value,
+		usuario = document.querySelector('#usuario').value,
 		valor_cuota = document.querySelector('#valor_cuota').value,
 		fecha_cuota = document.querySelector('#fecha_cuota').value,
 		fecha_pagada = document.querySelector('#fecha_pagada').value,
 		fecha_pago = document.querySelector('#fecha_pago').value,
+		hora_pago = document.querySelector('#hora_pago').value,
+		registro = document.querySelector('#registro').value,
 		fecha_vencimiento = document.querySelector('#fecha_vencimiento').value,
 
 		id_banco = document.querySelector('#id_banco').value,
@@ -727,11 +730,14 @@ function newCobro(e) {
 		console.log('enviar');
 		let datos = new FormData();
 		datos.append('id_compra', id_compra);
+		datos.append('usuario', usuario);
 		datos.append('valor_cuota', valor_cuota);
 		datos.append('fecha_cuota', fecha_cuota);
 		datos.append('fecha_vencimiento', fecha_vencimiento);
 		datos.append('fecha_pagada', fecha_pagada);
 		datos.append('fecha_pago', fecha_pago);
+		datos.append('hora_pago', hora_pago);
+		datos.append('registro', registro);
 		datos.append('id_banco', id_banco);
 		datos.append('tipo_comprobante', tipo_comprobante);
 		datos.append('no_cuota', no_cuota);

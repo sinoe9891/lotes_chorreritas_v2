@@ -394,9 +394,12 @@ if ($accion === 'newCobro') {
 	$id_compra = $_POST['id_compra'];
 	$valor_cuota = $_POST['valor_cuota'];
 	$fecha_cuota = $_POST['fecha_cuota'];
+	$usuario = $_POST['usuario'];
 	$fecha_vencimiento = $_POST['fecha_vencimiento'];
 	$fecha_pagada = $_POST['fecha_pagada'];
 	$fecha_pago = $_POST['fecha_pago'];
+	$hora_pago = $_POST['hora_pago'];
+	$registro = $_POST['registro'];
 	$id_banco = $_POST['id_banco'];
 	$tipo_comprobante = $_POST['tipo_comprobante'];
 	$no_cuota = $_POST['no_cuota'];
@@ -417,8 +420,24 @@ if ($accion === 'newCobro') {
 	$stmt->execute();
 	// echo $stmt->error;
 
-
+	
 	//comprobar si ya estamos en el ultimo registro de la tabla
+	$facturas = $conn->query("SELECT no_factura, id_factura FROM facturas WHERE estado_factura = 'disponible' order by id_factura asc limit 1");
+	$codigoFactura = $facturas->fetch_assoc();
+	if ($codigoFactura > 0) {
+		$no_factura = $codigoFactura['no_factura'];
+		$id_factura = $codigoFactura['id_factura'];
+		$emitida = 'emitida';
+		$stmt = $conn->prepare("UPDATE facturas SET contrato = ?, fecha_pago = ?, hora_pago = ?, monto_pagado = ?, saldo_actual = ?, id_registro = ?, estado_factura = ?, usuario = ?  WHERE id_factura = ?");
+		$stmt->bind_param('sssssssss', $id_compra, $fecha_pago, $hora_pago, $valor_cuota, $monto_restante, $registro, $emitida, $usuario, $id_factura);
+		$stmt->execute();
+	} else {
+		$no_factura = 0;
+		$errorFactura = 'No hay facturas disponibles';
+	}
+
+
+
 	$stmt = $conn->prepare("SELECT id_ficha_compra, saldo_actual, total_venta, id_registro FROM ficha_compra WHERE id_ficha_compra = ?");
 	$stmt->bind_param('s', $id_compra);
 	$stmt->execute();
@@ -499,8 +518,8 @@ if ($accion === 'newCobro') {
 		} else {
 			$imagenes = '';
 		}
-		
-		if ($statement->affected_rows > 0) {
+
+		if ($statement->affected_rows > 0 && $codigoFactura > 0) {
 			$respuesta = array(
 				//Esto es lo que se muestra en
 				//JSON.parse(xhr.responseText); console.log(respuesta);
@@ -508,13 +527,15 @@ if ($accion === 'newCobro') {
 				'name' => $name,
 				'tipo' => $accion,
 				'nombre' => $namefile,
-				'id_agregado' => $last_id
+				'id_agregado' => $last_id,
+				'factura' => $no_factura
 			);
 		} else {
 			$respuesta = array(
 				'respuesta' => 'error',
 				'Errores' => $carpeta,
 				'Error' => $imagenes,
+				'Error Factura' => $errorFactura,
 				// 'id_agregado' => $curriculum,
 			);
 			echo $statement->error;

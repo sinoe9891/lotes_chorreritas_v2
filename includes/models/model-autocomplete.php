@@ -5,14 +5,15 @@ if ($_POST['mi_busqueda'] != "") {
 	$mi_busqueda = $_POST['mi_busqueda'];
 	// $resultados = mysqli_query($conexion,"SELECT * FROM $tabla_db1 WHERE numero LIKE '%$mi_busqueda%' LIMIT 5");
 	// echo $mi_busqueda;
-	$estadoCuenta = $conn->query("SELECT a.fecha_pagada, b.id_ficha_compra, a.fecha_cuota, a.id_cuota_pagada, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, a.fecha_vencimiento, b.fecha_primer_cuota FROM cobros a, ficha_compra b WHERE a.id_contrato = b.id_ficha_compra and b.id_ficha_compra LIKE '$mi_busqueda'");
+	$estadoCuenta = $conn->query("SELECT a.fecha_pagada, b.id_ficha_compra, a.fecha_cuota, a.id_cuota_pagada, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, a.fecha_vencimiento, b.fecha_primer_cuota, b.id_registro FROM cobros a, ficha_compra b WHERE a.id_contrato = b.id_ficha_compra and b.id_ficha_compra LIKE '$mi_busqueda'");
 	$contador = 1;
 	//saber si viene vacio el query $estadoCuenta
 	//imprimir $estadoCuenta
-	echo 'Imprime números de filas: '. $estadoCuenta->num_rows . '<br>';
+	// echo 'Imprime números de filas: '. $estadoCuenta->num_rows . '<br>';
 	if ($estadoCuenta->num_rows > 0) {
 		while ($cuotaresult = $estadoCuenta->fetch_array()) {
 			$cuota = $cuotaresult['cuota'];
+			$registro = $cuotaresult['id_registro'];
 			$id_cuota_pagada = $cuotaresult['id_cuota_pagada'];
 			$fecha_pago = $cuotaresult['fecha_cuota'];
 			$id_ficha_compra = $cuotaresult['id_ficha_compra'];
@@ -34,6 +35,7 @@ if ($_POST['mi_busqueda'] != "") {
 					<input type="hidden" id="fecha_cuota" name="fecha_cuota" value="' . $fecha_pago . '">
 					<input type="hidden" id="fecha_vencimiento" name="fecha_vencimiento" value="' . $fecha_vencimiento . '">
 					<input type="hidden" id="monto_restante" name="monto_restante" value="' . $monto_restante . '">
+					<input type="hidden" id="registro" name="registro" value="' . $registro.'">
 					<input type="date" class="form-control" name="fecha_pagada" id="fecha_pagada" value="' . $fecha_pago . '">
 				</div>
 				<div class="form-group">
@@ -54,10 +56,11 @@ if ($_POST['mi_busqueda'] != "") {
 			$fecha_vencimiento = date("Y-m-d", strtotime($fecha_primera_cuota . " +1 month"));
 			$monto_restante = $cuotaresult['saldo_actual'];
 			$cuota = $cuotaresult['cuota'];
+			$registro = $cuotaresult['id_registro'];
 			$id_contrato_compra = $cuotaresult['id_contrato_compra'];
 		}
-		echo $fecha_vencimiento;
-		echo $id_contrato_compra;
+		// echo $fecha_vencimiento;
+		// echo $id_contrato_compra;
 		echo
 		'	<div class="form-group">
 					<label for="first-name-column">Fecha de cuota</label>
@@ -65,6 +68,7 @@ if ($_POST['mi_busqueda'] != "") {
 					<input type="hidden" id="fecha_cuota" name="fecha_cuota" value="' . $fecha_primera_cuota . '">
 					<input type="hidden" id="fecha_vencimiento" name="fecha_vencimiento" value="' . $fecha_vencimiento . '">
 					<input type="hidden" id="monto_restante" name="monto_restante" value="' . $monto_restante . '">
+					<input type="hidden" id="registro" name="registro" value="' . $registro.'">
 					<input type="date" class="form-control" name="fecha_pagada" id="fecha_pagada" value="' . $fecha_primera_cuota . '">
 				</div>
 				<div class="form-group">
