@@ -18,28 +18,29 @@ include 'includes/templates/sidebar.php';
 		<div class="page-title">
 			<div class="row">
 				<div class="col-12 col-md-6 order-md-1 order-last">
-					<h3>Lotes</h3>
+					<h3>Usuarios</h3>
 				</div>
 				<div class="col-12 col-md-6 order-md-2 order-first">
 					<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
-							<li class="breadcrumb-item active" aria-current="page">Logística</li>
+							<li class="breadcrumb-item active" aria-current="page">Configuración</li>
 						</ol>
 					</nav>
 				</div>
 			</div>
 		</div>
-		<section class="section lotes">
+		<section class="section usuarios">
 			<div class="card">
 				<div class="card-body">
 					<table class="table table-striped" id="table1">
 						<thead>
 							<tr>
 								<th>No.</th>
-								<th>Descripción</th>
-								<th>Precio</th>
-								<th>Varas2</th>
+								<th>Nombre</th>
+								<th>Username</th>
+								<th>Correo</th>
+								<th>Role</th>
 								<th>Estado</th>
 								<th>Acciones</th>
 							</tr>
@@ -47,37 +48,33 @@ include 'includes/templates/sidebar.php';
 						<tbody>
 
 							<?php
-							$consulta = $conn->query("SELECT DISTINCT a.id_lote, a.numero, a.areav2, a.estado, b.bloque, d.precio_vara2, a.estado, c.nombre FROM lotes a, bloques b, proyectos c, proyectos_ajustes d WHERE a.id_bloque = b.id_bloque and b.id_proyecto = c.id_proyecto and c.id_proyecto = d.id_proyecto");
+							$consulta = $conn->query("SELECT * FROM main_users a, main_cargo b WHERE a.role_user = b.id_role");
 							$contador = 1;
 							while ($solicitud = $consulta->fetch_array()) {
-								$id_lote = $solicitud['id_lote'];
-								$bloque = $solicitud['bloque'];
-								$preciov2 = $solicitud['precio_vara2'];
-								$estado = $solicitud['estado'];
-								$nombre = $solicitud['nombre'];
-								$numero = $solicitud['numero'];
-								$areav2 = $solicitud['areav2'];
-
-								$estado = $solicitud['estado'];
-								if ($estado == 'v') {
-									$estadoLote = 'Vendido';
-									$color = 'bg-secondary';
-								} elseif ($estado == 'd') {
-									$estadoLote = 'Disponible';
+								$id = $solicitud['id'];
+								$descripcion = $solicitud['descripcion'];
+								$usuario_name = $solicitud['usuario_name'];
+								$apellidos = $solicitud['apellidos'];
+								$username = $solicitud['nickname'];
+								$email = $solicitud['email_user'];
+								$estado = $solicitud['estado_user'];
+								if ($estado == 'a') {
+									$estadoUser = 'Habilitado';
 									$color = 'bg-success';
-								} elseif ($estado == 'r') {
-									$estadoLote = 'Reservado';
-									$color = 'bg-info';
+								} elseif ($estado == 'd') {
+									$estadoUser = 'Deshabilitado';
+									$color = 'bg-secondary';
 								}
 							?>
-								<tr id="solicitud:<?php echo $solicitud['id_lote'] ?>">
+								<tr id="solicitud:<?php echo $solicitud['id'] ?>">
 									<td><?php echo $contador++; ?></td>
-									<td><?php echo 'Bloque ' . $bloque . '-' . $numero ?></td>
-									<td><?php echo 'L. ' . number_format($preciov2 * $areav2) ?></td>
-									<td><?php echo $areav2 . 'v2 ' ?></td>
-									<td><?php echo '<span class="badge ' . $color . '">' . $estadoLote . '</span>' ?></td>
+									<td><?php echo $usuario_name .' '. $apellidos ?></td>
+									<td><?php echo '@'.$username ?></td>
+									<td><?php echo $email ?></td>
+									<td><?php echo '<span class="badge ' . $color . '">' . $descripcion ?></td>
+									<td><?php echo '<span class="badge ' . $color . '">' . $estadoUser . '</span>' ?></td>
 									<td>
-										<a href="edit-lote.php?ID=<?php echo $solicitud['id_lote'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
+										<a href="edit-usuario.php?ID=<?php echo $solicitud['id'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 										<i class="fas fa-trash"></i>
 									</td>
 								</tr>
@@ -86,7 +83,7 @@ include 'includes/templates/sidebar.php';
 							?>
 						</tbody>
 					</table>
-					<a href="new-lote.php" class="btn btn-primary">Nuevo Lote</a>
+					<a href="new-usuario.php" class="btn btn-primary">Nuevo Usuario</a>
 				</div>
 			</div>
 		</section>

@@ -60,7 +60,13 @@ function validarRegistro(e) {
   
                             });
                         }
-                    } else {
+                    } else if (respuesta.respuesta === 'des'){
+						Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Usuario Deshabilitado'
+                        })
+					}else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',

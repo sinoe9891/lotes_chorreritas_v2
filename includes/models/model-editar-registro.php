@@ -579,3 +579,62 @@ estado_cai = ? WHERE id_cai = ?");
 		echo json_encode($respuesta);
 	}
 }
+
+if ($accion === 'editUsuario') {
+	date_default_timezone_set('America/Tegucigalpa');
+	$user_id = $_POST['user_id'];
+	$nombre = $_POST['nombre'];
+	$apellidos = $_POST['apellidos'];
+	$nickname = $_POST['nickname'];
+	$email = $_POST['email'];
+	$role = $_POST['role'];
+	$estado = $_POST['estado'];
+	$accion = $_POST['accion'];
+	$nickname = trim($nickname);
+	$email = trim($email);
+	$nombre = trim($nombre);
+	$apellidos = trim($apellidos);
+	//Importar la conexión
+	include '../conexion.php';
+	try {
+		$stmt = $conn->prepare("UPDATE main_users SET usuario_name = ?, apellidos = ?, nickname = ?, email_user = ?,  role_user = ?, estado_user = ? WHERE id = ?");
+		$stmt->bind_param('sssssss', $nombre, $apellidos, $nickname, $email, $role, $estado, $user_id);
+		$stmt->execute();
+		if ($stmt->affected_rows > 0) {
+			$respuesta = array(
+				'respuesta' => 'correcto',
+				'id_insertado' => $stmt->insert_id,
+				'nombre' => $nombre,
+				'nickname' => $nickname,
+				'email' => $email,
+				'role' => $role,
+				'estado' => $estado,
+				'user_id' => $user_id,
+				'tipo' => $accion
+			);
+		} else {
+			$respuesta = array(
+				'respuesta' => 'error',
+				'id_insertado' => $stmt->insert_id,
+				'nombre' => $nombre,
+				'nickname' => $nickname,
+				'email' => $email,
+				'role ' => $role,
+				'estado' => $estado,
+				'user_id' => $user_id,
+				'tipo' => $accion
+			);
+		}
+		$stmt->close();
+		// $stmt_counter->close();
+		$conn->close();
+	} catch (Exception $e) {
+		//En caso de un error, tomar la exepción
+		$respuesta = array(
+			//Arreglo asociativo
+			'pass' => $e->getMessage(),
+			// 'pass' => $hash_password
+		);
+	}
+	echo json_encode($respuesta);
+}

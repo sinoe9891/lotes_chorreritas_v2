@@ -45,6 +45,11 @@ function addEventListener() {
 	if (nuevoCobro) {
 		nuevoCobro.addEventListener('submit', newCobro);
 	}
+	//Nuevo cobro
+	let nuevoUser = document.querySelector('#nuevoUsuario');
+	if (nuevoUser) {
+		nuevoUser.addEventListener('submit', nuevoUsuario);
+	}
 	//Nuevo venta
 	let editarventa = document.querySelector('#editarventa');
 	if (editarventa) {
@@ -61,6 +66,10 @@ function addEventListener() {
 	let editarLote = document.querySelector('#editarRegistroLote');
 	if (editarLote) {
 		editarLote.addEventListener('submit', editarRegistroLote);
+	}
+	let editarUser = document.querySelector('#editarUsuario');
+	if (editarUser) {
+		editarUser.addEventListener('submit', editarUsuario);
 	}
 	//Asignar Lote
 	let asignar = document.querySelector('#asignar_lote');
@@ -1562,9 +1571,151 @@ function editarRegistroLote(e) {
 		xhr.send(datos);
 	}
 }
+function editarUsuario(e) {
+	e.preventDefault();
+	console.log('llego');
+	let user_id = document.querySelector('#user_id').value,
+		nombre = document.querySelector('#nombre').value,
+		nickname = document.querySelector('#nickname').value,
+		apellidos = document.querySelector('#apellidos').value,
+		email = document.querySelector('#email').value,
+		role = document.querySelector('#role').value,
+		tipo = document.querySelector('#tipo').value,
+		estado = document.querySelector('#estado').value;
+
+	let datos = new FormData();
+
+	datos.append('user_id', user_id);
+	datos.append('nombre', nombre);
+	datos.append('apellidos', apellidos);
+	datos.append('nickname', nickname);
+	datos.append('email', email);
+	datos.append('role', role);
+	datos.append('estado', estado);
+	datos.append('accion', tipo);
+
+	//Validar que el campo tenga algo escrito
+	if (nombre === '' || apellidos === '' || estado === '' || nickname === '' || email === '' || role === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos'
+		});
+	} else {
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-editar-registro.php', true);
+
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'editUsuario') {
+						Swal.fire({
+							icon: 'success',
+							title: 'Usuario Actualizado!',
+							text: 'Esta solicitud se ha realizado con éxito',
+							position: 'center',
+							showConfirmButton: true
+						}).then(function () {
+							window.location = "usuarios.php";
+						});
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+}
 
 
+function nuevoUsuario(e) {
+	e.preventDefault();
 
+	let name = document.querySelector('#nombre').value,
+		apellido = document.querySelector('#apellido').value,
+		password = document.querySelector('#password').value,
+		email = document.querySelector('#email').value,
+		role = document.querySelector('#role').value,
+		tipo = document.querySelector('#tipo').value,
+		estado = document.querySelector('#estado').value;
+
+	//Crear  FormData - Datos que se envían al servidor
+	let datos = new FormData();
+	datos.append('nombre', name);
+	datos.append('apellido', apellido);
+	datos.append('password', password);
+	datos.append('correo', email);
+	datos.append('role', role);
+	datos.append('estado', estado);
+	datos.append('accion', tipo);
+
+	//Validar que el campo tenga algo escrito
+	if (name === '' || apellido === '' || password === '' || estado === '' ||  email === '' || role === '') {
+		//validación Falló
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'Debe de llenar todos los campos'
+		});
+	} else {
+		//Campos son correctos - Ejecutamos AJAX
+
+		//Crear  el llamado a Ajax
+		let xhr = new XMLHttpRequest();
+		//Abrir la Conexión
+		xhr.open('POST', 'includes/models/model-admin.php', true);
+
+		//Retorno de Datos
+		xhr.onload = function () {
+			if (this.status === 200) {
+				//esta es la respuesta la que tenemos en el model
+				// let respuesta = xhr.responseText;
+				let respuesta = JSON.parse(xhr.responseText);
+				console.log(respuesta);
+				if (respuesta.respuesta === 'correcto') {
+					//si es un nuevo usuario 
+					if (respuesta.tipo == 'newUsuario') {
+						Swal.fire({
+							icon: 'success',
+							title: '¡Solicitud realizada!',
+							text: 'Se ha creado el usuario con éxito',
+							position: 'center',
+							showConfirmButton: true
+
+						}).then(function () {
+							window.location = "usuarios.php";
+						});;
+					}
+				} else {
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'Hubo un error en la solicitud'
+					})
+				}
+			}
+		}
+		// Enviar la petición
+		xhr.send(datos);
+	}
+
+}
 
 
 

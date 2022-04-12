@@ -61,6 +61,11 @@
 				} else {
 					$cobros = '';
 				}
+				if (obtenerPaginaActual() == 'usuarios' || obtenerPaginaActual() == 'new-usuario' || obtenerPaginaActual() == 'edit-usuario') {
+					$usuarios = 'active';
+				} else {
+					$usuarios = '';
+				}
 				if (obtenerPaginaActual() == 'facturacion' || obtenerPaginaActual() == 'new-facturacion' || obtenerPaginaActual() == 'edit-cai') {
 					$facturacion = 'active';
 				} else {
@@ -71,10 +76,24 @@
 				} else {
 					$facturas = '';
 				}
+
+				// condición de usuarios
+				$hidden = '';
+				$role = $_SESSION["role_user"];
+				if ($role == 1) {
+					$bandera = true;
+				} else if ($role == 2) {
+					$bandera = false;
+				} else if ($role == 3) {
+					$bandera = false;
+				} else if ($role == 4) {
+					$bandera = false;
+				}
+
 				?>
 				<div class="sidebar-menu">
 					<ul class="menu">
-						<li class="sidebar-title">Menu</li>
+						<li class="sidebar-title">Menú</li>
 
 						<li class="sidebar-item  <?php echo $aqui; ?>">
 							<a href="index.php" class='sidebar-link'>
@@ -133,23 +152,32 @@
 								</li>
 							</ul>
 						</li>
-						<li class="sidebar-item  has-sub <?php echo $facturacion ?>">
-							<a href="#" class='sidebar-link'>
-								<i class="bi bi-life-preserver"></i>
-								<span>Configuración</span>
-							</a>
-							<ul class="submenu <?php echo $facturacion ?>">
-								<li class="submenu-item <?php echo $facturacion ?>">
-									<a href="facturacion.php">Facturación</a>
-								</li>
-								<li class="submenu-item <?php echo $facturas ?>">
-									<a href="facturas.php">Facturas Emitidas</a>
-								</li>
-								<li class="submenu-item">
-									<a href="backup_database.php?pass=Stark9891">Backup DB</a>
-								</li>
-							</ul>
-						</li>
+						<?php
+						if ($bandera) {
+						?>
+							<li class="sidebar-item  has-sub <?php echo $facturacion . $usuarios  ?>">
+								<a href="#" class='sidebar-link'>
+									<i class="bi bi-life-preserver"></i>
+									<span>Configuración</span>
+								</a>
+								<ul class="submenu <?php echo $facturacion . $usuarios ?>">
+									<li class="submenu-item <?php echo $facturacion ?>">
+										<a href="facturacion.php">Facturación</a>
+									</li>
+									<li class="submenu-item <?php echo $facturas ?>">
+										<a href="facturas.php">Facturas Emitidas</a>
+									</li>
+									<li class="submenu-item <?php echo $usuarios ?>">
+										<a href="usuarios.php">Usuarios</a>
+									</li>
+									<li class="submenu-item">
+										<a href="backup_database.php?pass=Stark9891">Backup DB</a>
+									</li>
+								</ul>
+							</li>
+						<?php
+						}
+						?>
 						<li class="sidebar-item  ">
 							<a href="login.php?cerrar_sesion=true" class='sidebar-link'>
 								<img src="assets/images/icons/logout.svg" alt="">

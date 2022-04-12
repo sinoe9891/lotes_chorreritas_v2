@@ -175,6 +175,27 @@ function obtenerProyecto($id = null) {
     }
 }
 
+function obtenerUsuarios($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM main_users WHERE id = {$id}");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+function obtenerRoles() {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT * FROM main_cargo");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+
 function obtenerProy($id_proyecto)	{
 	include '../conexion.php';
 	try {

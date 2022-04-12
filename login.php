@@ -73,11 +73,13 @@ if (isset($_GET['cerrar_sesion'])) {
 						<input type="hidden" id="tipo" value="login">
 						<input type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5" value="Ingresar">
 					</form>
-					<!-- <div class="text-center mt-5 text-lg fs-4">
-						<p class="text-gray-600">Don't have an account? <a href="auth-register.html" class="font-bold">Sign
-								up</a>.</p>
-						<p><a class="font-bold" href="auth-forgot-password.html">Forgot password?</a>.</p>
-					</div> -->
+					<div class="" style="text-align: center;margin-top:1rem;">
+						<!-- <p class="text-gray-600">Don't have an account? <a href="auth-register.html" class="font-bold">Sign
+								up</a>.</p> -->
+						<label class="form-check-label text-gray-600" for="flexCheckDefault">
+							<a class="font-bold" href="recuperar-contrasena.php">Olvidaste tu contraseña?</a>
+						</label>
+					</div>
 				</div>
 			</div>
 			<div class="col-lg-7 d-none d-lg-block">
@@ -86,9 +88,9 @@ if (isset($_GET['cerrar_sesion'])) {
 			</div>
 		</div>
 	</div>
-	<?php  
-        include 'includes/templates/footer.php'; 
-    ?>
+	<?php
+	include 'includes/templates/footer.php';
+	?>
 </body>
 
 </html>

@@ -40,6 +40,17 @@ function addEventListener() {
 		});
 	}
 	//Acciones de solicitudes
+	let solicitudUsuario = document.querySelector('.usuarios');
+	if (solicitudUsuario) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'eliminar-usuario';
+		solicitudUsuario.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event,modelo,eliminar);
+			}
+		});
+	}
+	//Acciones de solicitudes
 	let solicitudVenta = document.querySelector('.ventas');
 	if (solicitudVenta) {
 		modelo = 'model-acciones-eliminar';
