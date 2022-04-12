@@ -155,12 +155,12 @@
 						<?php
 						if ($bandera) {
 						?>
-							<li class="sidebar-item  has-sub <?php echo $facturacion . $usuarios  ?>">
+							<li class="sidebar-item  has-sub <?php echo $facturacion . $usuarios . $facturas  ?>">
 								<a href="#" class='sidebar-link'>
 									<i class="bi bi-life-preserver"></i>
 									<span>Configuración</span>
 								</a>
-								<ul class="submenu <?php echo $facturacion . $usuarios ?>">
+								<ul class="submenu <?php echo $facturacion . $usuarios . $facturas?>">
 									<li class="submenu-item <?php echo $facturacion ?>">
 										<a href="facturacion.php">Facturación</a>
 									</li>

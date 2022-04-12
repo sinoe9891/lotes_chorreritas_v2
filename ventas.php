@@ -32,6 +32,21 @@ include 'includes/templates/sidebar.php';
 		<section class="section ventas">
 			<div class="card">
 				<div class="card-body">
+					<div>
+						<?php
+
+						$DateAndTime = date('d-m-Y', time());
+						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></strong><br>';
+						$solicitudes = obtenerFacturas();
+						if ($solicitudes->num_rows <= 20 && $solicitudes->num_rows >= 1) {
+							echo 'Solo se cuenta con <span style="color:red;"><b>' . $solicitudes->num_rows . '</b></span> facturas disponibles</p>';
+						} elseif ($solicitudes->num_rows == 0) {
+							echo 'No se cuenta con facturas disponibles</p>';
+						} else {
+							echo '</p>';
+						}
+						?>
+					</div>
 					<table class="table table-striped" id="table1">
 						<thead>
 							<tr>
@@ -51,12 +66,12 @@ include 'includes/templates/sidebar.php';
 							<?php
 							$consultaProyecto = $conn->query("SELECT * FROM ficha_compra a, proyectos_ajustes b WHERE a.id_proyecto = b.id_proyecto");
 							$ajusteProyecto = $consultaProyecto->fetch_assoc();
-							if ($ajusteProyecto> 0){
+							if ($ajusteProyecto > 0) {
 								$precio_vara2 = $ajusteProyecto['precio_vara2'];
-							}else{
+							} else {
 								$precio_vara2 = 0;
 							}
-							
+
 							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, c.total_venta, c.id_ficha_compra, c.id_contrato_compra, a.id_contrato, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_contrato_compra = a.id_contrato GROUP BY id_contrato ORDER BY c.id_ficha_compra DESC");
 							$numero = 1;
 							$contador = 0;
