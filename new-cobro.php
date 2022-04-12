@@ -41,7 +41,15 @@ include 'includes/templates/sidebar.php';
 					<div>
 						<?php
 						$DateAndTime = date('d-m-Y', time());
-						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></p></strong>';
+						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></strong><br>';
+						$solicitudes = obtenerFacturas();
+						if ($solicitudes->num_rows <= 20 && $solicitudes->num_rows >= 1) {
+							echo 'Solo se cuenta con <span style="color:red;"><b>' . $solicitudes->num_rows . '</b></span> facturas disponibles</p>';
+						} elseif ($solicitudes->num_rows == 0) {
+							echo '<span style="color:red;"><b>No se cuenta con facturas disponibles</b></span></p>';
+						} else {
+							echo '</p>';
+						}
 						?>
 					</div>
 					<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -79,7 +87,7 @@ include 'includes/templates/sidebar.php';
 															?>
 
 														</select>
-														
+
 													</div>
 													<div class="form-group">
 														<label for="last-name-column">Deposito en Banco</label>

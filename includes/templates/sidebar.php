@@ -112,7 +112,7 @@
 								</li>
 							</ul>
 						</li>
-						<li class="sidebar-item  has-sub <?php echo $clientes . $ventas . $cobros ?>">
+						<li class="sidebar-item  has-sub <?php echo $clientes . $ventas . $cobros . $creditos?>">
 							<a href="#" class='sidebar-link'>
 								<i class="fa fa-table"></i>
 								<span>Facturación</span>

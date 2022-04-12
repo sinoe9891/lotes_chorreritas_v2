@@ -42,7 +42,7 @@ date_default_timezone_set('America/Tegucigalpa');
 						if ($solicitudes->num_rows <= 20 && $solicitudes->num_rows >= 1) {
 							echo 'Solo se cuenta con <span style="color:red;"><b>'.$solicitudes->num_rows.'</b></span> facturas disponibles</p>';
 						}elseif($solicitudes->num_rows == 0){
-							echo 'No se cuenta con facturas disponibles</p>';
+							echo '<span style="color:red;"><b>No se cuenta con facturas disponibles</b></span></p>';
 						}else{
 							echo '</p>';
 						}
