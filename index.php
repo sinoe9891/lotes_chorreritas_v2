@@ -255,7 +255,7 @@ include 'includes/templates/sidebar.php';
 								<img src="assets/images/faces/1.jpg" alt="Face 1">
 							</div>
 							<div class="ms-3 name">
-								<h5 class="font-bold"><?php echo $_SESSION["nombre_usuario"]; ?></h5>
+								<h5 class="font-bold"><?php echo $_SESSION["nombre_usuario"].' '.$_SESSION["apellidos"]; ?></h5>
 								<h5 class="font-bold"></h5>
 								<h6 class="text-muted mb-0">@<?php echo $_SESSION["username"]; ?></h6>
 							</div>

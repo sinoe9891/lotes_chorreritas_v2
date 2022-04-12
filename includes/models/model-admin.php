@@ -111,11 +111,11 @@ if ($accion === 'login') {
 	$password = $_POST['password'];
 	try {
 		//Seleccionaremos al administrador de la base de datos
-		$stmt = $conn->prepare('SELECT email_user, id, usuario_name, nickname, role_user, estado_user, password FROM main_users WHERE email_user = ?');
+		$stmt = $conn->prepare('SELECT email_user, id, usuario_name, apellidos, nickname, role_user, estado_user, password FROM main_users WHERE email_user = ?');
 		$stmt->bind_param('s', $email);
 		$stmt->execute();
 		//Loguear el usuario
-		$stmt->bind_result($email_user, $id_user, $usuario_name, $username, $role_user, $estado, $password_user);
+		$stmt->bind_result($email_user, $id_user, $usuario_name, $apellidos, $username, $role_user, $estado, $password_user);
 		$stmt->fetch();
 		if ($email_user) {
 			//Si el usuario existe verificar el password
@@ -125,6 +125,7 @@ if ($accion === 'login') {
 				$_SESSION['correo'] = $email;
 				$_SESSION['id'] = $id_user;
 				$_SESSION['nombre_usuario'] = $usuario_name;
+				$_SESSION['apellidos'] = $apellidos;
 				$_SESSION['username'] = $username;
 				$_SESSION['role_user'] = $role_user;
 				$_SESSION['login'] = true;
@@ -132,6 +133,7 @@ if ($accion === 'login') {
 				$respuesta = array(
 					'respuesta' => 'correcto',
 					'nombre' => $email_user,
+					'apellidos' => $apellidos,
 					'username' => $username,
 					'tipo' => $accion,
 					'role' => $role_user,
