@@ -11,7 +11,8 @@ $stylesheet = file_get_contents('css/style.css');
 
 if (isset($_GET['ID'])) {
 	$user_id = $_GET['ID'];
-	$consulta1 = $conn->query("SELECT * FROM info_cai a, info_empresa b where a.id_empresa = b.id_empresa");
+	// $consulta1 = $conn->query("SELECT * FROM info_cai a, info_empresa b where a.id_empresa = b.id_empresa");
+	$consulta1 = $conn->query("SELECT * FROM info_cai a, info_empresa b, facturas c, cobros d WHERE a.id_empresa = b.id_empresa and c.id_cobro = $user_id");
 	//while el id_cuota_pagada
 	while ($row = $consulta1->fetch_assoc()) {
 		$cai = $row['cai'];
@@ -19,6 +20,9 @@ if (isset($_GET['ID'])) {
 		$fecha_limite = $row['fecha_limite'];
 		$rango_inicial = $row['rango_inicial'];
 		$rango_final = $row['rango_final'];
+		$no_factura = $row['no_factura'];
+		$fecha_pago = $row['fecha_pago'];
+		$hora_pago = $row['hora_pago'];
 		$id_empresa = $row['id_empresa'];
 		$nombre = $row['nombre'];
 		$direccion = $row['direccion'];
@@ -26,6 +30,7 @@ if (isset($_GET['ID'])) {
 		$telefono = $row['telefono'];
 		$correo = $row['correo'];
 		$rango_autorizado = $row['rango_autorizado'];
+		$usuario = $row['usuario'];
 	}
 	$solicitudes = getCobro($user_id);
 	$len = 16;
@@ -38,7 +43,9 @@ if (isset($_GET['ID'])) {
 			$id_cobro = $row['id_cobro'];
 			$cantidad_pagada = $row['cantidad_pagada'];
 			$cuota = $row['cuota'];
+			$id_cuota_pagada = $row['id_cuota_pagada'];
 			$fecha_pagada = $row['fecha_pagada'];
+
 			$fecha_vencimiento = $row['fecha_vencimiento'];
 			$saldo_actual = $row['saldo_actual'];
 			$monto_restante = $row['monto_restante'];
@@ -49,10 +56,14 @@ if (isset($_GET['ID'])) {
 
 			if (($cuota + $monto_restante) == $total_venta) {
 				$actual = $total_venta;
-			}else{
+			} else {
 				$actual = $monto_restante;
 			}
-
+			if ($id_cuota_pagada == 1) {
+				$saldoanterior = $actual;
+			} else {
+				$saldoanterior = $actual + $cantidad_pagada;
+			}
 			$html .= '<div class="main_factura" >
 			<div class="main-container">
 			<div class="container_factura">
@@ -61,7 +72,7 @@ if (isset($_GET['ID'])) {
 			<p>RTN: ' . $rtn . '</p>
 			<p>Tel. ' . $telefono . '</p>
 			<hr style="border-style: dashed">
-			<p>FACTURA <span class="factura">000-001-01-00001001<span></p>
+			<p>FACTURA <span class="factura">' . $no_factura . '<span></p>
 			<hr>
 			<p>CAI</p>
 			<p>' . $cai . '</p>
@@ -75,14 +86,15 @@ if (isset($_GET['ID'])) {
 			<hr>
 			<p>' . $correo . '</p>
 			<hr>
-			<p>Fecha: ' .  date('d/m/Y') . '</p>
-			<p>Hora: ' .  date('h:i:s a', time()) . '</p>
+			<p>Usuario: ' .  $usuario . '</p>
+			<p>Fecha: ' .  date('d/m/Y', strtotime($fecha_pago)) . '</p>
+			<p>Hora: ' .   date('H:i:s a', strtotime($hora_pago))  . '</p>
 			<hr>
 			<div class="center">
 				<table class="center">
 					<tr>
 						<th>Por L. </th>
-						<td>'.number_format($cantidad_pagada, 2, '.', ',').'</td>
+						<td>' . number_format($cantidad_pagada, 2, '.', ',') . '</td>
 					</tr>
 					<tr>
 						<th>Fecha</th>
@@ -102,7 +114,7 @@ if (isset($_GET['ID'])) {
 				<table class="saldos">
 					<tr>
 						<th>Saldo anterior L.</th>
-						<td>'.number_format(($actual+$cantidad_pagada), 2, '.', ',').'</td>
+						<td>' . number_format(($saldoanterior), 2, '.', ',') . '</td>
 					</tr>
 					<tr>
 						<th>Interes a la fecha </th>
@@ -156,7 +168,7 @@ if (isset($_GET['ID'])) {
 					</tr>
 					<tr>
 						<th>Nuevo saldo L.</th>
-						<td>'.number_format($monto_restante, 2, '.', ',').'</td>
+						<td>' . number_format($monto_restante, 2, '.', ',') . '</td>
 					</tr>
 				</table>
 			</div>
@@ -170,7 +182,7 @@ if (isset($_GET['ID'])) {
 				<tr>
 					<th>Vencimiento</th>
 					dar formanto a $fecha_vencimiento
-					<td>' .  date('d/m/Y', strtotime($fecha_vencimiento)). '</td>
+					<td>' .  date('d/m/Y', strtotime($fecha_vencimiento)) . '</td>
 				</tr>
 			</table>
 			<hr>

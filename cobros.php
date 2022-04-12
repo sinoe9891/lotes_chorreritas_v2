@@ -35,9 +35,18 @@ include 'includes/templates/sidebar.php';
 			<div class="card">
 				<div class="card-body">
 					<div>
-						<?php
+					<?php
+						
 						$DateAndTime = date('d-m-Y', time());
-						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></p></strong>';
+						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></strong><br>';
+						$solicitudes = obtenerFacturas();
+						if ($solicitudes->num_rows <= 20 && $solicitudes->num_rows >= 1) {
+							echo 'Solo se cuenta con <span style="color:red;"><b>'.$solicitudes->num_rows.'</b></span> facturas disponibles</p>';
+						}elseif($solicitudes->num_rows == 0){
+							echo 'No se cuenta con facturas disponibles</p>';
+						}else{
+							echo '</p>';
+						}
 						?>
 					</div>
 					<table class="table table-striped" id="table1">

@@ -5,7 +5,7 @@ include 'includes/funciones.php';
 include 'includes/conexion.php';
 include 'includes/templates/header.php';
 include 'includes/templates/sidebar.php';
-
+date_default_timezone_set('America/Tegucigalpa');
 ?>
 <div id="main">
 	<header class="mb-3">
@@ -19,7 +19,6 @@ include 'includes/templates/sidebar.php';
 			<div class="row">
 				<div class="col-12 col-md-6 order-md-1 order-last">
 					<h3>Facturas</h3>
-
 				</div>
 				<div class="col-12 col-md-6 order-md-2 order-first">
 					<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -36,9 +35,19 @@ include 'includes/templates/sidebar.php';
 				<div class="card-body">
 					<div>
 						<?php
+						
 						$DateAndTime = date('d-m-Y', time());
-						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></p></strong>';
+						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></strong><br>';
+						$solicitudes = obtenerFacturas();
+						if ($solicitudes->num_rows <= 20 && $solicitudes->num_rows >= 1) {
+							echo 'Solo se cuenta con <span style="color:red;"><b>'.$solicitudes->num_rows.'</b></span> facturas disponibles</p>';
+						}elseif($solicitudes->num_rows == 0){
+							echo 'No se cuenta con facturas disponibles</p>';
+						}else{
+							echo '</p>';
+						}
 						?>
+						<p><span style="color:red;"><b>Importante:</b></span> El tiempo límite para anular una factura se de 1hr después de su emisión, subsiguiente de esto, ya no se podrá realizar ningún cambio.</p>
 					</div>
 					<table class="table table-striped" id="table1">
 						<thead>
@@ -64,7 +73,7 @@ include 'includes/templates/sidebar.php';
 							// 	$precio_vara2 = 0;
 							// }
 
-							$consulta = $conn->query("SELECT * FROM facturas a, ficha_compra b WHERE (a.estado_factura = 'emitida' OR a.estado_factura = 'anulada') AND a.contrato = b.id_ficha_compra;");
+							$consulta = $conn->query("SELECT a.id_factura, a.no_factura, a.fecha_pago, a.monto_pagado, a.fecha_pago, b.id_contrato_compra, a.saldo_actual, a.estado_factura, a.usuario FROM facturas a, ficha_compra b WHERE (a.estado_factura = 'emitida' OR a.estado_factura = 'anulada') AND a.contrato = b.id_ficha_compra;");
 							$numero = 1;
 							$contador = 1;
 							$total = 0;
@@ -74,7 +83,7 @@ include 'includes/templates/sidebar.php';
 								$no_factura = $solicitud['no_factura'];
 								$fecha_pago = $solicitud['fecha_pago'];
 								$monto_pagado = $solicitud['monto_pagado'];
-								$contrato = $solicitud['contrato'];
+								$contrato = $solicitud['id_contrato_compra'];
 								$saldo_actual = $solicitud['saldo_actual'];
 								$usuario = $solicitud['usuario'];
 								$estado = $solicitud['estado_factura'];
@@ -114,7 +123,6 @@ include 'includes/templates/sidebar.php';
 							?>
 						</tbody>
 					</table>
-					<a href="new-facturacion.php" class="btn btn-primary">Nuevo CAI</a>
 				</div>
 			</div>
 		</section>

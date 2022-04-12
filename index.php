@@ -315,14 +315,40 @@ include 'includes/templates/sidebar.php';
 </div>
 <script src="js/sweetalert2.all.min.js"></script>
 <script>
-	Swal.fire({
-		icon: 'success',
-		title: '¡Nueva Actualización!',
-		text: 'Ya se puede hacer cobros, adjuntar comprobante, se procede a generar configuración correlativo CAI',
-		position: 'center',
-		showConfirmButton: true
-
-	})
+	
+	<?php
+		$solicitudes = obtenerFacturas();
+		if ($solicitudes->num_rows <= 20 && $solicitudes->num_rows > 0) {
+			echo "Swal.fire({
+				icon: 'error',
+ 				title: 'Oops...',
+				html: 'Solo faltan $solicitudes->num_rows facturas por emitir.<br><b>Contactar al contador!!</b>',
+				position: 'center',
+				showConfirmButton: true,
+				
+			})
+			";
+		}elseif ($solicitudes->num_rows <= 0) {
+			echo "Swal.fire({
+				icon: 'error',
+ 				title: 'Oops...',
+				html: 'Tienes <b>$solicitudes->num_rows</b> facturas por emitir.<br>No puedes realizar cobros<br><b>Contactar al contador!!</b>',
+				position: 'center',
+				showConfirmButton: true,
+				
+			})
+			";
+		}else{
+			echo "Swal.fire({
+				icon: 'success',
+				title: '¡Nueva Actualización!',
+				text: 'Ya se pueden pasar los contratos a Activos y se puede iniciar a generar facturas',
+				position: 'center',
+				showConfirmButton: true
+		
+			})";
+		}
+	?>
 </script>
 <?php
 include 'includes/templates/footer.php';

@@ -788,6 +788,12 @@ function newCobro(e) {
 							window.location = "cobros.php";
 						});;
 					}
+				}else if(respuesta.respuesta === 'errorfactura'){
+					Swal.fire({
+						icon: 'error',
+						title: 'Oops...',
+						text: 'No hay Facturas Disponibles'
+					})
 				} else {
 					Swal.fire({
 						icon: 'error',
@@ -2340,9 +2346,9 @@ function cargarReloj() {
 
 	// Haciendo uso del objeto Date() obtenemos la hora, minuto y segundo 
 	var fechahora = new Date();
-	var hora = fechahora.getHours();
-	var minuto = fechahora.getMinutes();
-	var segundo = fechahora.getSeconds();
+	var hora = fechahora.getUTCHours();
+	var minuto = fechahora.getUTCMinutes();
+	var segundo = fechahora.getUTCSeconds();
 
 	// Variable meridiano con el valor 'AM' 
 	var meridiano = "PM";
@@ -2350,9 +2356,7 @@ function cargarReloj() {
 
 	// Si la hora es igual a 0, declaramos la hora con el valor 12 
 	if (hora == 0) {
-
 		hora = 12;
-
 	}
 
 	// Si la hora es mayor a 12, restamos la hora - 12 y mostramos la variable meridiano con el valor 'PM' 

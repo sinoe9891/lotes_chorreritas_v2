@@ -424,133 +424,143 @@ if ($accion === 'newCobro') {
 	//comprobar si ya estamos en el ultimo registro de la tabla
 	$facturas = $conn->query("SELECT no_factura, id_factura FROM facturas WHERE estado_factura = 'disponible' order by id_factura asc limit 1");
 	$codigoFactura = $facturas->fetch_assoc();
+
 	if ($codigoFactura > 0) {
-		$no_factura = $codigoFactura['no_factura'];
-		$id_factura = $codigoFactura['id_factura'];
-		$emitida = 'emitida';
-		$stmt = $conn->prepare("UPDATE facturas SET contrato = ?, fecha_pago = ?, hora_pago = ?, monto_pagado = ?, saldo_actual = ?, id_registro = ?, estado_factura = ?, usuario = ?  WHERE id_factura = ?");
-		$stmt->bind_param('sssssssss', $id_compra, $fecha_pago, $hora_pago, $valor_cuota, $monto_restante, $registro, $emitida, $usuario, $id_factura);
-		$stmt->execute();
+		
+		
+		// echo $id_cuota_pagada.'-'.$valor_cuota.'-'.$fecha_cuota.'-'.$id_banco.'-'.$tipo_comprobante.'-'.$no_cuota.'-'.$no_referencia.'-'.$forma_pago;
+		//Importar la conexión
+		// include '../conexion.php';
+		try {
+			//Preparar la consulta de insertar bloque
+			$statement = $conn->prepare("INSERT INTO cobros (id_cuota_pagada, id_contrato, cantidad_pagada, monto_restante, fecha_pagada, fecha_cuota, fecha_vencimiento, id_banco, tipo_comprobante, no_referencia, forma_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			//Asignar los valores de los parámetros
+			$statement->bind_param('sssssssssss', $no_cuota, $id_compra, $valor_cuota, $monto_restante, $fecha_pago, $fecha_cuota, $fecha_vencimiento, $id_banco, $tipo_comprobante, $no_referencia, $forma_pago);
+			$statement->execute();
+			$last_id = mysqli_insert_id($conn);
+			$carpeta = '../../src/recibos/' . $id_compra . '/';
+			$ruta = 'src/recibos/' . $id_compra . '/';
+
+
+
+			$no_factura = $codigoFactura['no_factura'];
+			$id_factura = $codigoFactura['id_factura'];
+			$emitida = 'emitida';
+			$stmt = $conn->prepare("UPDATE facturas SET id_cobro = ?, contrato = ?, fecha_pago = ?, hora_pago = ?, monto_pagado = ?, saldo_actual = ?, id_registro = ?, estado_factura = ?, usuario = ?  WHERE id_factura = ?");
+			$stmt->bind_param('ssssssssss', $last_id, $id_compra, $fecha_pago, $hora_pago, $valor_cuota, $monto_restante, $registro, $emitida, $usuario, $id_factura);
+			$stmt->execute();
+	
+			$stmt = $conn->prepare("SELECT id_ficha_compra, saldo_actual, total_venta, id_registro FROM ficha_compra WHERE id_ficha_compra = ?");
+			$stmt->bind_param('s', $id_compra);
+			$stmt->execute();
+			$resultado = $stmt->get_result();
+			$row = $resultado->fetch_assoc();
+			$id_ficha_compra = $row['id_ficha_compra'];
+			$saldo_actual = $row['saldo_actual'];
+			$total_venta = $row['total_venta'];
+			$id_registro = $row['id_registro'];
+			$concluido = 'co';
+		
+			if ($resultado->num_rows > 0) {
+				if ($saldo_actual == 0) {
+					$stmt = $conn->prepare("UPDATE ficha_compra SET estado = ? WHERE id_ficha_compra = ? AND id_registro = ?");
+					$stmt->bind_param('sss', $concluido, $id_compra, $id_registro);
+					$stmt->execute();
+				}
+			}
+		
+			if (isset($_FILES["archivos"]["name"])) {
+				$imagenes = count($_FILES["archivos"]["name"]);
+			} else {
+				$imagenes = null;
+			}
+		
+			function insertar_documento($id, $ruta)
+			{
+				include '../conexion.php';
+				//actualizar url de la cuota de pago
+				$stmt = $conn->prepare("UPDATE cobros SET url_comprobante = ? WHERE id_cobro = ?");
+				$stmt->bind_param('ss', $ruta, $id);
+				$stmt->execute();
+				return;
+			}
+	
+			function crearDireccion($carpeta)
+			{
+				// Path de documentos
+				// Permisos de la carpeta
+				if (!is_dir($carpeta)) {
+					mkdir($carpeta, 0777, true);
+				}
+				chmod($carpeta, 0777);
+				return;
+			}
+	
+			if ($imagenes != null) {
+				//Subir varias imagenes
+				for ($i = 0; $i < $imagenes; $i++) {
+					$ubicacionTemporal = $_FILES["archivos"]["tmp_name"][$i];
+					$nombreArchivo = $_FILES["archivos"]["name"][$i];
+					$extension = pathinfo($nombreArchivo, PATHINFO_EXTENSION);
+	
+					$parts = explode(".", $_FILES['archivos']['name'][$i]);
+					$ruta_archivos = $carpeta . $namefile . "_" . $i . "." . end($parts);
+					$ruta_db = $ruta . $namefile . "_" . $i . "." . end($parts);
+	
+					// Mover del temporal al directorio actual
+					crearDireccion($carpeta);
+					move_uploaded_file($ubicacionTemporal, $ruta_archivos);
+	
+					insertar_documento($last_id, $ruta_db);
+				}
+			} else {
+				$imagenes = '';
+			}
+	
+			if ($statement->affected_rows > 0 && $codigoFactura > 0) {
+				$respuesta = array(
+					//Esto es lo que se muestra en
+					//JSON.parse(xhr.responseText); console.log(respuesta);
+					'respuesta' => 'correcto',
+					'name' => $name,
+					'tipo' => $accion,
+					'nombre' => $namefile,
+					'id_agregado' => $last_id,
+					'factura' => $no_factura
+				);
+			} else {
+				$respuesta = array(
+					'respuesta' => 'error',
+					'Errores' => $carpeta,
+					'Error' => $imagenes,
+					'Error Factura' => $errorFactura,
+					// 'id_agregado' => $curriculum,
+				);
+				echo $statement->error;
+			}
+			$statement->close();
+			$conn->close();
+		} catch (Exception $e) {
+			//En caso de un error, tomar la exepción
+			$respuesta = array(
+				//Arreglo asociativo
+				'pass' => $e->getMessage(),
+				// 'pass' => $hash_password
+			);
+		}
 	} else {
 		$no_factura = 0;
-		$errorFactura = 'No hay facturas disponibles';
-	}
-
-
-
-	$stmt = $conn->prepare("SELECT id_ficha_compra, saldo_actual, total_venta, id_registro FROM ficha_compra WHERE id_ficha_compra = ?");
-	$stmt->bind_param('s', $id_compra);
-	$stmt->execute();
-	$resultado = $stmt->get_result();
-	$row = $resultado->fetch_assoc();
-	$id_ficha_compra = $row['id_ficha_compra'];
-	$saldo_actual = $row['saldo_actual'];
-	$total_venta = $row['total_venta'];
-	$id_registro = $row['id_registro'];
-	$concluido = 'co';
-
-	if ($resultado->num_rows > 0) {
-		if ($saldo_actual == 0) {
-			$stmt = $conn->prepare("UPDATE ficha_compra SET estado = ? WHERE id_ficha_compra = ? AND id_registro = ?");
-			$stmt->bind_param('sss', $concluido, $id_compra, $id_registro);
-			$stmt->execute();
-		}
-	}
-
-	if (isset($_FILES["archivos"]["name"])) {
-		$imagenes = count($_FILES["archivos"]["name"]);
-	} else {
-		$imagenes = null;
-	}
-
-	function insertar_documento($id, $ruta)
-	{
-		include '../conexion.php';
-		//actualizar url de la cuota de pago
-		$stmt = $conn->prepare("UPDATE cobros SET url_comprobante = ? WHERE id_cobro = ?");
-		$stmt->bind_param('ss', $ruta, $id);
-		$stmt->execute();
-		return;
-	}
-
-
-	// echo $id_cuota_pagada.'-'.$valor_cuota.'-'.$fecha_cuota.'-'.$id_banco.'-'.$tipo_comprobante.'-'.$no_cuota.'-'.$no_referencia.'-'.$forma_pago;
-	//Importar la conexión
-	// include '../conexion.php';
-	try {
-		//Preparar la consulta de insertar bloque
-		$statement = $conn->prepare("INSERT INTO cobros (id_cuota_pagada, id_contrato, cantidad_pagada, monto_restante, fecha_pagada, fecha_cuota, fecha_vencimiento, id_banco, tipo_comprobante, no_referencia, forma_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-		//Asignar los valores de los parámetros
-		$statement->bind_param('sssssssssss', $no_cuota, $id_compra, $valor_cuota, $monto_restante, $fecha_pago, $fecha_cuota, $fecha_vencimiento, $id_banco, $tipo_comprobante, $no_referencia, $forma_pago);
-		$statement->execute();
-		$last_id = mysqli_insert_id($conn);
-		$carpeta = '../../src/recibos/' . $id_compra . '/';
-		$ruta = 'src/recibos/' . $id_compra . '/';
-
-		function crearDireccion($carpeta)
-		{
-			// Path de documentos
-			// Permisos de la carpeta
-			if (!is_dir($carpeta)) {
-				mkdir($carpeta, 0777, true);
-			}
-			chmod($carpeta, 0777);
-			return;
-		}
-
-		if ($imagenes != null) {
-			//Subir varias imagenes
-			for ($i = 0; $i < $imagenes; $i++) {
-				$ubicacionTemporal = $_FILES["archivos"]["tmp_name"][$i];
-				$nombreArchivo = $_FILES["archivos"]["name"][$i];
-				$extension = pathinfo($nombreArchivo, PATHINFO_EXTENSION);
-
-				$parts = explode(".", $_FILES['archivos']['name'][$i]);
-				$ruta_archivos = $carpeta . $namefile . "_" . $i . "." . end($parts);
-				$ruta_db = $ruta . $namefile . "_" . $i . "." . end($parts);
-
-				// Mover del temporal al directorio actual
-				crearDireccion($carpeta);
-				move_uploaded_file($ubicacionTemporal, $ruta_archivos);
-
-				insertar_documento($last_id, $ruta_db);
-			}
-		} else {
-			$imagenes = '';
-		}
-
-		if ($statement->affected_rows > 0 && $codigoFactura > 0) {
-			$respuesta = array(
-				//Esto es lo que se muestra en
-				//JSON.parse(xhr.responseText); console.log(respuesta);
-				'respuesta' => 'correcto',
-				'name' => $name,
-				'tipo' => $accion,
-				'nombre' => $namefile,
-				'id_agregado' => $last_id,
-				'factura' => $no_factura
-			);
-		} else {
-			$respuesta = array(
-				'respuesta' => 'error',
-				'Errores' => $carpeta,
-				'Error' => $imagenes,
-				'Error Factura' => $errorFactura,
-				// 'id_agregado' => $curriculum,
-			);
-			echo $statement->error;
-		}
-		$statement->close();
-		$conn->close();
-	} catch (Exception $e) {
-		//En caso de un error, tomar la exepción
 		$respuesta = array(
-			//Arreglo asociativo
-			'pass' => $e->getMessage(),
-			// 'pass' => $hash_password
+			//Esto es lo que se muestra en
+			//JSON.parse(xhr.responseText); console.log(respuesta);
+			'respuesta' => 'errorfactura',
+			'name' => $name,
+			'tipo' => $accion,
+			'factura' => $no_factura
 		);
 	}
 	echo json_encode($respuesta);
+
 }
 
 

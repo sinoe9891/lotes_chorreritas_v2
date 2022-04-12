@@ -50,7 +50,7 @@ include 'includes/conexion.php';
 		echo $str1 . '<br>';
 		echo $str1 - ($str - 1) . '<br>'; 
 		// $cantidadFacturas = $str1 - $str;
-		$cantidadFacturas = 10;
+		$cantidadFacturas = 21;
 		// $str2 = ltrim($rango_inicial, "0");
 		// echo $str2.'<br>';
 		for ($i = 0; $i <= $cantidadFacturas; ++$i) {

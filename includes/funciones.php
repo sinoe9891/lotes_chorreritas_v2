@@ -112,6 +112,16 @@ function obtenerFichas() {
     }
 }
 
+function obtenerFacturas() {
+    include 'conexion.php';
+    try {
+		return $conn->query("SELECT * FROM facturas WHERE estado_factura = 'disponible'");
+    } catch(Exception $e) {
+		echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+
 function obtenerFichasCompra() {
     include 'conexion.php';
     try {
