@@ -111,7 +111,7 @@ if ($accion === 'login') {
 	$password = $_POST['password'];
 	try {
 		//Seleccionaremos al administrador de la base de datos
-		$stmt = $conn->prepare('SELECT email_user, id, usuario_name, username, role_user, estado_user, password FROM main_users WHERE email_user = ?');
+		$stmt = $conn->prepare('SELECT email_user, id, usuario_name, nickname, role_user, estado_user, password FROM main_users WHERE email_user = ?');
 		$stmt->bind_param('s', $email);
 		$stmt->execute();
 		//Loguear el usuario
