@@ -40,7 +40,7 @@ if (isset($_GET['ID'])) {
 		// echo $cuota;
 	}
 
-	$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra;");
+	$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado, a.fecha_pagada FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra;");
 	$contador = 1;
 	$numero = $estadoCuenta->num_rows;
 
@@ -83,7 +83,6 @@ if (isset($_GET['ID'])) {
 			$html .= $lotesa;
 			$sep = ', ';
 		};
-
 		$html .= '</td></tr>
 
 					<tr>
@@ -104,28 +103,26 @@ if (isset($_GET['ID'])) {
 					</tr>
 			</table>';
 
-		$html .= '<div class="container_cronograma"><h4>CRONOGRAMA DE PAGOS MENSUALES - VENTAL AL CRÉDITO</h4></div>
+		$html .= '<div class="container_cronograma"><h4>REPORTE DE PAGOS REALIZADOS POR EL CLIENTE</h4></div>
 			<table class="tablecronograma">
 				<tr>
 					<th>No.</th>
 					<th>Fecha de Pago</th>
+					<th>Cuota Pagada</th>
 					<th>Monto Restante</th>
-					<th>Cuota a pagar</th>
 				</tr>
 				';
 		$html .= '<tr>
 			<td>0</td>
 			<td></td>
-			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
 			<td></td>
+			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
 		</tr>';
-
-
-
-
+		$totalpagado = 0;
 		if ($estadoCuenta->num_rows > 0) {
 			while ($solicitud = $estadoCuenta->fetch_array()) {
 				date_default_timezone_set('America/Tegucigalpa');
+				$fecha_pagada = $solicitud['fecha_pagada'];
 				$fecha_pago = $solicitud['fecha_cuota'];
 				$fecha_pago = new DateTime($fecha_pago);
 				$fecha_pago1 = $fecha_pago->format('d-m-Y');
@@ -150,11 +147,18 @@ if (isset($_GET['ID'])) {
 
 				$html .= '<tr>
 						<td>' . $contador++ . '</td>
-						<td>' . $fecha_pago5 . '</td>
+						<td>' . $fecha_pagada . '</td>
+						<td><b>L.' . number_format($cantidad_pagada, 2, '.', ',') . '</b></td>
 						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
-						<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
 					</tr>';
-			}
+					$totalpagado += $cantidad_pagada;
+				}
+				$html .= '<tr>
+				<th style="border-right:0 !important;"></th>
+				<th style="border-left:0 !important;">Total Pagado</th>
+				<th>'.$totalpagado.'</th>
+				<th>---</th>
+			</tr>';
 
 			$cantidad_pagada = 0;
 			$bandera = false;
@@ -164,35 +168,7 @@ if (isset($_GET['ID'])) {
 			// $fecha_pago2 = date("d-m-Y", strtotime($fecha_pago . "+2 month")) . "<br>";
 			// echo $fecha_pago2;
 			$plazo_meses = $plazo_meses - $numero;
-			if ($monto_restante != 0) {
-				for ($i = 0; $i < $plazo_meses; ++$i) {
 
-					$fecha_pago2 = date("d/m/Y", strtotime($fecha_pago . " +$i month")) . "<br>";
-					// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
-					//ultima cuota sea igual al monto_restante
-					if ($monto_restante <= $cuota && $monto_restante >= 0) {
-						$cuota = $monto_restante;
-						$monto_restante = 0;
-						$bandera = true;
-					}
-
-					//restar la cuota de $total_venta\
-					if ($monto_restante > $cuota) {
-						$no_cuota = $i + 1;
-						$total_venta = $monto_restante - $cuota;
-						$monto_restante = $total_venta - $cantidad_pagada;
-					}
-
-
-
-					$html .= '<tr>
-						<td>' . $contador++ . '</td>
-						<td>' . $fecha_pago2 . '</td>
-						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
-						<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
-					</tr>';
-				}
-			}
 		}
 		$html .= '</table>';
 
@@ -215,9 +191,9 @@ if (isset($_GET['ID'])) {
 			// ob_end_clean();
 			$mpdf->WriteHTML($stylesheet, 1);
 			$mpdf->WriteHTML($html);
-			$mpdf->Output("Contrato.pdf", "I");
-			$nombrefactura = "Factura.pdf";
-			$mpdf->Output("facturas/" . ucwords(strtolower($nombrefactura)), "F");
+			$nombre_cobros = "cobros-" . $nombre_completo . '-' . $id_contrato_compra . ".pdf";
+			$mpdf->Output(strtolower($nombre_cobros) . "", "I");
+			// $mpdf->Output("facturas/" . ucwords(strtolower($nombre_cobros)), "F");
 			//si no existe el directorio factura se debe crear el directorio
 
 			// $mpdf->Output("Contrato ".$bloque .'-'. $numero .' '. ucwords(strtolower($nombre)) . ".pdf", "D");
@@ -310,61 +286,15 @@ if (isset($_GET['ID'])) {
 			<td></td>
 		</tr>';
 		if ($estadoCuenta->num_rows > 0) {
-			while ($solicitud = $estadoCuenta->fetch_array()) {
-				$fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
-				$fecha_pago = new DateTime($fecha_primer_cuota);
-				$fecha_pago1 = $fecha_pago->format('d-M-Y');
-				$nombre_completo = $solicitud['nombre_completo'];
-				$plazo_meses = $solicitud['plazo_meses'];
-				$saldo_actual = $solicitud['saldo_actual'];
-				$prima = $solicitud['prima'];
-				$cuota = $solicitud['cuota'];
-				$total_venta = $solicitud['total_venta'];
-				$total_venta = ($total_venta - $prima);
-				for ($i = 0; $i <= $plazo_meses; ++$i) {
-					// cambiar estado de la primera cuota por siguiente
-					if ($i == 0) {
-
-						$total_venta = $total_venta;
-						$fecha_pago1 = date("Y-m-d", strtotime($fecha_primer_cuota));
-					} else {
-
-						$fecha_pago1 = date("Y-m-d", strtotime($fecha_primer_cuota . " +$i month"));
-						$total_venta = $total_venta - $cuota;
-					}
-					// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
-					$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago1 . " +$i month"));
-					//restar la cuota de $total_venta
-					$saldo_actual = $total_venta - $cuota;
-					if ($total_venta <= $cuota && $total_venta >= 0) {
-						$cuota = $total_venta;
-						$total_venta = 0;
-						if ($saldo_actual < 0) {
-							$saldo_actual = 0;
-						}
-						$bandera = true;
-					}
-					$fecha_pago1 = new DateTime($fecha_pago1);
-					$fecha = $fecha_pago1->format('d/m/Y');
-					$fechahoy = new DateTime();
-					$interval = $fecha_pago1->diff($fechahoy);
-					$dias = $interval->format('%r%a');
-
-
-
 
 					$html .= '<tr>
-					<td>' . $contador++ . '</td>
-					<td>' . $fecha . '</td>
-					<td>L.' . number_format($saldo_actual, 2, '.', ',') . '</td>
-					<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
+					<td></td>
+					<td></td>
+					<td>L. 00.00</td>
+					<td><b>L. 00.00</b></td>
 				</tr>';
-					if ($bandera) {
-						// $cuota = $monto_restante;
-						break;
-					}
-				}
-			}
+	
+			
 		}
 
 		$html .= '</table>';
@@ -386,8 +316,8 @@ if (isset($_GET['ID'])) {
 			// ob_end_clean();
 			$mpdf->WriteHTML($stylesheet, 1);
 			$mpdf->WriteHTML($html);
-			$nombrecronograma = "cronograma-" . $nombre_completo . '-' . $id_contrato_compra . ".pdf";
-			$mpdf->Output(strtolower($nombrecronograma) . "", "I");
+			$nombrecronograma = "Cronograma-" . $nombre_completo . '-' . $id_contrato_compra . ".pdf";
+			$mpdf->Output($nombrecronograma . "", "I");
 			// $mpdf->Output("facturas/" . ucwords(strtolower($nombrecronograma)), "F");
 			//si no existe el directorio factura se debe crear el directorio
 

@@ -171,7 +171,7 @@ include 'includes/templates/sidebar.php';
 											<a href="letra.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Letra</a>
 										</td>
 										<td>
-											<a href="new-cobro.php?ID=<?php echo $id_compra ?>" target="_self"><span class="badge bg-primary">Realizar Cobro</span></a>
+											<a href="doc/cobros.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary"><i class="fa fa-file-pdf" aria-hidden="true"></i>Ver Cobros</a>
 										</td>
 										<td>
 											<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
