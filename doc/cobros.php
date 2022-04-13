@@ -151,12 +151,12 @@ if (isset($_GET['ID'])) {
 						<td><b>L.' . number_format($cantidad_pagada, 2, '.', ',') . '</b></td>
 						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 					</tr>';
-					$totalpagado += $cantidad_pagada;
-				}
-				$html .= '<tr>
+				$totalpagado += $cantidad_pagada;
+			}
+			$html .= '<tr>
 				<th style="border-right:0 !important;"></th>
 				<th style="border-left:0 !important;">Total Pagado</th>
-				<th>'.$totalpagado.'</th>
+				<th>L.' . number_format($totalpagado, 2, '.', ',') . '</th>
 				<th>---</th>
 			</tr>';
 
@@ -168,7 +168,6 @@ if (isset($_GET['ID'])) {
 			// $fecha_pago2 = date("d-m-Y", strtotime($fecha_pago . "+2 month")) . "<br>";
 			// echo $fecha_pago2;
 			$plazo_meses = $plazo_meses - $numero;
-
 		}
 		$html .= '</table>';
 
@@ -275,27 +274,33 @@ if (isset($_GET['ID'])) {
 				<tr>
 					<th>No.</th>
 					<th>Fecha de Pago</th>
+					<th>Cuota Pagada</th>
 					<th>Monto Restante</th>
-					<th>Cuota a pagar</th>
 				</tr>
 				';
 		$html .= '<tr>
 			<td>0</td>
 			<td></td>
-			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
 			<td></td>
+			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
 		</tr>';
 		if ($estadoCuenta->num_rows > 0) {
 
-					$html .= '<tr>
+			$html .= '<tr>
 					<td></td>
 					<td></td>
 					<td>L. 00.00</td>
 					<td><b>L. 00.00</b></td>
 				</tr>';
-	
-			
+
+			$totalpagado += $cantidad_pagada;
 		}
+		$html .= '<tr>
+			<th style="border-right:0 !important;"></th>
+			<th style="border-left:0 !important;">Total Pagado</th>
+			<th>L.' . number_format($totalpagado, 2, '.', ',') . '</th>
+			<th>---</th>
+		</tr>';
 
 		$html .= '</table>';
 		try {
