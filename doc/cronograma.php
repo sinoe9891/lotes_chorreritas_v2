@@ -391,7 +391,7 @@ if (isset($_GET['ID'])) {
 			// $mpdf->Output("facturas/" . ucwords(strtolower($nombrecronograma)), "F");
 			//si no existe el directorio factura se debe crear el directorio
 
-			// $mpdf->Output("Contrato ".$bloque .'-'. $numero .' '. ucwords(strtolower($nombre)) . ".pdf", "D");
+			// $mpdf->Output(ucwords(strtolower($nombrecronograma)), "D");
 		} catch (\Mpdf\MpdfException $e) { // Note: safer fully qualified exception 
 			//       name used for catch
 			// Process the exception, log, print etc.
