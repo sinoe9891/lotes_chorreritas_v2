@@ -91,7 +91,7 @@ if (isset($_GET['ID'])) {
 			<p>Hora: ' .   date('H:i:s a', strtotime($hora_pago))  . '</p>
 			<hr>
 			<div class="center">
-				<table class="center">
+				<table class="center-factura">
 					<tr>
 						<th>Por L. </th>
 						<td>' . number_format($cantidad_pagada, 2, '.', ',') . '</td>
