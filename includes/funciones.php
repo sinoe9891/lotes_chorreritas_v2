@@ -280,6 +280,17 @@ function obtenerInfoLoteCliente($id = null) {
     }
 }
 
+function obtenerInfoLotesCliente($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT a.numero, a.bloque FROM lotes a, ficha_compra b WHERE a.id_registro = b.id_registro and b.id_ficha_compra = {$id}");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+
 
 
 

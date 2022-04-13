@@ -13,7 +13,7 @@ body {
 
 .parrafo {
     font-size: 15px;
-	/* line-height: 1.5px; */
+    /* line-height: 1.5px; */
 }
 
 .mensaje {
@@ -25,7 +25,7 @@ body {
 }
 
 .main {
-	margin-top:-120px;
+    margin-top: -120px;
     width: 100%;
     position: relative;
 }
@@ -38,75 +38,206 @@ body {
 
 /* Factura */
 .main_factura {
-	/* margin-top:-120px;
+    /* margin-top:-120px;
     width: 100%; */
     /* position: relative; */
-	/* border:1px solid green; */
+    /* border:1px solid green; */
 }
 
 .container_factura {
-    margin:0;
-	text-align: center;
+    margin: 0;
+    text-align: center;
     /* width: 100%; */
-	/* border:1px solid red; */
+    /* border:1px solid red; */
 }
-.container_factura p{
-	font-size:12px;
-	/* line-height:0.5px; */
-	margin-bottom: 1;
-	margin-top: 1.5;
-}
-
-.container_factura h5{
-	font-size:12px;
-	/* line-height:0.5px; */
-	margin-bottom: 0;
-	margin-top: 0;
+.container_factura p {
+    font-size: 12px;
+    /* line-height:0.5px; */
+    margin-bottom: 1;
+    margin-top: 1.5;
 }
 
-hr{
-	margin: 7 0;
-	border-style: dashed !important;
+.container_factura h5 {
+    font-size: 12px;
+    /* line-height:0.5px; */
+    margin-bottom: 0;
+    margin-top: 0;
 }
-.factura{
-	font-size:10px;
+
+hr {
+    margin: 7 0;
+    border-style: dashed !important;
 }
-.center{
-	width: 100%;
-	border:0.2px dashed black;
-	text-align: center;
+.factura {
+    font-size: 10px;
 }
-th{
-	text-align: right;
+.center {
+    width: 100%;
+    border: 0.2px dashed black;
+    text-align: center;
 }
-td{
+th {
+    text-align: right;
+}
+td {
+    text-align: left;
+}
+
+.center {
+    width: 100%;
+    text-align: center;
+}
+
+.container_factura p.info {
+    font-size: 14px !important;
+    text-align: center;
+}
+.saldos {
+    width: 100%;
+}
+.saldos th {
+    text-align: left;
+}
+.saldos td {
+    text-align: right;
+}
+
+.container_factura p.exo {
+    font-size: 12px !important;
+    text-align: left;
+}
+.container_factura p.exoneracion {
+    font-size: 9px !important;
+    text-align: left;
+}
+
+
+
+
+/* Cronograma */
+.tablecronograma {
+    width: 100%;
+    /* border:0.2px solid black; */
+    text-align: center;
+}
+
+.tablecronograma th {
+	background-color: #dddddd;
+	border: 1px solid black;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+.tablecronograma td {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    border: 1px solid black;
+}
+.tablecronograma tr {
+    margin: 0;
+    padding: 0;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td {
+    border: 1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+}
+
+
+tr:nth-child(even) {
+    background-color: #ffffff;
+}
+.container_cronograma {
+    margin: 0;
+    text-align: center;
+    /* width: 100%; */
+    /* border:1px solid red; */
+}
+
+.container_cronograma p {
+    font-size: 12px;
+    /* line-height:0.5px; */
+    margin-bottom: 1;
+    margin-top: 1.5;
+}
+
+.container_cronograma h3 {
+	color:#2053a1;
+    font-size: 18px;
+    /* line-height:0.5px; */
+    margin-bottom: 0;
+    margin-top: 0;
+}
+.container_cronograma h4 {
+    font-size: 15px;
+    /* line-height:0.5px; */
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+
+
+
+.container_cliente {
+   
+    text-align: left;
+    width: 100%;
+    /* border:1px solid red; */
+}
+.tablecliente {
+    width: 100%;
+    /* border:0.2px solid black; */
+	margin-bottom: 15px;
 	text-align: left;
+
 }
 
-.center{
-	width: 100%;
-	text-align: center;
+.tablecliente th {
+	/* width:auto; */
+	/* background-color: #dddddd; */
+	font-size: 14px;
+	/* border: 1px solid black; */
+   margin: 15px 0;
+    padding-right: 5px;
+    text-align: left;
+}
+.tablecliente td {
+	font-size: 14px;
+	/* width:auto; */
+   margin: 15px 0;
+    padding: 0;
+    text-align: left;
+	/* padding: 0 5px ; */
+    /* border: 1px solid black; */
+}
+.tablecliente tr {
+    margin: 15px 0;
+    padding: 0;
+}
+.bck_icon {
+	width: 45%;
+    /* border: 1px solid black; */
 }
 
-.container_factura p.info{
-	font-size:14px !important;
-	text-align: center;
-}
-.saldos{
-	width: 100%;
-}
-.saldos th{
-	text-align: left;
-}
-.saldos td{
-	text-align: right;
+.card {
+	position: absolute;
+	overflow: visible;
+	left: 1cm;
+	top: 0cm;
+	padding: 1.5em;
+	font-family:sans;
+	margin: 0;
 }
 
-.container_factura p.exo{
-	font-size:12px !important;
-	text-align: left;
-}
-.container_factura p.exoneracion{
-	font-size:9px !important;
-	text-align: left;
-}
+/* #company_card {
+    position: absolute;
+	top: 10cm;
+    left:80px;
+} */
