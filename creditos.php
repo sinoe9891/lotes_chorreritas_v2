@@ -165,13 +165,13 @@ include 'includes/templates/sidebar.php';
 										<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
 										<td>
 											<a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
-											<a href="doc/cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary"><i class="fa fa-file-pdf" aria-hidden="true"></i></a> 
+											<a href="doc/cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i></a> 
 										</td>
 										<td>
-											<a href="letra.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Letra</a>
+											<a href="letra.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank">Letra</a>
 										</td>
 										<td>
-											<a href="doc/cobros.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary"><i class="fa fa-file-pdf" aria-hidden="true"></i>Ver Cobros</a>
+											<a href="doc/cobros.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i>Ver Cobros</a>
 										</td>
 										<td>
 											<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
