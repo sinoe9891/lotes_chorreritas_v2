@@ -342,7 +342,7 @@ include 'includes/templates/sidebar.php';
 			echo "Swal.fire({
 				icon: 'success',
 				title: '¡Nueva Actualización!',
-				text: 'Ya se pueden pasar los contratos a Activos y se puede iniciar a generar facturas',
+				text: 'Ya se pueden anular FACTURAS, pasar contratos a Activos y ya se puede iniciar a ingresar cobros',
 				position: 'center',
 				showConfirmButton: true
 		

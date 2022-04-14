@@ -207,7 +207,7 @@ if (isset($_GET['ID'])) {
 				// ob_end_clean();
 				$mpdf->WriteHTML($stylesheet, 1);
 				$mpdf->WriteHTML($html);
-				$mpdf->Output("Contrato " . $id_contrato_compra . '-' . $id_cobro . '-' . $id_registro . ".pdf", "I");
+				$mpdf->Output("Factura " . $id_contrato_compra . '-' . $id_cobro . '-' . $id_registro . ".pdf", "I");
 				$nombrefactura = "Factura-" . $id_contrato_compra . '-' . $id_cobro . '-' . $id_registro . ".pdf";
 				// $mpdf->Output("facturas/" . ucwords(strtolower($nombrefactura)), "F");
 				//si no existe el directorio factura se debe crear el directorio
