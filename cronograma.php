@@ -46,7 +46,7 @@ if (isset($_GET['ID'])) {
 							$cuota = $cuotaresult['cuota'];
 							// echo $cuota;
 						}
-						$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra;");
+						$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = 1 AND a.id_contrato = b.id_ficha_compra AND a.estado_cobro = 'emitida';");
 						$contador = 1;
 						$numero = $estadoCuenta->num_rows;
 						// echo $numero;

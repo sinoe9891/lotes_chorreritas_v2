@@ -166,7 +166,7 @@ if ($accion === 'eliminar-cuota-pagada') {
 			$id_cuota_pagada = $row['id_cuota_pagada'];
 			$id_contrato = $row['id_contrato'];
 			$cantidad_pagada = $row['cantidad_pagada'];
-			echo $cantidad_pagada;
+			// echo $cantidad_pagada;
 			//actualizar todos los datos de la tabla control_credito_lote por medio de una consulta con el $id_cuota_pagada
 			//actualizar saldo actual sumando cantidad_pagada
 			$consulta2 = $conn->query("UPDATE ficha_compra SET saldo_actual = saldo_actual + $cantidad_pagada WHERE id_ficha_compra = $id_contrato");

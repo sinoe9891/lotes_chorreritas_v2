@@ -381,12 +381,6 @@ function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 					title: 'Oops...',
 					text: 'Tiempo de Anulación Superado'
 				})
-			} else {
-				Swal.fire({
-					icon: 'error',
-					title: 'Oops...',
-					text: 'Huble un error'
-				})
 			}
 		}
 	}
