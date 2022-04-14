@@ -68,7 +68,7 @@ include 'includes/templates/sidebar.php';
 													<div class="form-group">
 														<label for="first-name-column">Nombre Completo</label>
 														<!-- <input type="hidden" id="fecha_pago" name="fecha_pago" value="<?php echo date('Y-m-d'); ?>"> -->
-														<input type="hidden" id="hora_pago" name="horaSolicitud" value="<?php echo date('H:i:s'); ?>">
+														<input type="hidden" id="hora_pago" name="horaSolicitud" value="<?php echo date('Y-m-d H:i:s', time()) ?>">
 														<input type="hidden" id="usuario" name="usuario" value="<?php echo $_SESSION["username"]; ?>">
 														<select class="choices form-select" id="nombre_completo" name="nombre_completo" onchange="mi_busqueda();">
 															<option name="lote" value="">Buscar Contrato</option>

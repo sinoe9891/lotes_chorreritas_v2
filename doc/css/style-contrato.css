@@ -1,0 +1,38 @@
+body {
+    /* background-image: url(./img/fondo.jpg); */
+    /* background-image-resize: 6; */
+    text-align: justify;
+    /* font-family: "Calibri, sans-serif"; */
+}
+
+.nombre {
+    /* padding: 420px 0 0 0; */
+    font-size: 25px;
+    /* border: 1px solid red; */
+}
+
+.parrafo {
+    font-size: 15px;
+	/* line-height: 1.5px; */
+}
+
+.mensaje {
+    padding-top: 70px;
+}
+
+.fechaCreacion {
+    padding-top: 40px;
+}
+
+.main {
+	margin-top:-120px;
+    width: 100%;
+    position: relative;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    width: 90%;
+}
+

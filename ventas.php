@@ -129,9 +129,10 @@ include 'includes/templates/sidebar.php';
 									</td>
 
 									<td> <span class="badge <?php echo $color ?> "> <?php echo $estadoVenta ?></span></td>
-									<td>Contrato</td>
 									<td>
-										<a href="cronograma.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Cronograma</span></a>
+										<a href="doc/index.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i>Contrato</a>
+									</td>
+									<td>
 										<a href="edit-venta.php?ID=<?php echo $solicitud['id_ficha_compra'] ?>" target="_self"><span class="badge bg-primary">Editar</span></a>
 										<i class="far fa-check-circle <?php echo ($solicitud['estado'] === '1' ? 'completo' : '') ?>"></i>
 										<i class="fas fa-trash"></i>

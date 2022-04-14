@@ -59,10 +59,10 @@ include 'includes/templates/sidebar.php';
 								<th>Saldo</th>
 								<th>Total Venta</th>
 								<th>Cronograma</th>
-								<th>Letra</th>
+								<!-- <th>Letra</th> -->
 								<th>Cobros</th>
 								<th>Estado</th>
-								<th>Acciones</th>
+								<!-- <th>Acciones</th> -->
 							</tr>
 						</thead>
 						<tbody>
@@ -167,9 +167,9 @@ include 'includes/templates/sidebar.php';
 											<a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
 											<a href="doc/cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i></a> 
 										</td>
-										<td>
+										<!-- <td>
 											<a href="letra.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank">Letra</a>
-										</td>
+										</td> -->
 										<td>
 											<a href="doc/cobros.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i>Ver Cobros</a>
 										</td>
@@ -177,9 +177,9 @@ include 'includes/templates/sidebar.php';
 											<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
 											<!-- <span class="badge <?php echo $color ?>"><?php echo $dias; ?></span> -->
 										</td>
-										<td>
+										<!-- <td>
 											<i class="fas fa-trash" style="<?php echo $noview . $view ?>;"></i>
-										</td>
+										</td> -->
 									</tr>
 							<?php
 								}

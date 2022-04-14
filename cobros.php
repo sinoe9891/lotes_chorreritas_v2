@@ -73,8 +73,9 @@ include 'includes/templates/sidebar.php';
 								$precio_vara2 = 0;
 							}
 
-							$consulta = $conn->query("SELECT DISTINCT a.id_cobro, d.nombre_completo, a.cantidad_pagada, a.no_referencia, a.tipo_comprobante, a.fecha_pagada, a.url_comprobante, c.id_contrato_compra, c.id_registro FROM cobros a, ficha_compra c, ficha_directorio d WHERE a.id_contrato = c.id_ficha_compra and c.id_registro = d.id ORDER BY a.id_cobro DESC;");
-							$numero = 1;							$contador = 1;
+							$consulta = $conn->query("SELECT DISTINCT a.id_cobro, d.nombre_completo, a.cantidad_pagada, a.no_referencia, a.tipo_comprobante, a.fecha_pagada, a.url_comprobante, c.id_contrato_compra, c.id_registro FROM cobros a, ficha_compra c, ficha_directorio d WHERE a.id_contrato = c.id_ficha_compra and c.id_registro = d.id AND a.estado_cobro = 'emitida' ORDER BY a.id_cobro DESC;");
+							$numero = 1;							
+							$contador = 1;
 							$total = 0;
 							while ($solicitud = $consulta->fetch_array()) {
 								date_default_timezone_set('America/Tegucigalpa');

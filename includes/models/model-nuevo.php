@@ -433,9 +433,9 @@ if ($accion === 'newCobro') {
 		// include '../conexion.php';
 		try {
 			//Preparar la consulta de insertar bloque
-			$statement = $conn->prepare("INSERT INTO cobros (id_cuota_pagada, id_contrato, cantidad_pagada, monto_restante, fecha_pagada, fecha_cuota, fecha_vencimiento, id_banco, tipo_comprobante, no_referencia, forma_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			$statement = $conn->prepare("INSERT INTO cobros (id_cuota_pagada, id_contrato, cantidad_pagada, monto_restante, fecha_pagada, hora_pagada, fecha_cuota, fecha_vencimiento, id_banco, tipo_comprobante, no_referencia, forma_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			//Asignar los valores de los parámetros
-			$statement->bind_param('sssssssssss', $no_cuota, $id_compra, $valor_cuota, $monto_restante, $fecha_pago, $fecha_cuota, $fecha_vencimiento, $id_banco, $tipo_comprobante, $no_referencia, $forma_pago);
+			$statement->bind_param('ssssssssssss', $no_cuota, $id_compra, $valor_cuota, $monto_restante, $fecha_pago, $hora_pago, $fecha_cuota, $fecha_vencimiento, $id_banco, $tipo_comprobante, $no_referencia, $forma_pago);
 			$statement->execute();
 			$last_id = mysqli_insert_id($conn);
 			$carpeta = '../../src/recibos/' . $id_compra . '/';

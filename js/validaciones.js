@@ -13,7 +13,7 @@ function addEventListener() {
 		eliminar = 'eliminar-cliente';
 		solicitud.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo,eliminar);
+				acciones(event, modelo, eliminar);
 			}
 		});
 	}
@@ -24,7 +24,7 @@ function addEventListener() {
 		eliminar = 'eliminar-bloque';
 		solicitudBloques.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo, eliminar);
+				acciones(event, modelo, eliminar);
 			}
 		});
 	}
@@ -35,7 +35,7 @@ function addEventListener() {
 		eliminar = 'eliminar-lote';
 		solicitudLote.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo,eliminar);
+				acciones(event, modelo, eliminar);
 			}
 		});
 	}
@@ -46,7 +46,7 @@ function addEventListener() {
 		eliminar = 'eliminar-usuario';
 		solicitudUsuario.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo,eliminar);
+				acciones(event, modelo, eliminar);
 			}
 		});
 	}
@@ -57,7 +57,7 @@ function addEventListener() {
 		eliminar = 'eliminar-venta';
 		solicitudVenta.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo,eliminar);
+				acciones(event, modelo, eliminar);
 			}
 		});
 	}
@@ -68,7 +68,7 @@ function addEventListener() {
 		eliminar = 'eliminar-credito';
 		solicitudCredito.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo,eliminar);
+				acciones(event, modelo, eliminar);
 			}
 		});
 	}
@@ -79,7 +79,7 @@ function addEventListener() {
 		eliminar = 'eliminar-cuota-pagada';
 		solicitudCuotaPagada.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo,eliminar);
+				acciones(event, modelo, eliminar);
 			}
 		});
 	}
@@ -90,17 +90,33 @@ function addEventListener() {
 		eliminar = 'eliminar-cai';
 		solicitudCai.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modelo,eliminar);
+				acciones(event, modelo, eliminar);
 			}
 		});
 	}
+	//Acciones de Cuota
+	let solicitudFactura = document.querySelector('.factura');
+	if (solicitudFactura) {
+		modelo = 'model-acciones-eliminar';
+		eliminar = 'anular-factura';
+		solicitudFactura.addEventListener('click', (event) => {
+			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
+				acciones(event, modelo, eliminar);
+			}
+		});
+	}
+
+
+
+
+
 
 	let fichaGraduado = document.querySelector('.caja-ficha');
 	if (fichaGraduado) {
 		modeloFicha = 'model-acciones-ficha';
 		fichaGraduado.addEventListener('click', (event) => {
 			if (event.isTrusted) { // Valida que el evento es desencadenado por una acción manual del cliente
-				acciones(event,modeloFicha);
+				acciones(event, modeloFicha);
 			}
 		});
 	}
@@ -233,7 +249,7 @@ function acciones(e, modelo) {
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
 			cancelButtonColor: '#d33',
-			confirmButtonText: 'Si, borrar!',
+			confirmButtonText: 'Sí, borrar!',
 			cancelButtonText: 'Cancelar'
 		}).then((result) => {
 			if (result.value) {
@@ -252,6 +268,31 @@ function acciones(e, modelo) {
 						window.location.reload();
 					}
 				});
+			}
+		})
+	}
+
+	if (e.target.classList.contains('anular')) {
+		Swal.fire({
+			title: 'Seguro(a)?',
+			text: "Esta acción no se puede deshacer",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Sí, anular!',
+			cancelButtonText: 'Cancelar'
+		}).then((result) => {
+			if (result.value) {
+				let solicitudEliminar = e.target.parentElement.parentElement;
+				console.log(solicitudEliminar);
+				// Borrra de la Base de datos
+				eliminarRegistro(solicitudEliminar, null, modelo, eliminar);
+				// Borrar del HTML
+				solicitudEliminar.remove();
+
+
+
 			}
 		})
 	}
@@ -288,7 +329,7 @@ function cambiarEstado(solicitud, estado, model) {
 
 const removeAccents = (str) => {
 	return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-} 
+}
 
 // Funcion eliminar registro de la tabla
 function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
@@ -305,7 +346,7 @@ function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 	datos.append('accion', eliminar);
 	datos.append('estado', estado);
 	// console.log(accion);
-	if(document.getElementById('nombre')){
+	if (document.getElementById('nombre')) {
 		let nombre = document.getElementById('nombre').value;
 		let procesado = nombre.replace(/\s+/g, '');
 		let archivoZip = removeAccents(procesado).toLowerCase();
@@ -319,6 +360,34 @@ function eliminarRegistro(solicitudEliminar, estado, model, eliminar) {
 		if (this.status === 200) {
 			// Ver si se puede eliminar
 			console.log(JSON.parse(xhr.responseText));
+
+			let respuesta = JSON.parse(xhr.responseText);
+
+			if (respuesta.respuesta === 'correctoanulado') {
+				//si es un nuevo usuario 
+				Swal.fire({
+					icon: 'success',
+					title: '¡Registro Anulado!',
+					text: 'La factura fue Anulada',
+					position: 'center',
+					showConfirmButton: true
+				}).then(function () {
+					window.location = "facturas.php";
+				});
+
+			} else if (respuesta.respuesta === 'errorhora') {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Tiempo de Anulación Superado'
+				})
+			} else {
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Huble un error'
+				})
+			}
 		}
 	}
 	//Enviar la petición
