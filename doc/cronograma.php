@@ -40,7 +40,7 @@ if (isset($_GET['ID'])) {
 		// echo $cuota;
 	}
 
-	$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra;");
+	$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra AND a.estado_cobro = 'emitida';");
 	$contador = 1;
 	$numero = $estadoCuenta->num_rows;
 
@@ -108,7 +108,7 @@ if (isset($_GET['ID'])) {
 			<table class="tablecronograma">
 				<tr>
 					<th>No.</th>
-					<th>Fecha de Pago</th>
+					<th>Fecha de Pago </th>
 					<th>Monto Restante</th>
 					<th>Cuota a pagar</th>
 				</tr>
@@ -191,6 +191,10 @@ if (isset($_GET['ID'])) {
 						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 						<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
 					</tr>';
+					if ($bandera) {
+						// $cuota = $monto_restante;
+						break;
+					}
 				}
 			}
 		}

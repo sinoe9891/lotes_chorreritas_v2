@@ -130,7 +130,7 @@ include 'includes/templates/sidebar.php';
 										<td><?php echo $nombre_completo; ?></td>
 										<td>
 											<?php
-											$ConsultaCobro = $conn->query("SELECT MAX(fecha_cuota) AS fecha_cuota FROM cobros WHERE id_contrato = $id_compra");
+											$ConsultaCobro = $conn->query("SELECT MAX(fecha_cuota) AS fecha_cuota FROM cobros WHERE id_contrato = $id_compra and estado_cobro = 'emitida'");
 
 											$solicitudFecha = $ConsultaCobro->fetch_assoc();
 											$fechaCuotaCobro = $solicitudFecha['fecha_cuota'];
