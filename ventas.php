@@ -72,7 +72,7 @@ include 'includes/templates/sidebar.php';
 								$precio_vara2 = 0;
 							}
 
-							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, c.total_venta, c.id_ficha_compra, c.id_contrato_compra, a.id_contrato, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_contrato_compra = a.id_contrato GROUP BY id_contrato ORDER BY c.id_ficha_compra DESC");
+							$consulta = $conn->query("SELECT a.id_registro, b.nombre_completo, c.total_venta, c.id_ficha_compra, c.id_contrato_compra, a.id_contrato, c.id_proyecto, c.fecha_venta, b.identidad, c.estado, c.tipo, c.prima FROM lotes a, ficha_directorio b, ficha_compra c WHERE a.id_registro=b.id and c.id_contrato_compra = a.id_contrato GROUP BY id_contrato ORDER BY c.estado ASC, c.id_ficha_compra DESC");
 							$numero = 1;
 							$contador = 0;
 							$total = 0;
