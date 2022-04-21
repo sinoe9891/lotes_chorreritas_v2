@@ -1,6 +1,6 @@
 <?php
 include '../conexion.php';
-
+include '../funciones.php';
 if ($_POST['mi_busqueda'] != "") {
 	$mi_busqueda = $_POST['mi_busqueda'];
 	// $resultados = mysqli_query($conexion,"SELECT * FROM $tabla_db1 WHERE numero LIKE '%$mi_busqueda%' LIMIT 5");
@@ -32,6 +32,24 @@ if ($_POST['mi_busqueda'] != "") {
 		if ($monto_restante < $cuota) {
 			$cuota = $monto_restante;
 		}
+
+		$loteClienteQuery = obtenerInfoLotesCliente($id_ficha_compra);
+		$sep = '';
+		echo '<div class="form-group">
+			<label for="company-column">Lotes</label>
+			<input type="text" class="form-control" name="no_cuota" id="no_cuota" value="';
+		while ($row = $loteClienteQuery->fetch_array()) {
+			$lote = $row['numero'];
+			$bloque = $row['bloque'];
+			$lotes = $bloque . '-' . $lote;
+			$text = $lotes;
+			$lotesa = $sep . $text;
+			echo $lotesa;
+			$sep = ', ';
+		};
+		echo '" readonly>
+		</div>';
+
 		echo
 		'		<div class="form-group">
 					<label for="company-column">Nombre Cliente</label>
@@ -70,6 +88,22 @@ if ($_POST['mi_busqueda'] != "") {
 		}
 		// echo $fecha_vencimiento;
 		// echo $id_contrato_compra;
+		$loteClienteQuery = obtenerInfoLotesCliente($id_ficha_compra);
+		$sep = '';
+		echo '<div class="form-group">
+			<label for="company-column">Lotes</label>
+			<input type="text" class="form-control" name="no_cuota" id="no_cuota" value="';
+		while ($row = $loteClienteQuery->fetch_array()) {
+			$lote = $row['numero'];
+			$bloque = $row['bloque'];
+			$lotes = $bloque . '-' . $lote;
+			$text = $lotes;
+			$lotesa = $sep . $text;
+			echo $lotesa;
+			$sep = ', ';
+		};
+		echo '" readonly>
+		</div>';
 		echo
 			'	<div class="form-group">
 					<label for="company-column">Nombre Cliente</label>
