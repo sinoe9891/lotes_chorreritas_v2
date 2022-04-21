@@ -4,7 +4,7 @@ include '../funciones.php';
 if ($_POST['mi_busqueda'] != "") {
 	$mi_busqueda = $_POST['mi_busqueda'];
 	// $resultados = mysqli_query($conexion,"SELECT * FROM $tabla_db1 WHERE numero LIKE '%$mi_busqueda%' LIMIT 5");
-	// echo $mi_busqueda;
+	echo $mi_busqueda;
 	$estadoCuenta = $conn->query("SELECT c.nombre_completo, a.fecha_pagada, b.id_ficha_compra, a.fecha_cuota, a.id_cuota_pagada, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, a.fecha_vencimiento, b.fecha_primer_cuota, b.id_registro FROM cobros a, ficha_compra b, ficha_directorio c WHERE a.id_contrato = b.id_ficha_compra and a.estado_cobro = 'emitida' AND b.id_registro = c.id AND b.id_ficha_compra LIKE '$mi_busqueda'");
 	$contador = 1;
 	//saber si viene vacio el query $estadoCuenta
