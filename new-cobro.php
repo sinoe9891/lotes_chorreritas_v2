@@ -66,7 +66,7 @@ include 'includes/templates/sidebar.php';
 											<div class="row">
 												<div class="col-md-6 col-12">
 													<div class="form-group">
-														<label for="first-name-column">Nombre Completo</label>
+														<label for="first-name-column">Contrato</label>
 														<!-- <input type="hidden" id="fecha_pago" name="fecha_pago" value="<?php echo date('Y-m-d'); ?>"> -->
 														<input type="hidden" id="hora_pago" name="horaSolicitud" value="<?php echo date('Y-m-d H:i:s', time()) ?>">
 														<input type="hidden" id="usuario" name="usuario" value="<?php echo $_SESSION["username"]; ?>">
