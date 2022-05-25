@@ -120,7 +120,7 @@ if ($_POST['mi_busqueda'] != "") {
 				</div>
 				<div class="form-group">
 					<label for="company-column">No. de Cuota</label>
-					<input type="number" class="form-control" name="no_cuota" id="no_cuota" value="1" placeholder="00001" readonly>
+					<input type="number" class="form-control" name="no_cuota" id="no_cuota" value="' . $id_cuota_pagada . '" placeholder="00001" readonly>
 				</div>
 				<div class="form-group">
 					<label for="company-column">Cuota Mensual Hola(L.)</label>
