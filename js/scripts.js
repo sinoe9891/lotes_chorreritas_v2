@@ -694,7 +694,7 @@ function newCobro(e) {
 		tipo_comprobante = document.querySelector('#tipo_comprobante').value,
 		no_cuota = document.querySelector('#no_cuota').value,
 		nombre_completo = document.querySelector('#nombre_completo').value,
-		// no_referencia = document.querySelector('#no_referencia').value,
+		no_referencia = document.querySelector('#no_referencia').value,
 		forma_pago = document.querySelector('#forma_pago').value,
 		monto_restante = document.querySelector('#monto_restante').value,
 		fotos = document.querySelector('#seleccionArchivos').files;
@@ -726,7 +726,7 @@ function newCobro(e) {
 		console.log(tamano.toFixed(2) + 'MB');
 	}
 
-	if (valor_cuota === '' || fecha_cuota === '' || id_banco === '' || tipo_comprobante === '' || no_cuota === '' || nombre_completo === '' || forma_pago === '') {
+	if (valor_cuota === '' || fecha_cuota === '' || id_banco === '' || tipo_comprobante === '' || no_cuota === '' || nombre_completo === '' ||  forma_pago === '') {
 		//validación Falló
 		Swal.fire({
 			icon: 'error',
