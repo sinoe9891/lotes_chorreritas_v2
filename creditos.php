@@ -161,12 +161,12 @@ date_default_timezone_set('America/Tegucigalpa');
 											// $oldLocale = setlocale(LC_TIME, 'es_HN');
 											// setlocale(LC_TIME, $oldLocale);
 											setlocale(LC_TIME, "spanish");
-											echo $fechaCuotaCobro;
+											// echo $fechaCuotaCobro;
 											$fecha = $fechaCuotaCobro;
 											// $fecha = str_replace("/", "-", $fecha);
-											echo $newDate = date("d-m-Y", strtotime($fecha));
-											$newDate = date("d-m-Y", strtotime($fecha));
-											echo $mesDesc = strftime("%B de %Y", strtotime($newDate));
+											// echo $newDate = date("d-m-Y", strtotime($fecha));
+											// $newDate = date("d-m-Y", strtotime($fecha));
+											// echo $mesDesc = strftime("%B de %Y", strtotime($newDate));
 											?>
 											<span class="badge <?php echo $color ?> "><?php echo $sig_pago; ?></span>
 										</td>
