@@ -95,7 +95,7 @@ include 'includes/templates/sidebar.php';
 												<div class="col-md-12 col-12">
 													<div class="form-group">
 														<label for="company-column">Prima</label>
-														<input type="number" class="form-control" name="prima" id="prima" value="" placeholder="00.00">
+														<input type="number" class="form-control" name="prima" step="0.01" id="prima" value="" placeholder="00.00">
 													</div>
 												</div>
 												<div class="col-md-12 col-12">

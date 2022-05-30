@@ -5,7 +5,7 @@ include 'includes/funciones.php';
 include 'includes/conexion.php';
 include 'includes/templates/header.php';
 include 'includes/templates/sidebar.php';
-
+date_default_timezone_set('America/Tegucigalpa');
 ?>
 <div id="main">
 	<header class="mb-3">
@@ -35,16 +35,16 @@ include 'includes/templates/sidebar.php';
 			<div class="card">
 				<div class="card-body">
 					<div>
-					<?php
-						
+						<?php
+
 						$DateAndTime = date('d-m-Y', time());
 						echo '<p>Hoy es: <strong>' . $DateAndTime . ' <span id="relojnumerico" onload"cargarReloj()"></span></strong><br>';
 						$solicitudes = obtenerFacturas();
 						if ($solicitudes->num_rows <= 20 && $solicitudes->num_rows >= 1) {
-							echo 'Solo se cuenta con <span style="color:red;"><b>'.$solicitudes->num_rows.'</b></span> facturas disponibles</p>';
-						}elseif($solicitudes->num_rows == 0){
+							echo 'Solo se cuenta con <span style="color:red;"><b>' . $solicitudes->num_rows . '</b></span> facturas disponibles</p>';
+						} elseif ($solicitudes->num_rows == 0) {
 							echo '<span style="color:red;"><b>No se cuenta con facturas disponibles</b></span></p>';
-						}else{
+						} else {
 							echo '</p>';
 						}
 						?>
@@ -138,7 +138,6 @@ include 'includes/templates/sidebar.php';
 											if ($fechaCuotaCobro !=  NULL) {
 												$fecha_pago = date("d-M-Y", strtotime($fechaCuotaCobro . " +1 month"));
 											}
-
 											$fecha_pago1 = new DateTime($fecha_pago);
 											$sig_pago =  $fecha_pago1->format('d-M-Y');
 											$fechahoy = new DateTime();
@@ -157,6 +156,17 @@ include 'includes/templates/sidebar.php';
 												$status =  "Pendiente";
 												$color = 'bg-success';
 											}
+											setlocale(LC_TIME, 'es_ES', 'Spanish_Spain', 'Spanish');
+											date_default_timezone_set('America/Tegucigalpa');
+											// $oldLocale = setlocale(LC_TIME, 'es_HN');
+											// setlocale(LC_TIME, $oldLocale);
+											setlocale(LC_TIME, "spanish");
+											echo $fechaCuotaCobro;
+											$fecha = $fechaCuotaCobro;
+											// $fecha = str_replace("/", "-", $fecha);
+											echo $newDate = date("d-m-Y", strtotime($fecha));
+											$newDate = date("d-m-Y", strtotime($fecha));
+											echo $mesDesc = strftime("%B de %Y", strtotime($newDate));
 											?>
 											<span class="badge <?php echo $color ?> "><?php echo $sig_pago; ?></span>
 										</td>
@@ -165,7 +175,7 @@ include 'includes/templates/sidebar.php';
 										<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
 										<td>
 											<a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
-											<a href="doc/cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i></a> 
+											<a href="doc/cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i></a>
 										</td>
 										<!-- <td>
 											<a href="letra.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank">Letra</a>
