@@ -4,7 +4,7 @@ include '../funciones.php';
 if ($_POST['mi_busqueda'] != "") {
 	$mi_busqueda = $_POST['mi_busqueda'];
 	// $resultados = mysqli_query($conexion,"SELECT * FROM $tabla_db1 WHERE numero LIKE '%$mi_busqueda%' LIMIT 5");
-	echo $mi_busqueda;
+	// echo $mi_busqueda;
 	$estadoCuenta = $conn->query("SELECT c.nombre_completo, a.fecha_pagada, b.id_ficha_compra, a.fecha_cuota, a.id_cuota_pagada, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, a.fecha_vencimiento, b.fecha_primer_cuota, b.id_registro FROM cobros a, ficha_compra b, ficha_directorio c WHERE a.id_contrato = b.id_ficha_compra and a.estado_cobro = 'emitida' AND b.id_registro = c.id AND b.id_ficha_compra LIKE '$mi_busqueda'");
 	$contador = 1;
 	//saber si viene vacio el query $estadoCuenta
@@ -37,7 +37,7 @@ if ($_POST['mi_busqueda'] != "") {
 		$sep = '';
 		echo '<div class="form-group">
 			<label for="company-column">Lotes</label>
-			<input type="text" class="form-control" name="no_cuota" id="no_cuota" value="';
+			<input type="text" class="form-control" name="lotes" id="lotes" value="';
 		while ($row = $loteClienteQuery->fetch_array()) {
 			$lote = $row['numero'];
 			$bloque = $row['bloque'];
@@ -53,7 +53,7 @@ if ($_POST['mi_busqueda'] != "") {
 		echo
 		'		<div class="form-group">
 					<label for="company-column">Nombre Cliente</label>
-					<input type="text" class="form-control" name="no_cuota" id="no_cuota" value="'.$nombre_completo.'" placeholder="00001" readonly>
+					<input type="text" class="form-control" name="nombre_completo" id="nombre_completo" value="'.$nombre_completo.'" placeholder="00001" readonly>
 				</div>
 				<div class="form-group">
 					<label for="first-name-column">Fecha de cuota</label>
@@ -75,7 +75,7 @@ if ($_POST['mi_busqueda'] != "") {
 			';
 	} elseif ($estadoCuenta->num_rows == 0) {
 		$estadoCuenta = $conn->query("SELECT * FROM ficha_compra a, ficha_directorio b WHERE a.id_ficha_compra = '$mi_busqueda' AND a.id_registro = b.id;");
-
+		$id_cuota_pagada = 1;
 		while ($cuotaresult = $estadoCuenta->fetch_array()) {
 			$id_ficha_compra = $cuotaresult['id_ficha_compra'];
 			$nombre_completo = $cuotaresult['nombre_completo'];
@@ -92,7 +92,7 @@ if ($_POST['mi_busqueda'] != "") {
 		$sep = '';
 		echo '<div class="form-group">
 			<label for="company-column">Lotes</label>
-			<input type="text" class="form-control" name="no_cuota" id="no_cuota" value="';
+			<input type="text" class="form-control" name="lotes" id="lotes" value="';
 		while ($row = $loteClienteQuery->fetch_array()) {
 			$lote = $row['numero'];
 			$bloque = $row['bloque'];
@@ -107,7 +107,7 @@ if ($_POST['mi_busqueda'] != "") {
 		echo
 			'	<div class="form-group">
 					<label for="company-column">Nombre Cliente</label>
-					<input type="text" class="form-control" name="no_cuota" id="no_cuota" value="'.$nombre_completo.'" placeholder="00001" readonly>
+					<input type="text" class="form-control" name="nombre_completo" id="nombre_completo" value="'.$nombre_completo.'" placeholder="00001" readonly>
 				</div>
 				<div class="form-group">
 					<label for="first-name-column">Fecha de cuota</label>
