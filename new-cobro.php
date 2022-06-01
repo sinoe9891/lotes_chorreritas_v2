@@ -7,6 +7,9 @@ include 'includes/templates/header.php';
 if (isset($_GET['ID'])) {
 	$user_id = $_GET['ID'];
 }
+if (isset($_POST['resultado'])) {
+	$user_id = $_POST['resultado'];
+}
 date_default_timezone_set('America/Tegucigalpa');
 include 'includes/templates/sidebar.php';
 ?>

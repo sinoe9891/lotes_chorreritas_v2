@@ -15,7 +15,7 @@
 	<title>Lotes Chorreritas</title>
 	<link rel="stylesheet" href="css/all.css?v=<?php echo(rand()); ?>">
 	<!-- <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css?v=<?php echo(rand()); ?>" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/> -->
-	<link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.0/normalize.css?v=<?php echo(rand()); ?>">
+	<!-- <link rel="stylesheet" href="https://necolas.github.io/normalize.css/8.0.0/normalize.css?v=<?php echo(rand()); ?>"> -->
 	<!-- Etiquetas CSS -->
 	<link rel="stylesheet" href="css/sweetalert2.min.css?v=<?php echo(rand()); ?>">
 	<!-- <link rel="stylesheet" href="css/style.css?v=<?php echo(rand()); ?>"> -->
@@ -32,7 +32,7 @@
 	<link rel="stylesheet" href="assets/css/app.css?v=<?php echo(rand()); ?>">
 	<link rel="stylesheet" href="css/mapa.css?v=<?php echo(rand()); ?>">
 	<link rel="stylesheet" href="css/all.css?v=<?php echo(rand()); ?>">
-	<link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+	<!-- <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon"> -->
 	<!-- Etiquetas SEO -->
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="description" content="Somos una empresa inmobiliaria que brinda apoyo para que puedas comprar tu lote de terreno en Siguatepue.">

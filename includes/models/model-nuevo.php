@@ -412,8 +412,11 @@ if ($accion === 'newCobro') {
 	$name = date('d-M-Y') . '-' . $id_compra . '-' . $no_cuota . '-' . $nombre_completo;
 	//Pasar a Minusculas
 	$namefile = strtolower(quitar_acentos(str_replace($searchString, $replaceString, $name)));
-
-
+	
+	$residuocuota = $_POST['residuocuota'];
+	$numero_cuotas_pagadas = $_POST['numero_cuotas_pagadas'];
+	// $no_cuota = ($no_cuota - 1) + $numero_cuotas_pagadas;
+	
 	$monto_restante = $monto_restante - $valor_cuota;
 	$stmt = $conn->prepare("UPDATE ficha_compra SET saldo_actual = ? WHERE id_ficha_compra = ?");
 	$stmt->bind_param('ss', $monto_restante, $id_compra);
@@ -427,21 +430,20 @@ if ($accion === 'newCobro') {
 
 	if ($codigoFactura > 0) {
 		
-		
-		// echo $id_cuota_pagada.'-'.$valor_cuota.'-'.$fecha_cuota.'-'.$id_banco.'-'.$tipo_comprobante.'-'.$no_cuota.'-'.$no_referencia.'-'.$forma_pago;
-		//Importar la conexión
-		// include '../conexion.php';
 		try {
-			//Preparar la consulta de insertar bloque
-			$statement = $conn->prepare("INSERT INTO cobros (id_cuota_pagada, id_contrato, cantidad_pagada, monto_restante, fecha_pagada, hora_pagada, fecha_cuota, fecha_vencimiento, id_banco, tipo_comprobante, no_referencia, forma_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			//Preparar la consulta de insertar Cobro
+			$statement = $conn->prepare("INSERT INTO cobros (id_cuota_pagada, numero_cuotas_pagadas, id_contrato, cantidad_pagada, monto_restante, fecha_pagada, hora_pagada, fecha_cuota, fecha_vencimiento, id_banco, tipo_comprobante, no_referencia, forma_pago) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			//Asignar los valores de los parámetros
-			$statement->bind_param('ssssssssssss', $no_cuota, $id_compra, $valor_cuota, $monto_restante, $fecha_pago, $hora_pago, $fecha_cuota, $fecha_vencimiento, $id_banco, $tipo_comprobante, $no_referencia, $forma_pago);
+			$statement->bind_param('sssssssssssss', $no_cuota, $numero_cuotas_pagadas, $id_compra, $valor_cuota, $monto_restante, $fecha_pago, $hora_pago, $fecha_cuota, $fecha_vencimiento, $id_banco, $tipo_comprobante, $no_referencia, $forma_pago);
 			$statement->execute();
 			$last_id = mysqli_insert_id($conn);
+
+
+
+
+
 			$carpeta = '../../src/recibos/' . $id_compra . '/';
 			$ruta = 'src/recibos/' . $id_compra . '/';
-
-
 
 			$no_factura = $codigoFactura['no_factura'];
 			$id_factura = $codigoFactura['id_factura'];

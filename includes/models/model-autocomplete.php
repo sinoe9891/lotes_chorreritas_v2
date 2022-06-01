@@ -4,9 +4,19 @@ include '../funciones.php';
 if ($_POST['mi_busqueda'] != "") {
 	$mi_busqueda = $_POST['mi_busqueda'];
 	// $resultados = mysqli_query($conexion,"SELECT * FROM $tabla_db1 WHERE numero LIKE '%$mi_busqueda%' LIMIT 5");
-	// echo $mi_busqueda;
-	$estadoCuenta = $conn->query("SELECT c.nombre_completo, a.fecha_pagada, b.id_ficha_compra, a.fecha_cuota, a.id_cuota_pagada, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, a.fecha_vencimiento, b.fecha_primer_cuota, b.id_registro FROM cobros a, ficha_compra b, ficha_directorio c WHERE a.id_contrato = b.id_ficha_compra and a.estado_cobro = 'emitida' AND b.id_registro = c.id AND b.id_ficha_compra LIKE '$mi_busqueda'");
+	$estadoCuenta = $conn->query("SELECT c.nombre_completo, a.fecha_pagada, a.numero_cuotas_pagadas, b.id_ficha_compra, a.fecha_cuota, a.id_cuota_pagada, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, a.fecha_vencimiento, b.fecha_primer_cuota, b.id_registro FROM cobros a, ficha_compra b, ficha_directorio c WHERE a.id_contrato = b.id_ficha_compra and a.estado_cobro = 'emitida' AND b.id_registro = c.id AND b.id_ficha_compra LIKE '$mi_busqueda'");
+
+	$numcuotas = $conn->query("SELECT SUM(a.numero_cuotas_pagadas) as total FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $mi_busqueda");
+
+	$cuot = 0;
+	echo 'entró';
+	while ($sumcuotas = $numcuotas->fetch_array()) {
+		$numerocuotas = $sumcuotas['total'];
+		$numerocuotas += 1;
+	}
+
 	$contador = 1;
+	$resultado = '';
 	//saber si viene vacio el query $estadoCuenta
 	//imprimir $estadoCuenta
 	// echo 'Imprime números de filas: '. $estadoCuenta->num_rows . '<br>';
@@ -16,15 +26,17 @@ if ($_POST['mi_busqueda'] != "") {
 			$cuota = $cuotaresult['cuota'];
 			$registro = $cuotaresult['id_registro'];
 			$id_cuota_pagada = $cuotaresult['id_cuota_pagada'];
+			$numero_cuotas_pagadas = $cuotaresult['numero_cuotas_pagadas'];
 			$fecha_pago = $cuotaresult['fecha_cuota'];
 			$id_ficha_compra = $cuotaresult['id_ficha_compra'];
 			$monto_restante = $cuotaresult['monto_restante'];
 			$fecha_primera_cuota = $cuotaresult['fecha_primer_cuota'];
 			// echo $id_ficha_compra;
+			$numero_cuotas_pagadas;
 		}
 		//condicion si no hay id_cuota_pagada solo imprima cuota
 
-		$id_cuota_pagada = $id_cuota_pagada + 1;
+		$id_cuota_pagada += 1;
 
 
 		$fecha_pago = date("Y-m-d", strtotime($fecha_pago . " +1 month"));
@@ -53,7 +65,7 @@ if ($_POST['mi_busqueda'] != "") {
 		echo
 		'		<div class="form-group">
 					<label for="company-column">Nombre Cliente</label>
-					<input type="text" class="form-control" name="nombre_completo" id="nombre_completo" value="'.$nombre_completo.'" placeholder="00001" readonly>
+					<input type="text" class="form-control" name="nombre_completo" id="nombre_completo" value="' . $nombre_completo . '" placeholder="00001" readonly>
 				</div>
 				<div class="form-group">
 					<label for="first-name-column">Fecha de cuota</label>
@@ -66,11 +78,13 @@ if ($_POST['mi_busqueda'] != "") {
 				</div>
 				<div class="form-group">
 					<label for="company-column">No. de Cuota</label>
-					<input type="number" class="form-control" name="no_cuota" id="no_cuota" value="' . $id_cuota_pagada . '" placeholder="00001" readonly>
+					<input type="hidden" class="form-control" name="no_cuota" id="no_cuota" value="' . $id_cuota_pagada . '" placeholder="00001" readonly>
+					<input type="number" class="form-control" name="sumcuota" id="sumcuota" value="' . $numerocuotas . '" placeholder="00001" readonly>
 				</div>
 				<div class="form-group">
-					<label for="company-column">Cuota Mensual (L.)</label>
-					<input type="number" class="form-control" name="valor_cuota" id="valor_cuota" step="0.01" value="' . $cuota . '" placeholder="' . $cuota . '">
+					<label for="company-column">Cuota Mensual (L.' . $cuota . ')</label>
+					<input type="hidden" class="form-control" name="cuota" id="cuota" step="0.01" value="' . $cuota . '" placeholder="' . $cuota . '">
+					<input type="number" class="form-control" name="valor_cuota" id="valor_cuota" step="0.01" value="' . $resultado . '" placeholder="' . $cuota . '">
 				</div>
 			';
 	} elseif ($estadoCuenta->num_rows == 0) {
@@ -105,9 +119,9 @@ if ($_POST['mi_busqueda'] != "") {
 		echo '" readonly>
 		</div>';
 		echo
-			'	<div class="form-group">
+		'	<div class="form-group">
 					<label for="company-column">Nombre Cliente</label>
-					<input type="text" class="form-control" name="nombre_completo" id="nombre_completo" value="'.$nombre_completo.'" placeholder="00001" readonly>
+					<input type="text" class="form-control" name="nombre_completo" id="nombre_completo" value="' . $nombre_completo . '" placeholder="00001" readonly>
 				</div>
 				<div class="form-group">
 					<label for="first-name-column">Fecha de cuota</label>
@@ -123,8 +137,9 @@ if ($_POST['mi_busqueda'] != "") {
 					<input type="number" class="form-control" name="no_cuota" id="no_cuota" value="' . $id_cuota_pagada . '" placeholder="00001" readonly>
 				</div>
 				<div class="form-group">
-					<label for="company-column">Cuota Mensual Hola(L.)</label>
-					<input type="number" class="form-control" name="valor_cuota" id="valor_cuota" step="0.01" value="' . $cuota . '" placeholder="' . $cuota . '">
+					<label for="company-column">Cuota Mensual Hola(L.' . $cuota . ')</label>
+					<input type="hidden" class="form-control" name="cuota" id="cuota" step="0.01" value="' . $cuota . '" placeholder="' . $cuota . '">
+					<input type="number" class="form-control" name="valor_cuota" id="valor_cuota" step="0.01" value="' . $resultado . '" placeholder="' . $cuota . '">
 				</div>
 			';
 	} else {

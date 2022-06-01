@@ -109,18 +109,18 @@ if (isset($_GET['ID'])) {
 				<tr>
 					<th>No.</th>
 					<th>Fecha de Pago </th>
-					<th>Monto Restante</th>
 					<th>Cuota a pagar</th>
+					<th>Monto Restante</th>
 				</tr>
 				';
 		$html .= '<tr>
 			<td>0</td>
 			<td></td>
+			<td>Saldo Inicial</td>
 			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
-			<td></td>
 		</tr>';
 
-
+		
 
 
 		if ($estadoCuenta->num_rows > 0) {
@@ -151,8 +151,8 @@ if (isset($_GET['ID'])) {
 				$html .= '<tr>
 						<td>' . $contador++ . '</td>
 						<td>' . $fecha_pago5 . '</td>
-						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 						<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
+						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 					</tr>';
 			}
 
@@ -188,8 +188,8 @@ if (isset($_GET['ID'])) {
 					$html .= '<tr>
 						<td>' . $contador++ . '</td>
 						<td>' . $fecha_pago2 . '</td>
-						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 						<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
+						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 					</tr>';
 					if ($bandera) {
 						// $cuota = $monto_restante;
@@ -237,6 +237,7 @@ if (isset($_GET['ID'])) {
 
 		// }
 	} else {
+		// ESTA CONDICIÓN ESTA CORRECTA YA QUE NO SE HA REALIZADO NINGUN PAGO ES UN CRONOGRAMA EN LIMPIO
 		$estadoCuenta = $conn->query("SELECT a.nombre_completo, b.fecha_primer_cuota, b.total_venta, b.saldo_actual, b.cuota, b.total_venta, b.plazo_meses, b.prima FROM ficha_directorio a, ficha_compra b WHERE b.id_ficha_compra = $id and b.id_registro = a.id;");
 		$contador = 1;
 		$numero = $estadoCuenta->num_rows;
@@ -303,15 +304,15 @@ if (isset($_GET['ID'])) {
 				<tr>
 					<th>No.</th>
 					<th>Fecha de Pago</th>
-					<th>Monto Restante</th>
 					<th>Cuota a pagar</th>
+					<th>Monto Restante</th>
 				</tr>
 				';
 		$html .= '<tr>
 			<td>0</td>
 			<td></td>
+			<td>Saldo Inicial -></td>
 			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
-			<td></td>
 		</tr>';
 		if ($estadoCuenta->num_rows > 0) {
 			while ($solicitud = $estadoCuenta->fetch_array()) {
@@ -360,8 +361,8 @@ if (isset($_GET['ID'])) {
 					$html .= '<tr>
 					<td>' . $contador++ . '</td>
 					<td>' . $fecha . '</td>
-					<td>L.' . number_format($saldo_actual, 2, '.', ',') . '</td>
 					<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
+					<td>L.' . number_format($saldo_actual, 2, '.', ',') . '</td>
 				</tr>';
 					if ($bandera) {
 						// $cuota = $monto_restante;

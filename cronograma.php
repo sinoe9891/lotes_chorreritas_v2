@@ -50,6 +50,7 @@ if (isset($_GET['ID'])) {
 						$contador = 1;
 						$numero = $estadoCuenta->num_rows;
 						// echo $numero;
+
 						if ($estadoCuenta->num_rows > 0) {
 						?>
 							<thead>
@@ -65,8 +66,10 @@ if (isset($_GET['ID'])) {
 							</thead>
 							<tbody>
 								<?php
-								
+								$valor_cuota = 0;
 								while ($solicitud = $estadoCuenta->fetch_array()) {
+									// $fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
+									// $fecha_pago = new DateTime($fecha_primer_cuota);
 									date_default_timezone_set('America/Tegucigalpa');
 									$fecha_pago = $solicitud['fecha_cuota'];
 									$fecha_pago = new DateTime($fecha_pago);
@@ -80,6 +83,25 @@ if (isset($_GET['ID'])) {
 									if ($monto_restante == 0) {
 										$cuota = $cantidad_pagada;
 									}
+
+
+									if ($cantidad_pagada > $cuota) {
+										// echo round($cantidad_pagada, 2) % $cuota ;
+										// echo intdiv(round($cantidad_pagada, 2), $cuota) ;
+										// $residuocuota = round($cantidad_pagada, 2) % $cuota;
+										$residuocuota = fmod($cantidad_pagada, $cuota);
+										// echo $residuocuota;
+										$numero_cuotas_pagadas = number_format(round(($cantidad_pagada - $residuocuota) / $cuota, 0));
+									} elseif ($cantidad_pagada == $cuota) {
+										$residuocuota = 0;
+										$numero_cuotas_pagadas = 1;
+									}
+									echo $residuocuota . '<br>';
+									echo $cantidad_pagada . '<br>';
+									echo $numero_cuotas_pagadas . '<br>';
+
+
+
 									if ($estado == 'pag') {
 										$status = "Pagado";
 										$coloractual = 'bg-secondary';
@@ -124,7 +146,7 @@ if (isset($_GET['ID'])) {
 										$status =  "Pendiente";
 										$coloractual = 'bg-success';
 									}
-									
+
 
 								?>
 									<tr>
@@ -153,7 +175,7 @@ if (isset($_GET['ID'])) {
 										// echo $fecha_pago2;
 										$plazo_meses = $plazo_meses - $numero;
 										if ($monto_restante != 0) {
-											for ($i = 0; $i < $plazo_meses; ++$i) {
+											for ($i = $numero_cuotas_pagadas; $i < $plazo_meses; ++$i) {
 
 												$fecha_pago2 = date("d-M-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
 												// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
@@ -192,7 +214,7 @@ if (isset($_GET['ID'])) {
 												</td>
 												<td>
 													<?php
-													// echo '<p>' . $dias . '</p>';
+													echo '<p>' . $dias . '</p>';
 													if ($dias == '-1') {
 														$status = "Pendiente";
 														$coloractual = 'bg-warning';
@@ -219,6 +241,7 @@ if (isset($_GET['ID'])) {
 											}
 										}
 									} else {
+										//ENTRA CUANDO NO HAY NINGUNA CUOTA PAGADA
 										$estadoCuenta = $conn->query("SELECT a.nombre_completo, b.fecha_primer_cuota, b.total_venta, b.saldo_actual, b.cuota, b.total_venta, b.plazo_meses, b.prima FROM ficha_directorio a, ficha_compra b WHERE b.id_ficha_compra = $id and b.id_registro = a.id;");
 										$contador = 1;
 										$numero = $estadoCuenta->num_rows;
@@ -237,7 +260,7 @@ if (isset($_GET['ID'])) {
 							</thead>
 							<tbody>
 								<?php
-										
+
 										while ($solicitud = $estadoCuenta->fetch_array()) {
 
 											$fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
@@ -253,11 +276,9 @@ if (isset($_GET['ID'])) {
 											for ($i = 0; $i <= $plazo_meses; ++$i) {
 												// cambiar estado de la primera cuota por siguiente
 												if ($i == 0) {
-
 													$total_venta = $total_venta;
 													$fecha_pago1 = date("Y-m-d", strtotime($fecha_primer_cuota));
 												} else {
-
 													$fecha_pago1 = date("Y-m-d", strtotime($fecha_primer_cuota . " +$i month"));
 													$total_venta = $total_venta - $cuota;
 												}

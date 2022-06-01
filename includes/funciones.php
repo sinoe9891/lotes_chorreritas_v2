@@ -18,6 +18,8 @@ function obtenerNumeroClientes() {
     }
 }
 
+
+
 function obtenerLotesDisponibles() {
     include 'conexion.php';
     try {
@@ -58,6 +60,17 @@ function obtenerInfoFichaPerfil($id = null) {
         return false;
     }
 }
+function sumaCuotas($id = null) {
+    include 'conexion.php';
+    try {
+        return $conn->query("SELECT SUM(numero_cuotas_pagadas) AS cuotas FROM cobros a, ficha_compra b WHERE b.id_contrato_compra = '{$id}'");
+
+    } catch(Exception $e) {
+        echo "Error! : " . $e->getMessage();
+        return false;
+    }
+}
+
 function obtenerInfoVenta($id = null) {
     include 'conexion.php';
     try {
