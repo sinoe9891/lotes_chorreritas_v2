@@ -46,11 +46,10 @@ if (isset($_GET['ID'])) {
 							$cuota = $cuotaresult['cuota'];
 							// echo $cuota;
 						}
-						$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra AND a.estado_cobro = 'emitida';");
+						$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado, b.fecha_primer_cuota FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra AND a.estado_cobro = 'emitida';");
 						$contador = 1;
 						$numero = $estadoCuenta->num_rows;
 						// echo $numero;
-
 						if ($estadoCuenta->num_rows > 0) {
 						?>
 							<thead>
@@ -68,8 +67,9 @@ if (isset($_GET['ID'])) {
 								<?php
 								$valor_cuota = 0;
 								while ($solicitud = $estadoCuenta->fetch_array()) {
-									// $fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
-									// $fecha_pago = new DateTime($fecha_primer_cuota);
+									$fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
+									$fecha_pago_prime = new DateTime($fecha_primer_cuota);
+									$fecha_pago3 = $fecha_pago_prime->format('d-M-Y');
 									date_default_timezone_set('America/Tegucigalpa');
 									$fecha_pago = $solicitud['fecha_cuota'];
 									$fecha_pago = new DateTime($fecha_pago);
@@ -84,7 +84,7 @@ if (isset($_GET['ID'])) {
 										$cuota = $cantidad_pagada;
 									}
 
-
+									$numero_cuotas_pagada = 0;
 									if ($cantidad_pagada > $cuota) {
 										// echo round($cantidad_pagada, 2) % $cuota ;
 										// echo intdiv(round($cantidad_pagada, 2), $cuota) ;
@@ -92,6 +92,7 @@ if (isset($_GET['ID'])) {
 										$residuocuota = fmod($cantidad_pagada, $cuota);
 										// echo $residuocuota;
 										$numero_cuotas_pagadas = number_format(round(($cantidad_pagada - $residuocuota) / $cuota, 0));
+										// $numero_cuotas_pagadas += $numero_cuotas_pagadas;
 									} elseif ($cantidad_pagada == $cuota) {
 										$residuocuota = 0;
 										$numero_cuotas_pagadas = 1;
@@ -106,13 +107,9 @@ if (isset($_GET['ID'])) {
 										$status = "Pagado";
 										$coloractual = 'bg-secondary';
 									}
-									// $fecha_vencimiento = new DateTime($fecha_vencimiento);
-									// $fecha_pago2 = date("d-M-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
-									// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
+
 									$fecha_pago = date("d-m-Y", strtotime($fecha_pago1 . " +1 month"));
-									// $fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago . " +1 month"));
 									$fecha_vencimiento = new DateTime($fecha_pago);
-									// echo '<p>' . $fecha_vencimiento->format('d-m-Y') . '</p>';
 									$fechahoy = new DateTime();
 									$interval = $fecha_vencimiento->diff($fechahoy);
 									$dias = $interval->format('%r%a');
@@ -168,14 +165,10 @@ if (isset($_GET['ID'])) {
 										<?php
 										$cantidad_pagada = 0;
 										$bandera = false;
-										// echo $fecha_pago . "<br>";
-										// $fecha_pago1 = $fecha_pago->format('d-M-Y');
-										$fecha_pago = date("d-m-Y", strtotime($fecha_pago1 . " +1 month"));
-										// $fecha_pago2 = date("d-m-Y", strtotime($fecha_pago . "+2 month")) . "<br>";
-										// echo $fecha_pago2;
+										$fecha_pago = date("d-m-Y", strtotime($fecha_pago3 . " +$numero_cuotas_pagadas month"));
 										$plazo_meses = $plazo_meses - $numero;
 										if ($monto_restante != 0) {
-											for ($i = $numero_cuotas_pagadas; $i < $plazo_meses; ++$i) {
+											for ($i = ($numero_cuotas_pagadas - 1); $i < $plazo_meses; ++$i) {
 
 												$fecha_pago2 = date("d-M-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
 												// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
@@ -240,12 +233,12 @@ if (isset($_GET['ID'])) {
 												}
 											}
 										}
-									} else {
-										//ENTRA CUANDO NO HAY NINGUNA CUOTA PAGADA
-										$estadoCuenta = $conn->query("SELECT a.nombre_completo, b.fecha_primer_cuota, b.total_venta, b.saldo_actual, b.cuota, b.total_venta, b.plazo_meses, b.prima FROM ficha_directorio a, ficha_compra b WHERE b.id_ficha_compra = $id and b.id_registro = a.id;");
-										$contador = 1;
-										$numero = $estadoCuenta->num_rows;
-										// echo $numero;
+						} else {
+							//ENTRA CUANDO NO HAY NINGUNA CUOTA PAGADA
+							$estadoCuenta = $conn->query("SELECT a.nombre_completo, b.fecha_primer_cuota, b.total_venta, b.saldo_actual, b.cuota, b.total_venta, b.plazo_meses, b.prima FROM ficha_directorio a, ficha_compra b WHERE b.id_ficha_compra = $id and b.id_registro = a.id;");
+							$contador = 1;
+							$numero = $estadoCuenta->num_rows;
+							// echo $numero;
 							?>
 							<thead>
 								<tr>

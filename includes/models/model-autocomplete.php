@@ -6,13 +6,17 @@ if ($_POST['mi_busqueda'] != "") {
 	// $resultados = mysqli_query($conexion,"SELECT * FROM $tabla_db1 WHERE numero LIKE '%$mi_busqueda%' LIMIT 5");
 	$estadoCuenta = $conn->query("SELECT c.nombre_completo, a.fecha_pagada, a.numero_cuotas_pagadas, b.id_ficha_compra, a.fecha_cuota, a.id_cuota_pagada, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, a.fecha_vencimiento, b.fecha_primer_cuota, b.id_registro FROM cobros a, ficha_compra b, ficha_directorio c WHERE a.id_contrato = b.id_ficha_compra and a.estado_cobro = 'emitida' AND b.id_registro = c.id AND b.id_ficha_compra LIKE '$mi_busqueda'");
 
-	$numcuotas = $conn->query("SELECT SUM(a.numero_cuotas_pagadas) as total FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $mi_busqueda");
+	// $numcuotas = $conn->query("SELECT SUM(a.numero_cuotas_pagadas) as total FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $mi_busqueda");
+	$numcuotas = $conn->query("SELECT SUM(numero_cuotas_pagadas) as total FROM cobros WHERE id_contrato = $mi_busqueda group by id_contrato;");
 
 	$cuot = 0;
-	echo 'entró';
+	// echo 'entró';
 	while ($sumcuotas = $numcuotas->fetch_array()) {
 		$numerocuotas = $sumcuotas['total'];
+		// echo $numerocuotas;
+		$sigcuota = $numerocuotas;
 		$numerocuotas += 1;
+		// echo $numerocuotas;
 	}
 
 	$contador = 1;
@@ -35,11 +39,13 @@ if ($_POST['mi_busqueda'] != "") {
 			$numero_cuotas_pagadas;
 		}
 		//condicion si no hay id_cuota_pagada solo imprima cuota
-
+		// echo $numero_cuotas_pagadas . ' Hola';
 		$id_cuota_pagada += 1;
+		// echo $fecha_pago;
 
-
-		$fecha_pago = date("Y-m-d", strtotime($fecha_pago . " +1 month"));
+		echo '<br>'.$fecha_primera_cuota.'<br>';
+		// echo '<br>'.$numerocuotas.'<br>';
+		$fecha_pago = date("Y-m-d", strtotime($fecha_primera_cuota . " +$sigcuota month"));
 		$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago . " +1 month"));
 		if ($monto_restante < $cuota) {
 			$cuota = $monto_restante;
@@ -130,6 +136,7 @@ if ($_POST['mi_busqueda'] != "") {
 					<input type="hidden" id="fecha_vencimiento" name="fecha_vencimiento" value="' . $fecha_vencimiento . '">
 					<input type="hidden" id="monto_restante" name="monto_restante" value="' . $monto_restante . '">
 					<input type="hidden" id="registro" name="registro" value="' . $registro . '">
+
 					<input type="date" class="form-control" name="fecha_pagada" id="fecha_pagada" value="' . $fecha_primera_cuota . '">
 				</div>
 				<div class="form-group">
@@ -137,7 +144,7 @@ if ($_POST['mi_busqueda'] != "") {
 					<input type="number" class="form-control" name="no_cuota" id="no_cuota" value="' . $id_cuota_pagada . '" placeholder="00001" readonly>
 				</div>
 				<div class="form-group">
-					<label for="company-column">Cuota Mensual Hola(L.' . $cuota . ')</label>
+					<label for="company-column">Cuota Mensual (L.' . $cuota . ')</label>
 					<input type="hidden" class="form-control" name="cuota" id="cuota" step="0.01" value="' . $cuota . '" placeholder="' . $cuota . '">
 					<input type="number" class="form-control" name="valor_cuota" id="valor_cuota" step="0.01" value="' . $resultado . '" placeholder="' . $cuota . '">
 				</div>
