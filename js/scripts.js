@@ -700,17 +700,21 @@ function newCobro(e) {
 		monto_restante = document.querySelector('#monto_restante').value,
 		fotos = document.querySelector('#seleccionArchivos').files;
 
-	if(valor_cuota > cuota){
+	// if(valor_cuota > cuota){
+		console.log('entró');
 		console.log(valor_cuota);
 		residuocuota = valor_cuota % cuota;
-		console.log(residuocuota.toFixed(2));
-
+		residuocuota = residuocuota.toFixed(2)
+		console.log(residuocuota);
 		numero_cuotas_pagadas = (valor_cuota-residuocuota)/cuota;
-		console.log(numero_cuotas_pagadas.toFixed(0));
-	}else if(valor_cuota == cuota){
-		residuocuota = 0;
-		numero_cuotas_pagadas = 1;
-	}
+		numero_cuotas_pagadas = numero_cuotas_pagadas.toFixed(0);
+		console.log(numero_cuotas_pagadas);
+	// }else if(valor_cuota == cuota){
+	// 	console.log('entró 2');
+	// 	residuocuota = 0;
+	// 	numero_cuotas_pagadas = 1;
+		
+	// }
 	// console.log(fotos);
 	let barraestado = document.cobroForm.children[0].children[2],
 		span = barraestado.children[0], tamano = 0;
@@ -747,13 +751,13 @@ function newCobro(e) {
 	} else {
 		//Campos son correctos - Ejecutamos AJAX
 		//Crear  FormData - Datos que se envían al servidor
-		console.log('enviar');
+		// console.log('enviar');
 		let datos = new FormData();
 		datos.append('id_compra', id_compra);
 		datos.append('usuario', usuario);
 		datos.append('valor_cuota', valor_cuota);
-		datos.append('residuocuota', residuocuota.toFixed(2));
-		datos.append('numero_cuotas_pagadas', numero_cuotas_pagadas.toFixed(0));
+		datos.append('residuocuota', residuocuota);
+		datos.append('numero_cuotas_pagadas', numero_cuotas_pagadas);
 		datos.append('fecha_cuota', fecha_cuota);
 		datos.append('fecha_vencimiento', fecha_vencimiento);
 		datos.append('fecha_pagada', fecha_pagada);

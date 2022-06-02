@@ -110,18 +110,27 @@ if (isset($_GET['ID'])) {
 					<th>No.</th>
 					<th>Fecha de Pago </th>
 					<th>Cuota a pagar</th>
-					<th>Monto Restante</th>
 					<th>Estado</th>
+					<th>Monto Restante</th>
 				</tr>
 				';
 		$html .= '<tr>
 			<td>0</td>
 			<td></td>
 			<td></td>
-			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
 			<td>Saldo Inicial</td>
+			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
 		</tr>';
-		
+		if($prima > 0){
+			$pendiente = $total_venta - $prima;
+			$html .= '<tr>
+			<td>0</td>
+			<td>Prima</td>
+			<td><b>L.' . number_format($prima, 2, '.', ',') . '</b></td>
+			<td>Pagado</td>
+			<td><b>L.' . number_format($pendiente, 2, '.', ',') . '</b></td>
+		</tr>';
+		}
 		if ($estadoCuenta->num_rows > 0) {
 			while ($solicitud = $estadoCuenta->fetch_array()) {
 				date_default_timezone_set('America/Tegucigalpa');
@@ -151,8 +160,8 @@ if (isset($_GET['ID'])) {
 						<td>' . $contador++ . '</td>
 						<td>' . $fecha_pago5 . '</td>
 						<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
-						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 						<td>Pagado</td>
+						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 					</tr>';
 			}
 		// 	$html .= '<tr>
@@ -195,8 +204,8 @@ if (isset($_GET['ID'])) {
 						<td>' . $contador++ . '</td>
 						<td>' . $fecha_pago2 . '</td>
 						<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
-						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 						<td>Pendiente</td>
+						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
 					</tr>';
 					if ($bandera) {
 						// $cuota = $monto_restante;
@@ -371,8 +380,8 @@ if (isset($_GET['ID'])) {
 					<td>' . $contador++ . '</td>
 					<td>' . $fecha . '</td>
 					<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
-					<td>L.' . number_format($saldo_actual, 2, '.', ',') . '</td>
 					<td>Pendiente</td>
+					<td>L.' . number_format($saldo_actual, 2, '.', ',') . '</td>
 				</tr>';
 					if ($bandera) {
 						// $cuota = $monto_restante;
