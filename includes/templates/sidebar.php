@@ -76,6 +76,11 @@
 				} else {
 					$facturas = '';
 				}
+				if (obtenerPaginaActual() == 'reportes') {
+					$reportes = 'active';
+				} else {
+					$reportes = '';
+				}
 
 				// condición de usuarios
 				$hidden = '';
@@ -106,7 +111,7 @@
 						?>
 							<li class="sidebar-item has-sub <?php echo $mapa; ?>">
 								<a href="#" class='sidebar-link'>
-									<i class="bi bi-map-fill"></i>
+									<i class="bi bi-geo-alt"></i>
 									<span>Mapa</span>
 								</a>
 								<ul class="submenu <?php echo $mapa; ?>">
@@ -123,7 +128,7 @@
 						?>
 							<li class="sidebar-item  has-sub <?php echo $clientes . $ventas . $cobros . $creditos ?>">
 								<a href="#" class='sidebar-link'>
-									<i class="fa fa-table"></i>
+									<i class="bi bi-person-lines-fill"></i>
 									<span>Control Clientes</span>
 								</a>
 								<ul class="submenu <?php echo $clientes . $ventas . $creditos . $cobros ?>">
@@ -153,7 +158,7 @@
 						?>
 							<li class="sidebar-item  has-sub <?php echo $bloque . $lotes ?>">
 								<a href="#" class='sidebar-link'>
-									<i class="bi bi-stack"></i>
+									<i class="bi bi-bricks"></i>
 									<span>Logística</span>
 								</a>
 								<ul class="submenu <?php echo $bloque . $lotes ?>">
@@ -171,12 +176,36 @@
 						?>
 							<li class="sidebar-item  has-sub <?php echo $facturas ?>">
 								<a href="#" class='sidebar-link'>
-									<i class="bi bi-stack"></i>
+									<i class="bi bi-receipt"></i>
 									<span>Facturación</span>
 								</a>
 								<ul class="submenu <?php echo $facturas ?>">
 									<li class="submenu-item <?php echo $facturas ?>">
 										<a href="facturas.php">Facturas Emitidas</a>
+									</li>
+								</ul>
+							</li>
+							<li class="sidebar-item  has-sub <?php echo $reportes ?>">
+								<a href="#" class='sidebar-link'>
+								<i class="bi bi-pie-chart-fill"></i>
+									<span style="color:red">Reportería</span>
+									<i class="bi bi-cone-striped"></i>
+								</a>
+								<ul class="submenu <?php echo $reportes ?>">
+									<li class="submenu-item <?php echo $reportes ?>">
+										<a href="#">Ventas</a>
+									</li>
+									<li class="submenu-item <?php echo $reportes ?>">
+										<a href="#">Financiero</a>
+									</li>
+									<li class="submenu-item <?php echo $reportes ?>">
+										<a href="#">Cuentas por Cobrar</a>
+									</li>
+									<li class="submenu-item <?php echo $reportes ?>">
+										<a href="#">Clientes</a>
+									</li>
+									<li class="submenu-item <?php echo $reportes ?>">
+										<a href="#">Facturas</a>
 									</li>
 								</ul>
 							</li>
