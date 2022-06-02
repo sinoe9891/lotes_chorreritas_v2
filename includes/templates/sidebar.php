@@ -101,71 +101,101 @@
 								<span>Dashboard</span>
 							</a>
 						</li>
-						<li class="sidebar-item has-sub <?php echo $mapa; ?>">
-							<a href="#" class='sidebar-link'>
-								<i class="bi bi-map-fill"></i>
-								<span>Mapa</span>
-							</a>
-							<ul class="submenu <?php echo $mapa; ?>">
-								<li class="submenu-item <?php echo $mapa ?>">
-									<a href="mapa.php?lote=1">Lotes</a>
-								</li>
-							</ul>
-						</li>
-						<li class="sidebar-item  has-sub <?php echo $clientes . $ventas . $cobros . $creditos?>">
-							<a href="#" class='sidebar-link'>
-								<i class="fa fa-table"></i>
-								<span>Facturación</span>
-							</a>
-							<ul class="submenu <?php echo $clientes . $ventas . $creditos . $cobros ?>">
-								<li class="submenu-item <?php echo $clientes ?>">
-									<a href="clientes.php">Clientes</a>
-								</li>
-								<li class="submenu-item <?php echo $ventas ?> ">
-									<a href="ventas.php">Contratos</a>
-								</li>
-								<li class="submenu-item <?php echo $creditos ?>">
-									<a href="creditos.php">Créditos</a>
-								</li>
-								<li class="submenu-item <?php echo $cobros ?>">
-									<a href="cobros.php">Cobros</a>
-								</li>
-								<li class="submenu-item ">
-									<a href="#">Cotizaciones</a>
-								</li>
-								<li class="submenu-item ">
-									<a href="#">Reservas</a>
-								</li>
-							</ul>
-						</li>
-						<li class="sidebar-item  has-sub <?php echo $bloque . $lotes ?>">
-							<a href="#" class='sidebar-link'>
-								<i class="bi bi-stack"></i>
-								<span>Logística</span>
-							</a>
-							<ul class="submenu <?php echo $bloque . $lotes ?>">
-								<li class="submenu-item <?php echo $bloque ?>">
-									<a href="bloques.php">Bloques</a>
-								</li>
-								<li class="submenu-item <?php echo $lotes ?>">
-									<a href="lotes.php">Lotes</a>
-								</li>
-							</ul>
-						</li>
+						<?php
+						if ($role == 1 || $role == 3 || $role == 2) {
+						?>
+							<li class="sidebar-item has-sub <?php echo $mapa; ?>">
+								<a href="#" class='sidebar-link'>
+									<i class="bi bi-map-fill"></i>
+									<span>Mapa</span>
+								</a>
+								<ul class="submenu <?php echo $mapa; ?>">
+									<li class="submenu-item <?php echo $mapa ?>">
+										<a href="mapa.php?lote=1">Lotes</a>
+									</li>
+								</ul>
+							</li>
+						<?php
+						};
+
+
+						if ($role == 1 || $role == 2 || $role == 4) {
+						?>
+							<li class="sidebar-item  has-sub <?php echo $clientes . $ventas . $cobros . $creditos ?>">
+								<a href="#" class='sidebar-link'>
+									<i class="fa fa-table"></i>
+									<span>Control Clientes</span>
+								</a>
+								<ul class="submenu <?php echo $clientes . $ventas . $creditos . $cobros ?>">
+									<li class="submenu-item <?php echo $clientes ?>">
+										<a href="clientes.php">Clientes</a>
+									</li>
+									<li class="submenu-item <?php echo $ventas ?> ">
+										<a href="ventas.php">Contratos</a>
+									</li>
+									<li class="submenu-item <?php echo $creditos ?>">
+										<a href="creditos.php">Créditos</a>
+									</li>
+									<li class="submenu-item <?php echo $cobros ?>">
+										<a href="cobros.php">Cobros</a>
+									</li>
+									<li class="submenu-item ">
+										<a href="#">Cotizaciones</a>
+									</li>
+									<li class="submenu-item ">
+										<a href="#">Reservas</a>
+									</li>
+								</ul>
+							</li>
+						<?php
+						};
+						if ($role == 1 || $role == 2) {
+						?>
+							<li class="sidebar-item  has-sub <?php echo $bloque . $lotes ?>">
+								<a href="#" class='sidebar-link'>
+									<i class="bi bi-stack"></i>
+									<span>Logística</span>
+								</a>
+								<ul class="submenu <?php echo $bloque . $lotes ?>">
+									<li class="submenu-item <?php echo $bloque ?>">
+										<a href="bloques.php">Bloques</a>
+									</li>
+									<li class="submenu-item <?php echo $lotes ?>">
+										<a href="lotes.php">Lotes</a>
+									</li>
+								</ul>
+							</li>
+						<?php
+						};
+						if ($role == 1 || $role == 2 || $role == 4) {
+						?>
+							<li class="sidebar-item  has-sub <?php echo $facturas ?>">
+								<a href="#" class='sidebar-link'>
+									<i class="bi bi-stack"></i>
+									<span>Facturación</span>
+								</a>
+								<ul class="submenu <?php echo $facturas ?>">
+									<li class="submenu-item <?php echo $facturas ?>">
+										<a href="facturas.php">Facturas Emitidas</a>
+									</li>
+								</ul>
+							</li>
+
+						<?php
+						};
+						?>
+
 						<?php
 						if ($bandera) {
 						?>
-							<li class="sidebar-item  has-sub <?php echo $facturacion . $usuarios . $facturas  ?>">
+							<li class="sidebar-item  has-sub <?php echo $facturacion . $usuarios  ?>">
 								<a href="#" class='sidebar-link'>
 									<i class="bi bi-life-preserver"></i>
 									<span>Configuración</span>
 								</a>
-								<ul class="submenu <?php echo $facturacion . $usuarios . $facturas?>">
+								<ul class="submenu <?php echo $facturacion . $usuarios ?>">
 									<li class="submenu-item <?php echo $facturacion ?>">
 										<a href="facturacion.php">Facturación</a>
-									</li>
-									<li class="submenu-item <?php echo $facturas ?>">
-										<a href="facturas.php">Facturas Emitidas</a>
 									</li>
 									<li class="submenu-item <?php echo $usuarios ?>">
 										<a href="usuarios.php">Usuarios</a>
