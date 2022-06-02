@@ -46,7 +46,7 @@ if (isset($_GET['ID'])) {
 							$cuota = $cuotaresult['cuota'];
 							// echo $cuota;
 						}
-						$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado, b.fecha_primer_cuota FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra AND a.estado_cobro = 'emitida';");
+						$estadoCuenta = $conn->query("SELECT a.fecha_cuota, b.cuota, a.cantidad_pagada, b.total_venta, a.monto_restante, b.plazo_meses, b.estado, b.fecha_primer_cuota, a.numero_cuotas_pagadas FROM cobros a, ficha_compra b WHERE b.id_ficha_compra = $id AND a.id_contrato = b.id_ficha_compra AND a.estado_cobro = 'emitida';");
 						$contador = 1;
 						$numero = $estadoCuenta->num_rows;
 						// echo $numero;
@@ -66,6 +66,7 @@ if (isset($_GET['ID'])) {
 							<tbody>
 								<?php
 								$valor_cuota = 0;
+								$numero_cuotaspag = 0;
 								while ($solicitud = $estadoCuenta->fetch_array()) {
 									$fecha_primer_cuota = $solicitud['fecha_primer_cuota'];
 									$fecha_pago_prime = new DateTime($fecha_primer_cuota);
@@ -75,6 +76,7 @@ if (isset($_GET['ID'])) {
 									$fecha_pago = new DateTime($fecha_pago);
 									$fecha_pago1 = $fecha_pago->format('d-M-Y');
 									$cuota = $solicitud['cuota'];
+									$numero_cuotasp  = $solicitud['numero_cuotas_pagadas'];
 									$cantidad_pagada = $solicitud['cantidad_pagada'];
 									$total_venta = $solicitud['total_venta'];
 									$plazo_meses = $solicitud['plazo_meses'];
@@ -83,7 +85,10 @@ if (isset($_GET['ID'])) {
 									if ($monto_restante == 0) {
 										$cuota = $cantidad_pagada;
 									}
+									$numero_cuotaspag += $numero_cuotasp;
+									// echo $numero_cuotaspag . '<br>';
 
+									$numero_cuotasp = 0;
 									$numero_cuotas_pagada = 0;
 									if ($cantidad_pagada > $cuota) {
 										// echo round($cantidad_pagada, 2) % $cuota ;
@@ -92,14 +97,11 @@ if (isset($_GET['ID'])) {
 										$residuocuota = fmod($cantidad_pagada, $cuota);
 										// echo $residuocuota;
 										$numero_cuotas_pagadas = number_format(round(($cantidad_pagada - $residuocuota) / $cuota, 0));
-										// $numero_cuotas_pagadas += $numero_cuotas_pagadas;
+										
 									} elseif ($cantidad_pagada == $cuota) {
 										$residuocuota = 0;
 										$numero_cuotas_pagadas = 1;
 									}
-									echo $residuocuota . '<br>';
-									echo $cantidad_pagada . '<br>';
-									echo $numero_cuotas_pagadas . '<br>';
 
 
 
@@ -146,6 +148,7 @@ if (isset($_GET['ID'])) {
 
 
 								?>
+									<!-- Lo pagado -->
 									<tr>
 										<td><?php echo $contador++; ?></td>
 										<td><span class="badge bg-secondary"><?php echo $fecha_pago1; ?></span></td>
@@ -165,10 +168,14 @@ if (isset($_GET['ID'])) {
 										<?php
 										$cantidad_pagada = 0;
 										$bandera = false;
-										$fecha_pago = date("d-m-Y", strtotime($fecha_pago3 . " +$numero_cuotas_pagadas month"));
+										// echo $numero_cuotaspag . '<br>';
+										// echo $fecha_pago3 . '<br>';
+										// echo $numero_cuotas_pagadas . '<br>';
+										$fecha_pago = date("d-m-Y", strtotime($fecha_pago3 . " +$numero_cuotaspag month"));
+										// echo $fecha_pago . '<br>';
 										$plazo_meses = $plazo_meses - $numero;
 										if ($monto_restante != 0) {
-											for ($i = ($numero_cuotas_pagadas - 1); $i < $plazo_meses; ++$i) {
+											for ($i = 0; $i < $plazo_meses; ++$i) {
 
 												$fecha_pago2 = date("d-M-Y", strtotime($fecha_pago . " +$i month")) . "<br>";
 												// insertar fechas en la tabla control_credito_lote con fecha_pago y fecha_vencimiento y no_cuota
@@ -193,34 +200,51 @@ if (isset($_GET['ID'])) {
 												$interval = $fecha_vencimiento->diff($fechahoy);
 												$dias = $interval->format('%r%a');
 
+												if ($dias === '0') {
+													$status = "Vence Hoy";
+													$coloractual = 'bg-warning';
+												} else if ($dias > '0') {
+													$status = "Vencido";
+													$coloractual = 'bg-danger';
+												} else if ($dias === '-0') {
+													$status = "Vence Mañana";
+													$coloractual = 'bg-warning';
+												} else if ($dias < '-0') {
+													$status =  "Pendiente";
+													$coloractual = 'bg-success';
+												}
+			
+			
+			
+												if ($dias == '-1') {
+													$status = "Pendiente";
+													$coloractual = 'bg-warning';
+												} else if ($dias > '0') {
+													$status = "Vencido";
+													$coloractual = 'bg-danger';
+												} else if ($dias == '0') {
+													$status = "Vence hoy";
+													$coloractual = 'bg-warning';
+												} else if ($dias < '0') {
+													$status =  "Pendiente";
+													$coloractual = 'bg-success';
+												}
 
 												# code...
 
-										?>
+										?>		
+												<!-- Lo restante -->
 												<td><?php echo $contador++; ?></td>
 												<td><span class="badge <?php echo $coloractual ?> "><?php echo $fecha_pago2; ?></span></td>
 												<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cuota, 2, '.', ','); ?></span></td>
 												<td><span class="badge bg-primary"><?php echo 'L.' . number_format($cantidad_pagada, 2, '.', ','); ?></span></td>
 												<td><span class="badge bg-info"><?php echo 'L.' . number_format($monto_restante, 2, '.', ','); ?></span></td>
 												<td>
-													<span class="badge <?php echo $coloractual ?>"><?php echo $dias; ?></span>
+													<span class="badge <?php echo $coloractual ?>"><?php echo $dias; ?> días</span>
 												</td>
 												<td>
 													<?php
-													echo '<p>' . $dias . '</p>';
-													if ($dias == '-1') {
-														$status = "Pendiente";
-														$coloractual = 'bg-warning';
-													} else if ($dias > '0') {
-														$status = "Vencido";
-														$coloractual = 'bg-danger';
-													} else if ($dias == '0') {
-														$status = "Vence hoy";
-														$coloractual = 'bg-warning';
-													} else if ($dias < '0') {
-														$status =  "Pendiente";
-														$coloractual = 'bg-success';
-													}
+													// echo '<p>' . $dias . '</p>';
 
 													?>
 													<span class="badge <?php echo $coloractual ?>"><?php echo $status; ?></span>
