@@ -111,13 +111,15 @@ if (isset($_GET['ID'])) {
 					<th>Fecha de Pago </th>
 					<th>Cuota a pagar</th>
 					<th>Monto Restante</th>
+					<th>Estado</th>
 				</tr>
 				';
 		$html .= '<tr>
 			<td>0</td>
 			<td></td>
-			<td>Saldo Inicial 1ra</td>
+			<td></td>
 			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
+			<td>Saldo Inicial</td>
 		</tr>';
 		
 		if ($estadoCuenta->num_rows > 0) {
@@ -150,14 +152,15 @@ if (isset($_GET['ID'])) {
 						<td>' . $fecha_pago5 . '</td>
 						<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
 						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
+						<td>Pagado</td>
 					</tr>';
 			}
-			$html .= '<tr>
-			<td></td>
-			<td></td>
-			<td>dIVISIÓN</td>
-			<td></td>
-		</tr>';
+		// 	$html .= '<tr>
+		// 	<td></td>
+		// 	<td></td>
+		// 	<td>dIVISIÓN</td>
+		// 	<td></td>
+		// </tr>';
 			$cantidad_pagada = 0;
 			$bandera = false;
 			// echo $fecha_pago . "<br>";
@@ -193,6 +196,7 @@ if (isset($_GET['ID'])) {
 						<td>' . $fecha_pago2 . '</td>
 						<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
 						<td>L.' . number_format($monto_restante, 2, '.', ',') . '</td>
+						<td>Pendiente</td>
 					</tr>';
 					if ($bandera) {
 						// $cuota = $monto_restante;
@@ -309,13 +313,15 @@ if (isset($_GET['ID'])) {
 					<th>Fecha de Pago</th>
 					<th>Cuota a pagar</th>
 					<th>Monto Restante</th>
+					<th>Estado</th>
 				</tr>
 				';
 		$html .= '<tr>
 			<td>0</td>
 			<td></td>
-			<td>Saldo Inicial -></td>
+			<td></td>
 			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
+			<td>Saldo Inicial</td>
 		</tr>';
 		if ($estadoCuenta->num_rows > 0) {
 			while ($solicitud = $estadoCuenta->fetch_array()) {
@@ -366,6 +372,7 @@ if (isset($_GET['ID'])) {
 					<td>' . $fecha . '</td>
 					<td><b>L.' . number_format($cuota, 2, '.', ',') . '</b></td>
 					<td>L.' . number_format($saldo_actual, 2, '.', ',') . '</td>
+					<td>Pendiente</td>
 				</tr>';
 					if ($bandera) {
 						// $cuota = $monto_restante;

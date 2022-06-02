@@ -121,8 +121,6 @@ if (isset($_GET['ID'])) {
 		</tr>';
 
 		
-
-
 		if ($estadoCuenta->num_rows > 0) {
 			while ($solicitud = $estadoCuenta->fetch_array()) {
 				date_default_timezone_set('America/Tegucigalpa');
@@ -184,7 +182,7 @@ if (isset($_GET['ID'])) {
 					}
 
 
-
+					//Esta es la segunda parte
 					$html .= '<tr>
 						<td>' . $contador++ . '</td>
 						<td>' . $fecha_pago2 . '</td>
@@ -237,7 +235,7 @@ if (isset($_GET['ID'])) {
 
 		// }
 	} else {
-		// ESTA CONDICIÓN ESTA CORRECTA YA QUE NO SE HA REALIZADO NINGUN PAGO ES UN CRONOGRAMA EN LIMPIO
+		// ESTA CONDICIÓN ESTA CORRECTA YA QUE NO SE HA REALIZADO NINGUN PAGO - ES UN CRONOGRAMA EN LIMPIO
 		$estadoCuenta = $conn->query("SELECT a.nombre_completo, b.fecha_primer_cuota, b.total_venta, b.saldo_actual, b.cuota, b.total_venta, b.plazo_meses, b.prima FROM ficha_directorio a, ficha_compra b WHERE b.id_ficha_compra = $id and b.id_registro = a.id;");
 		$contador = 1;
 		$numero = $estadoCuenta->num_rows;

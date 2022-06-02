@@ -58,6 +58,7 @@ date_default_timezone_set('America/Tegucigalpa');
 								<th>Cuota</th>
 								<th>Saldo</th>
 								<th>Total Venta</th>
+								<th>Ver Cuotas</th>
 								<th>Cronograma</th>
 								<!-- <th>Letra</th> -->
 								<th>Cobros</th>
@@ -174,14 +175,17 @@ date_default_timezone_set('America/Tegucigalpa');
 										<td><span class="badge bg-info"><?php echo 'L.' . number_format($saldo_actual, 2, '.', ','); ?></span></td>
 										<td><span class="badge bg-secondary"><?php echo 'L.' . number_format($total_venta, 2, '.', ','); ?></span></td>
 										<td>
-											<a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary">Cronograma</a>
-											<a href="doc/cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i></a>
+											<a href="cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary"><i class="fa fa-list" aria-hidden="true"></i>Ver Cuotas</a>
+										</td>
+										<td>
+											<a href="doc/cronograma.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i>Completo</a>
+											<a href="doc/cronograma_pagados.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-credit-card" aria-hidden="true"></i>Con Pagos</a>
 										</td>
 										<!-- <td>
 											<a href="letra.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank">Letra</a>
 										</td> -->
 										<td>
-											<a href="doc/cobros.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i>Ver Cobros</a>
+											<a href="doc/cobros.php?ID=<?php echo $id_compra ?>" class="btn btn-sm btn-outline-secondary" target="_blank"><i class="fa fa-file-pdf" aria-hidden="true"></i>Pagos</a>
 										</td>
 										<td>
 											<span class="badge <?php echo $color ?>"><?php echo $status; ?></span>
