@@ -121,7 +121,7 @@ if (isset($_GET['ID'])) {
 		$html .= '<tr>
 			<td>0</td>
 			<td></td>
-			<td>Saldo Inicial -></td>
+			<td>Saldo Inicial</td>
 			<td><b>L.' . number_format($total_venta, 2, '.', ',') . '</b></td>
 		</tr>';
 		if($prima > 0){
