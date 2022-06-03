@@ -44,6 +44,8 @@ if ($_POST['mi_busqueda'] != "") {
 		// echo $fecha_pago;
 
 		echo '<br>'.$fecha_primera_cuota.'<br>';
+		echo '<br>'.$numerocuotas.'<br>';
+		echo '<br>'.$sigcuota.'<br>';
 		// echo '<br>'.$numerocuotas.'<br>';
 		$fecha_pago = date("Y-m-d", strtotime($fecha_primera_cuota . " +$sigcuota month"));
 		$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago . " +1 month"));
@@ -107,7 +109,7 @@ if ($_POST['mi_busqueda'] != "") {
 			$id_contrato_compra = $cuotaresult['id_contrato_compra'];
 		}
 		// echo $fecha_vencimiento;
-		// echo $id_contrato_compra;
+		echo $id_contrato_compra;
 		$loteClienteQuery = obtenerInfoLotesCliente($id_ficha_compra);
 		$sep = '';
 		echo '<div class="form-group">

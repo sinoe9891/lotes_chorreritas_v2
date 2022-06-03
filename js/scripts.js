@@ -748,6 +748,12 @@ function newCobro(e) {
 			title: 'Oops...',
 			text: 'Debe de llenar todos los campos',
 		});
+	}else if(valor_cuota < cuota){
+		Swal.fire({
+			icon: 'error',
+			title: 'Oops...',
+			text: 'El Valor de Cuota no es el correcto'
+		});
 	} else {
 		//Campos son correctos - Ejecutamos AJAX
 		//Crear  FormData - Datos que se envían al servidor
@@ -927,7 +933,8 @@ function editventa(e) {
 		tipo = document.querySelector('#tipo').value,
 		bloque = document.querySelectorAll('.tabla-bloque');
 
-
+	
+	
 	if (bloque.length == 0) {
 		Swal.fire({
 			icon: 'error',
