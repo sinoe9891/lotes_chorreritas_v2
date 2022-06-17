@@ -5,7 +5,7 @@
     $actual = obtenerPaginaActual();
     if ($actual === 'register' || $actual === 'login') {
         echo '<script src="js/formulario.js?v='.(rand()).'"></script>';
-    }elseif ($actual === 'index' || $actual === 'mapa'|| $actual === 'actualizar-graduado' || $actual === 'editar-bloque' || $actual === 'contrato' || $actual === 'exportar'  || $actual === 'ver-fichas') {
+    }elseif ($actual === 'index' || $actual === 'mapa'|| $actual === 'analytics-clientes' || $actual === 'actualizar-graduado' || $actual === 'editar-bloque' || $actual === 'contrato' || $actual === 'exportar'  || $actual === 'ver-fichas') {
         echo '<script> console.log("No accede porque la ruta actual no corresponde");</script>';
         echo '<script src="js/validaciones.js?v="' . rand() . '"></script>';
 		echo '<script src="assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js?v='.(rand()).'"></script>

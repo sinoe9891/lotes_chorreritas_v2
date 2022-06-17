@@ -286,55 +286,55 @@ var config4 = {
 };
 
 
-var ctxBar = document.getElementById("bar").getContext("2d");
-var myBar = new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-        datasets: [{
-            label: 'Students',
-            backgroundColor: [chartColors.grey, chartColors.grey, chartColors.grey, chartColors.grey, chartColors.info, chartColors.blue, chartColors.grey],
-            data: [
-                5,
-                10,
-                30,
-                40,
-                35,
-                55,
-                15,
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        barRoundness: 1,
-        title: {
-            display: true,
-            text: "Students in 2020"
-        },
-        legend: {
-            display: false
-        },
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    suggestedMax: 40 + 20,
-                    padding: 10,
-                },
-                gridLines: {
-                    drawBorder: false,
-                }
-            }],
-            xAxes: [{
-                gridLines: {
-                    display: false,
-                    drawBorder: false
-                }
-            }]
-        }
-    }
-});
+// var ctxBar = document.getElementById("bar").getContext("2d");
+// var myBar = new Chart(ctxBar, {
+//     type: 'bar',
+//     data: {
+//         labels: ["Enero", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+//         datasets: [{
+//             label: 'Estudiantes',
+//             backgroundColor: [chartColors.grey, chartColors.grey, chartColors.grey, chartColors.grey, chartColors.info, chartColors.blue, chartColors.grey],
+//             data: [
+//                 5,
+//                 10,
+//                 30,
+//                 40,
+//                 35,
+//                 55,
+//                 15,
+//             ]
+//         }]
+//     },
+//     options: {
+//         responsive: true,
+//         barRoundness: 1,
+//         title: {
+//             display: true,
+//             text: "Estudiantes in 2020"
+//         },
+//         legend: {
+//             display: false
+//         },
+//         scales: {
+//             yAxes: [{
+//                 ticks: {
+//                     beginAtZero: true,
+//                     suggestedMax: 40 + 20,
+//                     padding: 10,
+//                 },
+//                 gridLines: {
+//                     drawBorder: false,
+//                 }
+//             }],
+//             xAxes: [{
+//                 gridLines: {
+//                     display: false,
+//                     drawBorder: false
+//                 }
+//             }]
+//         }
+//     }
+// });
 var line = document.getElementById("line").getContext("2d");
 var gradient = line.createLinearGradient(0, 0, 0, 400);
 gradient.addColorStop(0, 'rgba(50, 69, 209,1)');

@@ -202,7 +202,7 @@
 										<a href="#">Cuentas por Cobrar</a>
 									</li>
 									<li class="submenu-item <?php echo $reportes ?>">
-										<a href="#">Clientes</a>
+										<a href="analytics-clientes.php">Clientes</a>
 									</li>
 									<li class="submenu-item <?php echo $reportes ?>">
 										<a href="#">Facturas</a>

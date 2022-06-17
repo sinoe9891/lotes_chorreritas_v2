@@ -43,9 +43,9 @@ if ($_POST['mi_busqueda'] != "") {
 		$id_cuota_pagada += 1;
 		// echo $fecha_pago;
 
-		echo '<br>'.$fecha_primera_cuota.'<br>';
-		echo '<br>'.$numerocuotas.'<br>';
-		echo '<br>'.$sigcuota.'<br>';
+		// echo '<br>'.$fecha_primera_cuota.'<br>';
+		// echo '<br>'.$numerocuotas.'<br>';
+		// echo '<br>'.$sigcuota.'<br>';
 		// echo '<br>'.$numerocuotas.'<br>';
 		$fecha_pago = date("Y-m-d", strtotime($fecha_primera_cuota . " +$sigcuota month"));
 		$fecha_vencimiento = date("Y-m-d", strtotime($fecha_pago . " +1 month"));
