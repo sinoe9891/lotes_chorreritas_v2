@@ -81,6 +81,16 @@
 				} else {
 					$reportes = '';
 				}
+				if (obtenerPaginaActual() == 'analytics-clientes') {
+					$analyticsclientes = 'active';
+				} else {
+					$analyticsclientes = '';
+				}
+				if (obtenerPaginaActual() == 'analytics-ventas') {
+					$analyticsventas = 'active';
+				} else {
+					$analyticsventas = '';
+				}
 
 				// condición de usuarios
 				$hidden = '';
@@ -185,31 +195,30 @@
 									</li>
 								</ul>
 							</li>
-							<li class="sidebar-item  has-sub <?php echo $reportes ?>">
+							<li class="sidebar-item  has-sub <?php echo $analyticsclientes . $analyticsventas ?>">
 								<a href="#" class='sidebar-link'>
 								<i class="bi bi-pie-chart-fill"></i>
 									<span style="color:red">Reportería</span>
 									<i class="bi bi-cone-striped"></i>
 								</a>
-								<ul class="submenu <?php echo $reportes ?>">
-									<li class="submenu-item <?php echo $reportes ?>">
-										<a href="#">Ventas</a>
+								<ul class="submenu <?php echo $analyticsclientes . $analyticsventas ?>">
+									<li class="submenu-item <?php echo $analyticsventas ?>">
+										<a href="analytics-ventas.php">Ventas</a>
 									</li>
-									<li class="submenu-item <?php echo $reportes ?>">
+									<li class="submenu-item <?php echo $analyticsclientes ?>">
+										<a href="analytics-clientes.php">Marketing</a>
+									</li>
+									<li class="submenu-item <?php echo $analytics ?>">
 										<a href="#">Financiero</a>
 									</li>
-									<li class="submenu-item <?php echo $reportes ?>">
+									<li class="submenu-item <?php echo $analytics ?>">
 										<a href="#">Cuentas por Cobrar</a>
 									</li>
-									<li class="submenu-item <?php echo $reportes ?>">
-										<a href="analytics-clientes.php">Clientes</a>
-									</li>
-									<li class="submenu-item <?php echo $reportes ?>">
+									<li class="submenu-item <?php echo $analytics ?>">
 										<a href="#">Facturas</a>
 									</li>
 								</ul>
 							</li>
-
 						<?php
 						};
 						?>

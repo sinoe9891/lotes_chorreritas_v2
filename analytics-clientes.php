@@ -18,6 +18,10 @@ foreach ($data as $d) :
 	$total = $total + $d->cantidad;
 endforeach;
 
+$totalclientes = 0;
+foreach ($data as $d) :
+	$totalclientes = $totalclientes + $d->cantidad;
+endforeach;
 
 // Genero 
 $consulta = $conn->query("select sum(case when genero like '%F%' then 1 else 0 end) as Femenino, sum(case when genero like '%M%' then 1 else 0 end) as Masculino from ficha_directorio where genero like '%F%' OR genero like '%M%' ORDER BY genero ASC;");
@@ -46,7 +50,7 @@ endforeach;
 		<div class="page-title">
 			<div class="row">
 				<div class="col-12 col-md-6 order-md-1 order-last">
-					<h3>Métricas Clientes</h3>
+					<h3>Métricas</h3>
 				</div>
 				<div class="col-12 col-md-6 order-md-2 order-first">
 					<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
@@ -55,6 +59,13 @@ endforeach;
 							<li class="breadcrumb-item active" aria-current="page">Configuración</li>
 						</ol>
 					</nav>
+				</div>
+			</div>
+		</div>
+		<div class="page-title">
+			<div class="row">
+				<div class="col-12 col-md-6 order-md-1 order-last">
+					<h5>Grupos Demográficos</h5>
 				</div>
 			</div>
 		</div>
@@ -80,6 +91,13 @@ endforeach;
 				</div>
 			</div>
 		</section>
+		<div class="page-title">
+			<div class="row">
+				<div class="col-12 col-md-6 order-md-1 order-last">
+					<h5>Información Geográfica</h5>
+				</div>
+			</div>
+		</div>
 		<section class="section factura">
 			<div class="card">
 				<div class="card-header">
@@ -131,7 +149,7 @@ endforeach;
 						<div class="card-header">
 							<?php
 							$consultanacionalidad = $conn->query("select nacionalidad, sum(case when genero like '%F%' then 1 else 0 end) as Femenino, sum(case when genero like '%M%' then 1 else 0 end) as Masculino, count('%M%'+'%F%') as Total from ficha_directorio where genero like '%F%' OR genero like '%M%' group by nacionalidad ORDER BY nacionalidad ASC;");
-								$rowcount = mysqli_num_rows($consultanacionalidad);;
+							$rowcount = mysqli_num_rows($consultanacionalidad);;
 							?>
 							<h4>Nacionalidad (total <?php echo $rowcount ?>)</h4>
 						</div>
@@ -148,7 +166,7 @@ endforeach;
 								</thead>
 								<tbody>
 									<?php
-									
+
 
 									$numero1 = 1;
 									$contador1 = 1;
@@ -216,7 +234,191 @@ endforeach;
 						</div>
 					</div>
 				</div>
+				<div class="page-title">
+					<div class="row">
+						<div class="col-12 col-md-6 order-md-1 order-last">
+							<h5>Adquisición</h5>
+						</div>
+					</div>
+				</div>
 				<div class="col-md-6">
+					<div class="card">
+						<?php
+						$adquisicion = $conn->query("select sum(case when `adquisicion` like '%RRSS%' then 1 else 0 end) as social, sum(case when `adquisicion` like '%Directo%' then 1 else 0 end) as directo, sum(case when `adquisicion` like '%Email%' then 1 else 0 end) as email, sum(case when `adquisicion` like '%Referido%' then 1 else 0 end) as referido, count(`adquisicion`) as totaladquisicion from `ficha_directorio` ORDER BY `adquisicion` ASC;");
+						while ($adquisiciones = $adquisicion->fetch_array()) {
+							$social = $adquisiciones['social'];
+							$directo = $adquisiciones['directo'];
+							$email = $adquisiciones['email'];
+							$referido = $adquisiciones['referido'];
+							$totaladquisicion = $adquisiciones['totaladquisicion'];
+						}
+
+						?>
+						<div class="card-header">
+							<h4>Canales de Contacto</h4>
+						</div>
+						<div class="card-body">
+							<table class="table table-striped" id="table3">
+								<thead>
+									<tr>
+										<th>No.</th>
+										<th>Estado Civil</th>
+										<th>Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+
+
+									$numero1 = 1;
+									$contador1 = 1;
+									$total1 = 0;
+									?>
+									<tr>
+										<td>1</td>
+										<td>Social</td>
+										<td COLSPAN=2><?php echo $social . ' (' . round(($social * 100) / $totaladquisicion, 2) . '%)'; ?></td>
+									</tr>
+									<tr>
+										<td>2</td>
+										<td>Directo</td>
+										<td COLSPAN=2><?php echo $directo . ' (' . round(($directo * 100) / $totaladquisicion, 2) . '%)'; ?></td>
+									</tr>
+									<tr>
+										<td>3</td>
+										<td>Email</td>
+										<td COLSPAN=2><?php echo $email . ' (' . round(($email * 100) / $totaladquisicion, 2) . '%)'; ?></td>
+									</tr>
+									<tr>
+										<td>4</td>
+										<td>Referido</td>
+										<td COLSPAN=2><?php echo $referido . ' (' . round(($referido * 100) / $totaladquisicion, 2) . '%)'; ?></td>
+									</tr>
+									<?php
+
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="card">
+						<?php
+						$fuentequery = $conn->query("select fuente, COUNT(fuente) as total from ficha_directorio group by fuente ORDER BY fuente ASC;");
+						$rowcount = mysqli_num_rows($fuentequery);
+						?>
+						<div class="card-header">
+							<h4>Fuente/Medio (total <?php echo $rowcount ?>)</h4>
+						</div>
+						<div class="card-body">
+							<table class="table table-striped" id="table3">
+								<thead>
+									<tr>
+										<th>No.</th>
+										<th>País Reside</th>
+										<th>Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+									$numero1 = 1;
+									$contador1 = 1;
+									
+									while ($fuentes = $fuentequery->fetch_array()) {
+										$fuente = $fuentes['fuente'];
+										$total = $fuentes['total'];
+									?>
+										<tr ?>
+											<td><?php echo $contador1++; ?></td>
+											<td><?php echo $fuente; ?></td>
+											<td><?php echo $total . ' (' . round(($total * 100) / $totaladquisicion, 2) . '%)'; ?></td>
+										</tr>
+									<?php
+									}
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="page-title">
+				<div class="row">
+					<div class="col-12 col-md-6 order-md-1 order-last">
+						<h5>Información Extra</h5>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="card">
+					<?php
+					$estadocivil = $conn->query("select sum(case when `estado_civil` like '%1%' then 1 else 0 end) as Soltero, sum(case when `estado_civil` like '%2%' then 1 else 0 end) as Casado, sum(case when `estado_civil` like '%3%' then 1 else 0 end) as Divorciado, sum(case when `estado_civil` like '%4%' then 1 else 0 end) as Viudo, sum(case when `estado_civil` like '%5%' then 1 else 0 end) as Union_Libre, count(`estado_civil`) as totaestadocivil from `ficha_directorio` ORDER BY `estado_civil` ASC;");
+					while ($solicitudnac = $estadocivil->fetch_array()) {
+						$soltero = $solicitudnac['Soltero'];
+						$casado = $solicitudnac['Casado'];
+						$divorciado = $solicitudnac['Divorciado'];
+						$viudo = $solicitudnac['Viudo'];
+						$union_Libre = $solicitudnac['Union_Libre'];
+						$Total = $solicitudnac['totaestadocivil'];
+					}
+
+					?>
+					<div class="card-header">
+						<h4>Estado Civil (total <?php echo $Total ?>)</h4>
+					</div>
+					<div class="card-body">
+						<table class="table table-striped" id="table3">
+							<thead>
+								<tr>
+									<th>No.</th>
+									<th>Estado Civil</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php
+
+
+								$numero1 = 1;
+								$contador1 = 1;
+								$total1 = 0;
+								?>
+								<tr>
+									<td>1</td>
+									<td>Soltero(a)</td>
+									<td COLSPAN=2><?php echo $soltero . ' (' . round(($soltero * 100) / $Total, 2) . '%)'; ?></td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>Casado(a)</td>
+									<td COLSPAN=2><?php echo $casado . ' (' . round(($casado * 100) / $Total, 2) . '%)'; ?></td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td>Divorciado(a)</td>
+									<td COLSPAN=2><?php echo $divorciado . ' (' . round(($divorciado * 100) / $Total, 2) . '%)'; ?></td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td>Viudo(a)</td>
+									<td COLSPAN=2><?php echo $viudo . ' (' . round(($viudo * 100) / $Total, 2) . '%)'; ?></td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td>Unión Libre</td>
+									<td COLSPAN=2><?php echo $union_Libre . ' (' . round(($union_Libre * 100) / $Total, 2) . '%)'; ?></td>
+								</tr>
+								<?php
+
+								?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="col-md-6">
 					<div class="card">
 						<div class="card-header">
 							<h4>Vendidos</h4>
@@ -236,15 +438,15 @@ endforeach;
 							<canvas id="line"></canvas>
 						</div>
 					</div>
-				</div>
-
-			</div>
-		</section>
+				</div> -->
 
 	</div>
-	<?php
-	include('includes/templates/created.php');
-	?>
+	</section>
+
+</div>
+<?php
+include('includes/templates/created.php');
+?>
 </div>
 
 </div>
@@ -276,7 +478,8 @@ endforeach;
 				backgroundColor: [chartColors.blue, chartColors.info, chartColors.blue, chartColors.info, chartColors.blue, chartColors.info],
 				data: [
 					<?php foreach ($data as $d) : ?>
-						<?php echo round(($d->cantidad * 100) / $total, 2) ?>,
+						<?php echo round($d->cantidad, 2) ?>,
+						// <?php echo round(($d->cantidad * 100) / $totalclientes, 2) ?>,
 					<?php endforeach; ?>
 				]
 			}]
