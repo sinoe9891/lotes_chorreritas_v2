@@ -243,7 +243,7 @@ echo $totalotes;
 			barRoundness: 1,
 			title: {
 				display: true,
-				text: "Edad de Clientes <?php echo date('Y'); ?>"
+				text: "Ventas <?php echo date('Y'); ?>"
 			},
 			legend: {
 				display: false
