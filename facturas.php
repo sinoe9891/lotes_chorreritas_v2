@@ -65,14 +65,6 @@ date_default_timezone_set('America/Tegucigalpa');
 						</thead>
 						<tbody>
 							<?php
-							// $consultaProyecto = $conn->query("SELECT * FROM ficha_compra a, proyectos_ajustes b WHERE a.id_proyecto = b.id_proyecto");
-							// $ajusteProyecto = $consultaProyecto->fetch_assoc();
-							// if ($ajusteProyecto > 0) {
-							// 	$precio_vara2 = $ajusteProyecto['precio_vara2'];
-							// } else {
-							// 	$precio_vara2 = 0;
-							// }
-
 							$consulta = $conn->query("SELECT DISTINCT a.id_factura, a.id_cobro, a.no_factura, a.fecha_pago, a.monto_pagado, a.fecha_pago, b.id_contrato_compra, a.saldo_actual, a.estado_factura, a.usuario, c.estado_cobro, c.hora_pagada FROM facturas a, ficha_compra b, cobros c WHERE (a.estado_factura = 'emitida' OR a.estado_factura = 'anulada') AND b.id_ficha_compra = c.id_contrato and a.contrato = c.id_contrato and a.id_cobro = c.id_cobro ORDER BY a.no_factura DESC;");
 
 							$numero = 1;
